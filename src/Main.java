@@ -90,10 +90,9 @@ Söka efter varor inom ett specifikt prisintervall, kategori mm (Java Streams)
 
     private static void switchCategories(ArrayList<Category> categoryList, String choice, Scanner sc) {
         switch (choice) {
-            case "1" -> product();
-            case "2" -> category(sc);
-            case "3" -> inventoryBalance();
+            case choice -> categoryList(choice);
             case "c" -> addNewCategory(categoryList, sc);
+            case "e" -> quit();
             default -> System.out.println("Please choose one of the alternatives below:");
         }
     }
