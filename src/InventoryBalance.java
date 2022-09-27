@@ -4,8 +4,8 @@ import java.util.Scanner;
 public class InventoryBalance {
     ArrayList<Product> list;
     public InventoryBalance(Scanner sc) {
-        list.add(new Product("Fuse", 179, Main.addCategory(sc), "Latitude 64", 111));
-        list.add(new Product("Diamond", 189, Main.addCategory(sc), "Latitude 64", 112));
+        list.add(new Product("Fuse", 179, Main.category(sc), "Latitude 64", 111));
+        list.add(new Product("Diamond", 189, Main.category(sc), "Latitude 64", 112));
 
     }
     /*
@@ -19,6 +19,9 @@ public class InventoryBalance {
      4. Distance Driver
      a. Add new category
      På add new category så skriver man in namnet på den nya kategorin och den läggs till i Arraylistan för de olika kategorierna
+
+
+     Todo; Vill jag använda @override toString() för att skriva ut innehållet i arrayListorna?
     */
 
 

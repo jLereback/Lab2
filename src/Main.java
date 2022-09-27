@@ -46,7 +46,7 @@ Söka efter varor inom ett specifikt prisintervall, kategori mm (Java Streams)
     private static void switchMenu(String choice, Scanner sc) {
         switch (choice) {
             case "1" -> product();
-            case "2" -> addCategory(sc);
+            case "2" -> category(sc);
             case "3" -> inventoryBalance();
             case "4" -> search();
             case "e" -> quit();
@@ -70,7 +70,7 @@ Söka efter varor inom ett specifikt prisintervall, kategori mm (Java Streams)
     private static void product() {
     }
 
-    public static ArrayList<Category> addCategory(Scanner sc) {
+    public static ArrayList<Category> category(Scanner sc) {
         String choice;
         var categoryList = new ArrayList<Category>();
         do {
@@ -91,7 +91,7 @@ Söka efter varor inom ett specifikt prisintervall, kategori mm (Java Streams)
     private static void switchCategories(ArrayList<Category> categoryList, String choice, Scanner sc) {
         switch (choice) {
             case "1" -> product();
-            case "2" -> addCategory(sc);
+            case "2" -> category(sc);
             case "3" -> inventoryBalance();
             case "c" -> addNewCategory(categoryList, sc);
             default -> System.out.println("Please choose one of the alternatives below:");
