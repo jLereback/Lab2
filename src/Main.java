@@ -7,8 +7,9 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        InventoryBalance i = new InventoryBalance(sc);
-        menu(sc);
+        var categoryList = new ArrayList<Category>();
+        InventoryBalance i = new InventoryBalance(sc, categoryList);
+        menu(sc, categoryList);
     }
 
 /*
@@ -33,20 +34,38 @@ Söka efter varor inom ett specifikt prisintervall, kategori mm (Java Streams)
 
 */
 
-    private static void menu(Scanner sc) {
+    private static void menu(Scanner sc, ArrayList<Category> categoryList) {
         String choice;
         do {
-            printMenu();
+            //printMenu();
+            System.out.println("""
+                            
+                Shop
+                ========
+                1. Product
+                2. Categories
+                3. Inventory balance
+                4. Search product
+                e. Quit
+                """);
             choice = sc.nextLine();
             choice = choice.toLowerCase();
-            switchMenu(choice, sc);
+            //switchMenu(choice, sc, categoryList);
+            switch (choice) {
+                case "1" -> product();
+                case "2" -> category(sc, categoryList);
+                case "3" -> inventoryBalance();
+                case "4" -> search();
+                case "e" -> quit();
+                default -> System.out.println("Please choose one of the alternatives below:");
+            }
         } while (!choice.equals("e"));
     }
 
-    private static void switchMenu(String choice, Scanner sc) {
+    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList) {
         switch (choice) {
             case "1" -> product();
-            case "2" -> category(sc);
+            case "2" -> category(sc, categoryList);
             case "3" -> inventoryBalance();
             case "4" -> search();
             case "e" -> quit();
@@ -70,9 +89,9 @@ Söka efter varor inom ett specifikt prisintervall, kategori mm (Java Streams)
     private static void product() {
     }
 
-    public static ArrayList<Category> category(Scanner sc) {
+    public static ArrayList<Category> category(Scanner sc, ArrayList<Category> categoryList) {
         String choice;
-        var categoryList = new ArrayList<Category>();
+
         do {
             printCategories(categoryList);
             choice = sc.nextLine();
@@ -90,7 +109,6 @@ Söka efter varor inom ett specifikt prisintervall, kategori mm (Java Streams)
 
     private static void switchCategories(ArrayList<Category> categoryList, String choice, Scanner sc) {
         switch (choice) {
-            case choice -> categoryList(choice);
             case "c" -> addNewCategory(categoryList, sc);
             case "e" -> quit();
             default -> System.out.println("Please choose one of the alternatives below:");
