@@ -4,8 +4,8 @@ import java.util.Scanner;
 public class InventoryBalance {
     ArrayList<Product> list;
     public InventoryBalance(Scanner sc, ArrayList<Category> categoryList) {
-        list.add(new Product("Fuse", 179, Main.category(sc, categoryList), "Latitude 64", 111));
-        list.add(new Product("Diamond", 189, Main.category(sc, categoryList), "Latitude 64", 112));
+        list.add(new Product("Fuse", 179, "Hej"/*Main.category(sc, categoryList)*/, "Latitude 64", 111));
+        list.add(new Product("Diamond", 189, "Då"/*Main.category(sc, categoryList)*/, "Latitude 64", 112));
 
     }
     /*
