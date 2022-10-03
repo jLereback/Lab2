@@ -1,6 +1,7 @@
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
@@ -18,16 +19,20 @@ Todo: Fundera igenom vilka klasser som kan behövas för att implementera följa
     - Hantera lagersaldo för produkter där jag kan se vilka olika varor som finns samt antal av dessa
     - Söka efter varor inom ett specifikt prisintervall, kategori mm (Java Streams)
     */
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+
+        var categoryProductHashMap = new HashMap<Category, Product>();
+        var inventory = new ArrayList<Product>();
         var categoryList = new ArrayList<Category>();
 
         categoryList.add(new Category("Put & Approach"));
         categoryList.add(new Category("Midrange"));
         categoryList.add(new Category("Fairway Driver"));
         categoryList.add(new Category("Distance Driver"));
-        var inventory = new ArrayList<Product>();
-        Start.menu(sc, categoryList, inventory);
+
+        Start.menu(sc, categoryList, inventory, categoryProductHashMap);
 
     }
 }

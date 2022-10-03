@@ -1,20 +1,21 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Admin {
-    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
+    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Category, Product> categoryProductHashMap) {
         String choice;
         do {
             printMenu();
             choice = sc.nextLine().toLowerCase();
-            switchMenu(choice, sc, categoryList, inventory);
+            switchMenu(choice, sc, categoryList, inventory, categoryProductHashMap);
         } while (!choice.equals("e"));
     }
 
-    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
+    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Category, Product> categoryProductHashMap) {
         switch (choice) {
-            case "1" -> product(sc, categoryList, inventory);
-            case "2" -> category(sc, categoryList, inventory);
+            case "1" -> product(sc, categoryList, inventory, categoryProductHashMap);
+            case "2" -> category(sc, categoryList, inventory, categoryProductHashMap);
             case "3" -> inventoryBalance(sc, categoryList, inventory);
             case "4" -> search();
             case "e" -> Menu.quit();
@@ -31,17 +32,16 @@ public class Admin {
                 2. Categories
                 3. Inventory balance
                 4. Search product
-                e. Quit
+                e. Switch user
                 """);
     }
 
-    private static void product(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
+    private static void product(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Category, Product> categoryProductHashMap) {
         String choice;
         do {
             printProductMenu();
-            choice = sc.nextLine();
-            choice = choice.toLowerCase();
-            switchProduct(choice, sc, categoryList, inventory);
+            choice = sc.nextLine().toLowerCase();
+            switchProduct(choice, sc, categoryList, inventory, categoryProductHashMap);
         } while (!choice.equals("e"));
     }
 
@@ -53,14 +53,14 @@ public class Admin {
                 1. Show products
                 2. Add product
                 3. Remove product
-                e. Main menu
+                e. Back to Main menu
                 """);
     }
 
-    private static void switchProduct(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
+    private static void switchProduct(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Category, Product> categoryProductHashMap) {
         switch (choice) {
             case "1" -> showProduct(inventory);
-            case "2" -> addProduct(sc, categoryList, inventory);
+            case "2" -> addProduct(sc, categoryList, inventory, categoryProductHashMap);
 //            case "3" -> removeProduct();
             case "e" -> System.out.println("Going back to previous menu");
             default -> System.out.println("Please choose one of the alternatives below:");
@@ -77,63 +77,71 @@ public class Admin {
         }
     }
 
-    private static void addProduct(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
-        printAvailableCategories(categoryList);
+    private static void addProduct(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Category, Product> categoryProductHashMap) {
+        printAddProductMenu(categoryList);
         String choice = sc.nextLine();
 
         try {
             if (choice.equals("e"))
                 System.out.println("Going back to previous menu");
             else if ((Integer.parseInt(choice) <= categoryList.size()))
-                addNewProduct((Integer.parseInt(choice) - 1), sc, categoryList, inventory);
+                addNewProduct((Integer.parseInt(choice) - 1), sc, categoryList, inventory, categoryProductHashMap);
         } catch (NumberFormatException e) {
             System.out.println("Please choose one of the alternatives below:");
-            addProduct(sc, categoryList, inventory);
+            addProduct(sc, categoryList, inventory, categoryProductHashMap);
         }
     }
 
-    private static void printAvailableCategories(ArrayList<Category> categoryList) {
+    private static void printAddProductMenu(ArrayList<Category> categoryList) {
+        System.out.println("In which category would you like to add the product?");
         for (int i = 0; i < categoryList.size(); i++) {
+            /*            System.out.println((i + 1) + ". " + categoryList.get(i).toString());*/
             System.out.println((i + 1) + ". " + categoryList.get(i).toString());
         }
-        System.out.println("e. Quit");
+        System.out.println("e. Back to Product menu");
     }
 
-    private static void addNewProduct(int choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
-        System.out.println("To add a new product in this category (" + categoryList.get(choice).toString()
-                + "), \nyou need to fill in the following information:");
+    private static void addNewProduct(int choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Category, Product> categoryProductHashMap) {
+        System.out.println("To add a new product in this category (" + categoryList.get(choice).toString() +
+                "), \nyou need to fill in the following information:");
 
-        System.out.print("Product name: ");
-        String name = sc.nextLine();
-        System.out.print("Price: ");
-        Double price = sc.nextDouble();
-        System.out.print("Brand: ");
-        String brand = sc.nextLine();
-        System.out.print("Product ID: ");
-        String productID = sc.nextLine();
-        inventory.add(new Product(name, price, categoryList.get(choice), brand, productID));
+        String name = getInfo("Name: ", sc);
+        Double price = getPrice("Price: ", sc);
+        String brand = getInfo("Brand: ", sc);
+        String productID = getInfo("Product ID: ", sc);
+        categoryProductHashMap.put(categoryList.get(choice), new Product(name, price, brand, productID));
+
     }
 
-    public static void category(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
+    private static String getInfo(String s, Scanner sc) {
+        System.out.println(s);
+        return sc.nextLine();
+    }
+
+    private static Double getPrice(String s, Scanner sc) {
+        System.out.println(s);
+        return sc.nextDouble();
+    }
+
+
+    public static void category(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Category, Product> categoryProductHashMap) {
         String choice;
 
         do {
-            printCategoryMenu(categoryList);
-            choice = sc.nextLine();
-            choice = choice.toLowerCase();
-            switchCategories(categoryList, choice, sc);
+            printCategoryMenu();
+            choice = sc.nextLine().toLowerCase();
+            switchCategories(categoryList, choice, sc, categoryProductHashMap);
         } while (!choice.equals("e"));
-
     }
 
-    private static void printCategoryMenu(ArrayList<Category> categoryList) {
+    private static void printCategoryMenu() {
         System.out.println("""
                             
                 Category Menu
                 =============
                 1. Add category
                 2. Print categories
-                e. Main menu
+                e. Back to Main menu
                 """);
     }
 
@@ -145,7 +153,7 @@ public class Admin {
         }
     }
 
-    private static void switchCategories(ArrayList<Category> categoryList, String choice, Scanner sc) {
+    private static void switchCategories(ArrayList<Category> categoryList, String choice, Scanner sc, HashMap<Category, Product> categoryProductHashMap) {
         switch (choice) {
             case "1" -> addNewCategory(categoryList, sc);
             case "2" -> printCategories(categoryList);
@@ -165,7 +173,4 @@ public class Admin {
 
     private static void search() {
     }
-
-
-
 }

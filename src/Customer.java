@@ -6,8 +6,7 @@ public class Customer {
         String choice;
         do {
             printMenu();
-            choice = sc.nextLine();
-            choice = choice.toLowerCase();
+            choice = sc.nextLine().toLowerCase();
             switchMenu(choice, sc, categoryList, inventory);
         } while (!choice.equals("e"));
     }
@@ -16,27 +15,28 @@ public class Customer {
         switch (choice) {
             case "1" -> showProduct(inventory);
             case "2" -> printCategories(categoryList);
-            case "4" -> search();
-            case "e" -> Menu.quit();
+            case "3" -> search();
             default -> System.out.println("Please choose one of the alternatives below:");
         }
     }
 
     private static void printMenu() {
         System.out.println("""
-                            
+                
                 Disc Shop
                 =========
                 1. Show products
                 2. Show categories
-                4. Search product
-                e. Quit
+                3. Search product
+                e. Switch user
                 """);
     }
 
     private static void showProduct(ArrayList<Product> inventory) {
         if (inventory.size() == 0) {
-            System.out.println("Please add a product before you print it");
+            System.out.println("""
+                    There is no products available in this shop at the moment
+                    Please come back later""");
         } else {
             for (Product product : inventory) {
                 System.out.println(product.printProducts());
@@ -54,6 +54,4 @@ public class Customer {
 
     private static void search() {
     }
-
-
 }

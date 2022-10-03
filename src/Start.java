@@ -1,19 +1,19 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Start {
 
-    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
+    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Category, Product> categoryProductHashMap) {
         String choice;
         do {
-            printStartMenu(sc, categoryList, inventory);
-            choice = sc.nextLine();
-            choice = choice.toLowerCase();
-            switchMenu(choice, sc, categoryList, inventory);
+            printStartMenu();
+            choice = sc.nextLine().toLowerCase();
+            switchMenu(choice, sc, categoryList, inventory, categoryProductHashMap);
         } while (!choice.equals("e"));
     }
 
-    static void printStartMenu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
+    static void printStartMenu() {
         System.out.println("""
                 Welcome to Disc Shop!
                 =====================
@@ -25,10 +25,10 @@ public class Start {
                 """);
     }
 
-    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
+    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Category, Product> categoryProductHashMap) {
         switch (choice) {
             case "1" -> Customer.menu(sc, categoryList, inventory);
-            case "2" -> Admin.menu(sc, categoryList, inventory);
+            case "2" -> Admin.menu(sc, categoryList, inventory, categoryProductHashMap);
             case "3" -> Master.menu(sc, categoryList, inventory);
             case "e" -> Menu.quit();
             default -> System.out.println("Please choose one of the alternatives below:");
