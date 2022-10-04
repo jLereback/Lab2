@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Start {
 
-    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Category, Product> categoryProductHashMap) {
+    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Product, Category> categoryProductHashMap) {
         String choice;
         do {
             printStartMenu();
@@ -25,18 +25,18 @@ public class Start {
                 """);
     }
 
-    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Category, Product> categoryProductHashMap) {
+    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Product, Category> categoryProductHashMap) {
         switch (choice) {
-            case "1" -> Customer.menu(sc, categoryList, inventory);
+            case "1" -> Customer.menu(sc, categoryList, inventory, categoryProductHashMap);
             case "2" -> Admin.menu(sc, categoryList, inventory, categoryProductHashMap);
-            case "3" -> Master.menu(sc, categoryList, inventory);
+            case "3" -> Master.menu(sc, categoryList, inventory, categoryProductHashMap);
             case "e" -> Menu.quit();
             default -> System.out.println("Please choose one of the alternatives below:");
         }
     }
 
     private static class Master {
-        static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
+        static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Product, Category> categoryProductHashMap) {
             System.out.println("");
         }
     }

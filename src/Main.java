@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Main {
     /*
-Todo: Fundera igenom vilka klasser som kan behövas för att implementera följande:
+    Fundera igenom vilka klasser som kan behövas för att implementera följande:
      Varor som kan innehålla:
         1. Namn
         2. Pris
@@ -18,12 +18,16 @@ Todo: Fundera igenom vilka klasser som kan behövas för att implementera följa
     - Det ska gå att skapa nya kategorier i framtiden.
     - Hantera lagersaldo för produkter där jag kan se vilka olika varor som finns samt antal av dessa
     - Söka efter varor inom ett specifikt prisintervall, kategori mm (Java Streams)
+
+    Todo: Om vi behöver lagra element i en samling som garanterar att inga dubbletter lagras,
+     vilket interface väljer vi då?
+        Svar: java.util.Set
     */
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        var categoryProductHashMap = new HashMap<Category, Product>();
+        var categoryProductHashMap = new HashMap<Product, Category>();
         var inventory = new ArrayList<Product>();
         var categoryList = new ArrayList<Category>();
 
@@ -33,6 +37,5 @@ Todo: Fundera igenom vilka klasser som kan behövas för att implementera följa
         categoryList.add(new Category("Distance Driver"));
 
         Start.menu(sc, categoryList, inventory, categoryProductHashMap);
-
     }
 }

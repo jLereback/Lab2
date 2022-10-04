@@ -1,23 +1,56 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Customer {
-    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
+    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Product, Category> categoryProductHashMap) {
         String choice;
         do {
             printMenu();
             choice = sc.nextLine().toLowerCase();
-            switchMenu(choice, sc, categoryList, inventory);
+            switchMenu(choice, sc, categoryList, inventory, categoryProductHashMap);
         } while (!choice.equals("e"));
     }
 
-    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
+    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Product, Category> categoryProductHashMap) {
         switch (choice) {
             case "1" -> showProduct(inventory);
             case "2" -> printCategories(categoryList);
-            case "3" -> search();
+            case "3" -> printProductsInCategory(sc, categoryList, categoryProductHashMap);
+            case "4" -> search();
             default -> System.out.println("Please choose one of the alternatives below:");
         }
+    }
+
+    private static void printProductsInCategory(Scanner sc, ArrayList<Category> categoryList, HashMap<Product, Category> categoryProductHashMap) {
+        categoryList.forEach(System.out::println);
+
+
+        System.out.println("In what category would you like to see the products?");
+        categoryProductHashMap.put();
+
+
+
+
+
+        String choice = sc.nextLine();
+
+/*
+        try {
+            if (choice.equals("e"))
+                System.out.println("Going back to previous menu");
+            else if ((Integer.parseInt(choice) <= categoryList.size()))
+                addNewProduct((Integer.parseInt(choice) - 1), sc, categoryList, inventory, categoryProductHashMap);
+        } catch (NumberFormatException e) {
+            System.out.println("Please choose one of the alternatives below:");
+*/
+
+
+
+/*        categoryProductHashMap.containsKey();*/
+
+
+        System.out.println(categoryProductHashMap);
     }
 
     private static void printMenu() {
@@ -44,11 +77,11 @@ public class Customer {
         }
     }
 
-    private static void printCategories(ArrayList<Category> list) {
-        if (list.size() == 0) {
+    private static void printCategories(ArrayList<Category> categoryList) {
+        if (categoryList.size() == 0) {
             System.out.println("Please create a category before you print it");
         } else {
-            list.forEach(System.out::println);
+            categoryList.forEach(System.out::println);
         }
     }
 
