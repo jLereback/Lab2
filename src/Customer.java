@@ -1,90 +1,63 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
-public class Customer {
-    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Category> categoryProductHashMap) {
+public class Customer extends Super {
+    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         String choice;
         do {
-            printMenu();
+            Menu.printCustomerMenu();
             choice = sc.nextLine().toLowerCase();
-            switchMenu(choice, sc, categoryList, products, categoryProductHashMap);
+            switchCustomerMenu(choice, sc, categoryList, products);
         } while (!choice.equals("e"));
     }
 
-    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Category> categoryProductHashMap) {
+    private static void switchCustomerMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         switch (choice) {
-            case "1" -> showProduct(products);
-            case "2" -> printCategories(categoryList);
-            case "3" -> printProductsInCategory(sc, categoryList, categoryProductHashMap);
+            case "1" -> showProducts(sc, categoryList, products);
+            case "2" -> printCategoryList(sc, categoryList, products);
+            case "3" -> printProductsInCategory(choice, sc, categoryList, products);
             case "4" -> search();
             default -> System.out.println("Please choose one of the alternatives below:");
         }
     }
 
-    private static void printProductsInCategory(Scanner sc, ArrayList<Category> categoryList, HashMap<Product, Category> categoryProductHashMap) {
-        categoryList.forEach(System.out::println);
+    private static void showProducts(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        String choice;
+        printProductInfo(sc, categoryList, products);
+        choice = sc.nextLine().toLowerCase();
+        switchCustomerProductMenu(choice, sc, categoryList, products);
 
-
-        System.out.println("In what category would you like to see the products?");
-/*        categoryProductHashMap.put();
-
-
-
-
-
-        String choice = sc.nextLine();*/
-
-/*
-        try {
-            if (choice.equals("e"))
-                System.out.println("Going back to previous menu");
-            else if ((Integer.parseInt(choice) <= categoryList.size()))
-                addNewProduct((Integer.parseInt(choice) - 1), sc, categoryList, products, categoryProductHashMap);
-        } catch (NumberFormatException e) {
-            System.out.println("Please choose one of the alternatives below:");
-*/
-
-
-
-/*        categoryProductHashMap.containsKey();*/
-
-
-        System.out.println(categoryProductHashMap);
     }
 
-    private static void printMenu() {
-        System.out.println("""
-                
-                Disc Shop
-                =========
-                1. Show products
-                2. Show categories
-                3. Search product
-                e. Switch user
-                """);
+    private static void switchCustomerProductMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        switch (choice) {
+            case "1" -> chooseCategory(sc, categoryList, products);
+            case "2" -> printAllProducts(products);
+            default -> System.out.println("Please choose one of the alternatives below:");
+        }
     }
 
-    private static void showProduct(ArrayList<Product> products) {
+
+    private static void printProductInfo(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         if (products.size() == 0) {
             System.out.println("""
-                    There is no products available in this shop at the moment
+                    There are no products available in this shop at the moment
                     Please come back later""");
-        } else {
-            for (Product product : products) {
-                System.out.println(product.printProducts());
-            }
+            Start.menu(sc, categoryList, products);
+        }
+        else {
+            System.out.println("Would you like to see all products or from a specific category?");
         }
     }
 
-    private static void printCategories(ArrayList<Category> categoryList) {
+    private static void printCategoryList(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         if (categoryList.size() == 0) {
-            System.out.println("Please create a category before you print it");
-        } else {
-            categoryList.forEach(System.out::println);
+            System.out.println("""
+                    There are no categories in this shop at the moment
+                    Please come back later""");
+            Start.menu(sc, categoryList, products);
         }
-    }
-
-    private static void search() {
+        else
+            categoryList.forEach(System.out::println);
     }
 }

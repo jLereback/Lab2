@@ -22,12 +22,14 @@ public class Main {
     Todo: Om vi behöver lagra element i en samling som garanterar att inga dubbletter lagras,
      vilket interface väljer vi då?
         Svar: java.util.Set
+
+
+    Todo: Abstract superklass så alla subklasser kan köra metoderna i superklassen
     */
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        var categoryProductHashMap = new HashMap<Product, Category>();
         var products = new ArrayList<Product>();
         var categoryList = new ArrayList<Category>();
 
@@ -36,6 +38,6 @@ public class Main {
         categoryList.add(new Category("Fairway Driver"));
         categoryList.add(new Category("Distance Driver"));
 
-        Start.menu(sc, categoryList, products, categoryProductHashMap);
+        Start.menu(sc, categoryList, products);
     }
 }
