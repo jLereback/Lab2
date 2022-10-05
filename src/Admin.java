@@ -3,20 +3,20 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Admin {
-    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Product, Category> categoryProductHashMap) {
+    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Category> categoryProductHashMap) {
         String choice;
         do {
             printMenu();
             choice = sc.nextLine().toLowerCase();
-            switchMenu(choice, sc, categoryList, inventory, categoryProductHashMap);
+            switchMenu(choice, sc, categoryList, products, categoryProductHashMap);
         } while (!choice.equals("e"));
     }
 
-    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Product, Category> categoryProductHashMap) {
+    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Category> categoryProductHashMap) {
         switch (choice) {
-            case "1" -> product(sc, categoryList, inventory, categoryProductHashMap);
-            case "2" -> category(sc, categoryList, inventory, categoryProductHashMap);
-            case "3" -> inventoryBalance(sc, categoryList, inventory);
+            case "1" -> product(sc, categoryList, products, categoryProductHashMap);
+            case "2" -> category(sc, categoryList, products, categoryProductHashMap);
+            case "3" -> productsBalance(sc, categoryList, products);
             case "4" -> search();
             case "e" -> Menu.quit();
             default -> System.out.println("Please choose one of the alternatives below:");
@@ -30,18 +30,18 @@ public class Admin {
                 =========
                 1. Product
                 2. Categories
-                3. Inventory balance
+                3. products balance
                 4. Search product
                 e. Switch user
                 """);
     }
 
-    private static void product(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Product, Category> categoryProductHashMap) {
+    private static void product(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Category> categoryProductHashMap) {
         String choice;
         do {
             printProductMenu();
             choice = sc.nextLine().toLowerCase();
-            switchProduct(choice, sc, categoryList, inventory, categoryProductHashMap);
+            switchProduct(choice, sc, categoryList, products, categoryProductHashMap);
         } while (!choice.equals("e"));
     }
 
@@ -57,27 +57,27 @@ public class Admin {
                 """);
     }
 
-    private static void switchProduct(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Product, Category> categoryProductHashMap) {
+    private static void switchProduct(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Category> categoryProductHashMap) {
         switch (choice) {
-            case "1" -> showProduct(inventory);
-            case "2" -> addProduct(sc, categoryList, inventory, categoryProductHashMap);
+            case "1" -> showProduct(products);
+            case "2" -> addProduct(sc, categoryList, products, categoryProductHashMap);
 //            case "3" -> removeProduct();
             case "e" -> System.out.println("Going back to previous menu");
             default -> System.out.println("Please choose one of the alternatives below:");
         }
     }
 
-    private static void showProduct(ArrayList<Product> inventory) {
-        if (inventory.size() == 0) {
+    private static void showProduct(ArrayList<Product> products) {
+        if (products.size() == 0) {
             System.out.println("Please add a product before you print it");
         } else {
-            for (Product product : inventory) {
+            for (Product product : products) {
                 System.out.println(product.printProducts());
             }
         }
     }
 
-    private static void addProduct(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Product, Category> categoryProductHashMap) {
+    private static void addProduct(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Category> categoryProductHashMap) {
         printAddProductMenu(categoryList);
         String choice = sc.nextLine();
 
@@ -85,10 +85,10 @@ public class Admin {
             if (choice.equals("e"))
                 System.out.println("Going back to previous menu");
             else if ((Integer.parseInt(choice) <= categoryList.size()))
-                addNewProduct((Integer.parseInt(choice) - 1), sc, categoryList, inventory, categoryProductHashMap);
+                addNewProduct((Integer.parseInt(choice) - 1), sc, categoryList, products, categoryProductHashMap);
         } catch (NumberFormatException e) {
             System.out.println("Please choose one of the alternatives below:");
-            addProduct(sc, categoryList, inventory, categoryProductHashMap);
+            addProduct(sc, categoryList, products, categoryProductHashMap);
         }
     }
 
@@ -101,30 +101,31 @@ public class Admin {
         System.out.println("e. Back to Product menu");
     }
 
-    private static void addNewProduct(int choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Product, Category> categoryProductHashMap) {
+    private static void addNewProduct(int choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Category> categoryProductHashMap) {
         System.out.println("To add a new product in this category (" + categoryList.get(choice).toString() +
                 "), \nyou need to fill in the following information:");
 
         String name = getInfo("Name: ", sc);
         Double price = getPrice("Price: ", sc);
+        sc.nextLine();
         String brand = getInfo("Brand: ", sc);
         String productID = getInfo("Product ID: ", sc);
-        categoryProductHashMap.put((new Product(name, price, brand, productID), categoryList.get(choice)));
+        categoryProductHashMap.put(new Product(name, price, brand, productID), categoryList.get(choice));
 
     }
 
     private static String getInfo(String s, Scanner sc) {
-        System.out.println(s);
+        System.out.print(s);
         return sc.nextLine();
     }
 
     private static Double getPrice(String s, Scanner sc) {
-        System.out.println(s);
+        System.out.print(s);
         return sc.nextDouble();
     }
 
 
-    public static void category(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory, HashMap<Product, Category> categoryProductHashMap) {
+    public static void category(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Category> categoryProductHashMap) {
         String choice;
 
         do {
@@ -166,9 +167,9 @@ public class Admin {
         categoryList.add(new Category(sc.nextLine()));
     }
 
-    private static void inventoryBalance(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> inventory) {
-        System.out.println(inventory.size());
-        inventory.forEach(System.out::println);
+    private static void productsBalance(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        System.out.println(products.size());
+        products.forEach(System.out::println);
     }
 
     private static void search() {

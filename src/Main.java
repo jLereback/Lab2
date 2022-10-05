@@ -28,7 +28,7 @@ public class Main {
         Scanner sc = new Scanner(System.in);
 
         var categoryProductHashMap = new HashMap<Product, Category>();
-        var inventory = new ArrayList<Product>();
+        var products = new ArrayList<Product>();
         var categoryList = new ArrayList<Category>();
 
         categoryList.add(new Category("Put & Approach"));
@@ -36,6 +36,6 @@ public class Main {
         categoryList.add(new Category("Fairway Driver"));
         categoryList.add(new Category("Distance Driver"));
 
-        Start.menu(sc, categoryList, inventory, categoryProductHashMap);
+        Start.menu(sc, categoryList, products, categoryProductHashMap);
     }
 }
