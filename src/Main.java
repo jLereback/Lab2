@@ -33,7 +33,7 @@ public class Main {
         var products = new ArrayList<Product>();
         var categoryList = new ArrayList<Category>();
 
-        categoryList.add(new Category("Put & Approach"));
+        categoryList.add(new Category("Putt&Approach"));
         categoryList.add(new Category("Midrange"));
         categoryList.add(new Category("Fairway Driver"));
         categoryList.add(new Category("Distance Driver"));

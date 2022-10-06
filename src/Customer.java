@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Customer extends Super {
+
     static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         String choice;
         do {
@@ -15,7 +16,7 @@ public class Customer extends Super {
         switch (choice) {
             case "1" -> showProducts(sc, categoryList, products);
             case "2" -> printCategoryList(sc, categoryList, products);
-            case "3" -> printProductsInCategory(choice, sc, categoryList, products);
+            case "3" -> printProductsInCategory(choice, categoryList, products);
             case "4" -> search();
             default -> System.out.println("Please choose one of the alternatives below:");
         }
@@ -24,17 +25,7 @@ public class Customer extends Super {
     private static void showProducts(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         String choice;
         printProductInfo(sc, categoryList, products);
-        choice = sc.nextLine().toLowerCase();
-        switchCustomerProductMenu(choice, sc, categoryList, products);
 
-    }
-
-    private static void switchCustomerProductMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
-        switch (choice) {
-            case "1" -> chooseCategory(sc, categoryList, products);
-            case "2" -> printAllProducts(products);
-            default -> System.out.println("Please choose one of the alternatives below:");
-        }
     }
 
 
@@ -43,10 +34,10 @@ public class Customer extends Super {
             System.out.println("""
                     There are no products available in this shop at the moment
                     Please come back later""");
-            Start.menu(sc, categoryList, products);
-        }
-        else {
-            System.out.println("Would you like to see all products or from a specific category?");
+        } else {
+            Menu.printChosenMenu();
+            String choice = sc.nextLine().toLowerCase();
+            switchProductMenu(choice, sc, categoryList, products);
         }
     }
 
@@ -56,8 +47,7 @@ public class Customer extends Super {
                     There are no categories in this shop at the moment
                     Please come back later""");
             Start.menu(sc, categoryList, products);
-        }
-        else
+        } else
             categoryList.forEach(System.out::println);
     }
 }

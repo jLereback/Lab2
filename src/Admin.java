@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Admin extends Super{
+public class Admin extends Super {
     static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         String choice;
         do {
@@ -32,26 +32,30 @@ public class Admin extends Super{
         } while (!choice.equals("e"));
     }
 
-
-
-
-    public static void category(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
-        String choice;
-
-        do {
-            Menu.printAdminCategoryMenu();
-            choice = sc.nextLine().toLowerCase();
-            switchCategories(categoryList, choice, sc);
-        } while (!choice.equals("e"));
-    }
-
-    private static void switchCategories(ArrayList<Category> categoryList, String choice, Scanner sc) {
+    private static void switchProduct(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         switch (choice) {
-            case "1" -> addNewCategory(categoryList, sc);
-            case "2" -> printCategories(categoryList);
+            case "1" -> addProduct(sc, categoryList, products);
+            case "2" -> removeProduct(sc, categoryList, products);
+            case "e" -> System.out.println("Going back to previous menu");
             default -> System.out.println("Please choose one of the alternatives below:");
         }
     }
 
+    public static void category(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        String choice;
+        do {
+            Menu.printAdminCategoryMenu();
+            choice = sc.nextLine().toLowerCase();
+            switchCategories(categoryList, products, choice, sc);
+        } while (!choice.equals("e"));
+    }
 
+    private static void switchCategories(ArrayList<Category> categoryList, ArrayList<Product> products, String choice, Scanner sc) {
+        switch (choice) {
+            case "1" -> addNewCategory(categoryList, sc);
+            case "2" -> printCategories(categoryList);
+            case "3" -> deleteCategory(sc, categoryList, products);
+            default -> System.out.println("Please choose one of the alternatives below:");
+        }
+    }
 }

@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,19 +12,39 @@ public abstract class Super {
         }
     }
 
-    static void showProduct(ArrayList<Product> products) {
-        if (products.size() == 0)
-            System.out.println("Please add a product before you print it");
-        else
-            for (Product product : products) {
-                System.out.println(product);
-            }
+    static void switchProductMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        switch (choice) {
+            case "1" -> chooseCategory(sc, categoryList, products);
+            case "2" -> printAllProducts(products, categoryList);
+            default -> System.out.println("Please choose one of the alternatives below:");
+        }
     }
 
-    static void printProductsInCategory(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+    private static void chooseCategory(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        String choice;
+//        do {
+        Menu.printProductMenu(categoryList);
+        choice = sc.nextLine();
+        chooseSpecificCategory(choice, sc, categoryList, products);
+//        } while (!choice.equals("e"));
+    }
 
+    private static void chooseSpecificCategory(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        if (choice.equals("e"))
+            System.out.println("Going back to previous menu");
+        else if ((Integer.parseInt(choice) <= categoryList.size()))
+            printProductsInCategory(choice, categoryList, products);
+    }
+
+    static void printProductsInCategory(String choice, ArrayList<Category> categoryList, ArrayList<Product> products) {
         int choiceNumber = (Integer.parseInt(choice) - 1);
         Category categoryName = categoryList.get(choiceNumber);
+        System.out.println("Name " + lineUpName(4) +
+                "| price " + lineUpPrice(5) +
+                "| category " + lineUpCategory(8) +
+                "| brand " + lineUpBrand(5) +
+                "| productID " + lineUpProductID(9) +
+                "| stock");
         products.stream()
                 .filter(product -> product.category().equals(categoryName))
                 .forEach(System.out::println);
@@ -38,9 +59,9 @@ public abstract class Super {
     }
 
     static void addProduct(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        String choice;
         Menu.printProductMenu(categoryList);
-        String choice = sc.nextLine();
-
+        choice = sc.nextLine();
         try {
             if (choice.equals("e"))
                 System.out.println("Going back to previous menu");
@@ -48,7 +69,6 @@ public abstract class Super {
                 addNewProduct((Integer.parseInt(choice) - 1), sc, categoryList, products);
         } catch (NumberFormatException e) {
             System.out.println("Please choose one of the alternatives below:");
-            addProduct(sc, categoryList, products);
         }
     }
 
@@ -57,11 +77,17 @@ public abstract class Super {
                 "), \nyou need to fill in the following information:");
 
         String name = getInfo("Name: ", sc);
-        Double price = getPrice("Price: ", sc);
-        sc.nextLine();
+        BigDecimal price = getPrice("Price: ", sc);
         String brand = getInfo("Brand: ", sc);
         String productID = getInfo("Product ID: ", sc);
-        products.add(new Product(name, price, categoryList.get(choice), brand, productID));
+        int stock = getStock("Stock: ", sc);
+        sc.nextLine();
+        products.add(new Product(name, price, categoryList.get(choice), brand, productID, stock));
+    }
+
+    private static BigDecimal getPrice(String s, Scanner sc) {
+        System.out.print(s);
+        return new BigDecimal(sc.nextLine());
     }
 
     static String getInfo(String s, Scanner sc) {
@@ -69,9 +95,9 @@ public abstract class Super {
         return sc.nextLine();
     }
 
-    static Double getPrice(String s, Scanner sc) {
+    static Integer getStock(String s, Scanner sc) {
         System.out.print(s);
-        return sc.nextDouble();
+        return sc.nextInt();
     }
 
     static void productsBalance(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
@@ -79,44 +105,92 @@ public abstract class Super {
         products.forEach(System.out::println);
     }
 
-    static void deleteCategory(ArrayList<Category> categoryList) {
-
-    }
-
-    static void switchProduct(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
-        switch (choice) {
-            case "1" -> showProduct(products);
-            case "2" -> addProduct(sc, categoryList, products);
-            case "3" -> removeProduct();
-            case "e" -> System.out.println("Going back to previous menu");
-            default -> System.out.println("Please choose one of the alternatives below:");
-        }
-    }
-
-    static void printAllProducts(ArrayList<Product> products) {
-        for (Product product : products) {
-            System.out.println(product.printProducts());
-        }
-    }
-
-    static void chooseCategory(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
-        Menu.printProductMenu(categoryList);
-        String choice = sc.nextLine();
-
+    static void deleteCategory(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        String choice;
+        Menu.printRemoveCategoryMenu(categoryList, products);
+        choice = sc.nextLine();
         try {
             if (choice.equals("e"))
                 System.out.println("Going back to previous menu");
             else if ((Integer.parseInt(choice) <= categoryList.size()))
-                printProductsInCategory(choice, sc, categoryList, products);
-            addNewProduct((Integer.parseInt(choice) - 1), sc, categoryList, products);
+                removeChosenCategory((Integer.parseInt(choice) - 1), sc, categoryList, products);
         } catch (NumberFormatException e) {
             System.out.println("Please choose one of the alternatives below:");
-            addProduct(sc, categoryList, products);
         }
     }
 
-    static void removeProduct() {
-
+    private static void removeChosenCategory(int choiceNumber, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        System.out.println("The chosen product is now deleted");
+        categoryList.remove(choiceNumber);
     }
 
+    static void printAllProducts(ArrayList<Product> products, ArrayList<Category> categoryList) {
+        System.out.println("Name " + lineUpName(4) +
+                "| price " + lineUpPrice(5) +
+                "| category " + lineUpCategory(8) +
+                "| brand " + lineUpBrand(5) +
+                "| productID " + lineUpProductID(9) +
+                "| stock");
+        for (Product product : products) {
+            System.out.println(product);
+        }
+    }
+
+    static String lineUpName(int length) {
+        for (int i = 0; i < 12 - length; i++)
+            System.out.print("");
+        return " ";
+    }
+
+    static String lineUpCategory(int length) {
+        for (int i = 0; i < 18 - length; i++)
+            System.out.print("");
+        return " ";
+    }
+
+    static String lineUpPrice(int length) {
+        for (int i = 0; i < 6 - length; i++)
+            System.out.print("");
+        return " ";
+    }
+
+    static String lineUpBrand(int length) {
+        for (int i = 0; i < 18 - length; i++)
+            System.out.print("");
+        return " ";
+    }
+
+    static String lineUpProductID(int length) {
+        for (int i = 0; i < 6 - length; i++)
+            System.out.print("");
+        return " ";
+    }
+
+
+    static void removeProduct(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        if (products.size() == 0)
+            System.out.println("Please add a product before you remove it");
+        else {
+            removeExistingProduct(sc, categoryList, products);
+        }
+    }
+
+    private static void removeExistingProduct(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        String choice;
+        Menu.printRemoveProductMenu(products);
+        choice = sc.nextLine();
+        try {
+            if (choice.equals("e"))
+                System.out.println("Going back to previous menu");
+            else if ((Integer.parseInt(choice) <= products.size()))
+                removeChosenProduct((Integer.parseInt(choice) - 1), sc, categoryList, products);
+        } catch (NumberFormatException e) {
+            System.out.println("Please choose one of the alternatives below:");
+        }
+    }
+
+    private static void removeChosenProduct(int choiceNumber, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        System.out.println("The chosen product is now deleted");
+        products.remove(choiceNumber);
+    }
 }
