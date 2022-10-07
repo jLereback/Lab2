@@ -38,6 +38,30 @@ public final class Product {
             return "5+";
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public String getProductID() {
+        return productID;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
     @Override
     public String toString() {
         var nameSpace = Super.lineUpName(name.length());

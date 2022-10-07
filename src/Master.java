@@ -1,7 +1,5 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Map.Entry;
 
 public class Master extends Super {
     static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
@@ -19,6 +17,7 @@ public class Master extends Super {
             case "2" -> category(sc, categoryList, products);
             case "3" -> productsBalance(sc, categoryList, products);
             case "4" -> search();
+            case "5" -> showShopMenu(sc, categoryList, products);
             case "e" -> Menu.quit();
             default -> System.out.println("Please choose one of the alternatives below:");
         }
@@ -35,7 +34,7 @@ public class Master extends Super {
 
     private static void switchProduct(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         switch (choice) {
-            case "1" -> showProductMenu(sc, categoryList, products);
+            case "1" -> printProductInfo(sc, categoryList, products);
             case "2" -> addProduct(sc, categoryList, products);
             case "3" -> removeProduct(sc, categoryList, products);
             case "e" -> System.out.println("Going back to previous menu");
@@ -43,16 +42,37 @@ public class Master extends Super {
         }
     }
 
-    private static void showProductMenu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+
+    private static void printProductInfo(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         if (products.size() == 0) {
-            System.out.println("Please add a product before you print it");
+            System.out.println("""
+                    Please add a product before you print it""");
         } else {
-            String choice;
             Menu.printChosenMenu();
-            choice = sc.nextLine().toLowerCase();
+            String choice = sc.nextLine().toLowerCase();
             switchProductMenu(choice, sc, categoryList, products);
         }
     }
+    private static void showShopMenu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        String choice;
+        do {
+            Menu.printShopMenu();
+            choice = sc.nextLine().toLowerCase();
+            switchShopMenu(choice, sc, categoryList, products);
+        } while (!choice.equals("e"));
+    }
+
+    private static void switchShopMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        switch (choice) {
+            case "1" -> addToCart(sc, categoryList, products);
+            case "2" -> showCart(sc, categoryList, products);
+            case "3" -> editCart(sc, categoryList, products);
+            case "4" -> toCheckout(sc, categoryList, products);
+            case "e" -> System.out.println("Going back to previous menu");
+            default -> System.out.println("Please choose one of the alternatives below:");
+        }
+    }
+
 
 
     public static void category(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {

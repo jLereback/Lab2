@@ -15,7 +15,6 @@ public class Menu {
                 e. Quit
                 """);
     }
-
     static void printMasterMenu() {
         System.out.println("""
                             
@@ -25,6 +24,7 @@ public class Menu {
                 2. Categories
                 3. Inventory balance
                 4. Search product
+                5. Shop
                 e. Switch user
                 """);
     }
@@ -68,10 +68,10 @@ public class Menu {
                 Shop Menu
                 =========
                 1. Add to cart
-                2. Edit cart
-                3. Show cart
+                2. Show cart
+                3. Edit cart
                 4. Checkout
-                e. Switch user
+                e. Main Menu
                 """);
     }
     static void printProductMenu(ArrayList<Category> categoryList) {

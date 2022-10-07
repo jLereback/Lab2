@@ -1,6 +1,8 @@
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
+
 
 public abstract class Super {
 
@@ -76,32 +78,31 @@ public abstract class Super {
         System.out.println("To add a new product in this category (" + categoryList.get(choice).toString() +
                 "), \nyou need to fill in the following information:");
 
-        String name = getInfo("Name: ", sc);
-        BigDecimal price = getPrice("Price: ", sc);
-        String brand = getInfo("Brand: ", sc);
-        String productID = getInfo("Product ID: ", sc);
-        int stock = getStock("Stock: ", sc);
+        String name = setInfo("Name: ", sc);
+        BigDecimal price = setPrice("Price: ", sc);
+        String brand = setInfo("Brand: ", sc);
+        String productID = setInfo("Product ID: ", sc);
+        int stock = setStock("Stock: ", sc);
         sc.nextLine();
         products.add(new Product(name, price, categoryList.get(choice), brand, productID, stock));
     }
 
-    private static BigDecimal getPrice(String s, Scanner sc) {
+    private static BigDecimal setPrice(String s, Scanner sc) {
         System.out.print(s);
         return new BigDecimal(sc.nextLine());
     }
 
-    static String getInfo(String s, Scanner sc) {
+    static String setInfo(String s, Scanner sc) {
         System.out.print(s);
         return sc.nextLine();
     }
 
-    static Integer getStock(String s, Scanner sc) {
+    static Integer setStock(String s, Scanner sc) {
         System.out.print(s);
         return sc.nextInt();
     }
 
     static void productsBalance(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
-        System.out.println(products.size());
         products.forEach(System.out::println);
     }
 
@@ -125,7 +126,7 @@ public abstract class Super {
     }
 
     static void printAllProducts(ArrayList<Product> products, ArrayList<Category> categoryList) {
-        System.out.println("Name " + lineUpName(4) +
+        System.out.printf("Name " + lineUpName(4) +
                 "| price " + lineUpPrice(5) +
                 "| category " + lineUpCategory(8) +
                 "| brand " + lineUpBrand(5) +
@@ -192,5 +193,22 @@ public abstract class Super {
     private static void removeChosenProduct(int choiceNumber, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         System.out.println("The chosen product is now deleted");
         products.remove(choiceNumber);
+    }
+
+
+    static void addToCart(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+
+    }
+
+    static void showCart(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+
+    }
+
+    static void editCart(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+
+    }
+
+    static void toCheckout(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+
     }
 }
