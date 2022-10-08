@@ -78,30 +78,6 @@ public final class Product {
                 inStock(stock);
     }
 
-    public String name() {
-        return name;
-    }
-
-    public BigDecimal price() {
-        return price;
-    }
-
-    public Category category() {
-        return category;
-    }
-
-    public String brand() {
-        return brand;
-    }
-
-    public String productID() {
-        return productID;
-    }
-
-    public int stock() {
-        return stock;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

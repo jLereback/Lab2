@@ -41,14 +41,14 @@ public abstract class Super {
     static void printProductsInCategory(String choice, ArrayList<Category> categoryList, ArrayList<Product> products) {
         int choiceNumber = (Integer.parseInt(choice) - 1);
         Category categoryName = categoryList.get(choiceNumber);
-        System.out.println("Name " + lineUpName(4) +
-                "| price " + lineUpPrice(5) +
-                "| category " + lineUpCategory(8) +
-                "| brand " + lineUpBrand(5) +
-                "| productID " + lineUpProductID(9) +
-                "| stock");
+        System.out.println("Name" + lineUpName(4) +
+                "| Price" + lineUpPrice(5) +
+                "| Category" + lineUpCategory(8) +
+                "| Brand" + lineUpBrand(5) +
+                "| ProductID" + lineUpProductID(9) +
+                "| Stock");
         products.stream()
-                .filter(product -> product.category().equals(categoryName))
+                .filter(product -> product.getCategory().equals(categoryName))
                 .forEach(System.out::println);
     }
 
@@ -126,48 +126,94 @@ public abstract class Super {
     }
 
     static void printAllProducts(ArrayList<Product> products, ArrayList<Category> categoryList) {
-        System.out.printf("Name " + lineUpName(4) +
-                "| price " + lineUpPrice(5) +
-                "| category " + lineUpCategory(8) +
-                "| brand " + lineUpBrand(5) +
-                "| productID " + lineUpProductID(9) +
-                "| stock");
+        System.out.println("Name" + lineUpName(4) +
+                "| Price" + lineUpPrice(5) +
+                "| Category" + lineUpCategory(8) +
+                "| Brand" + lineUpBrand(5) +
+                "| ProductID" + lineUpProductID(9) +
+                "| Stock");
         for (Product product : products) {
             System.out.println(product);
         }
     }
 
     static String lineUpName(int length) {
-        for (int i = 0; i < 12 - length; i++)
-            System.out.print("");
-        return " ";
-    }
-
-    static String lineUpCategory(int length) {
-        for (int i = 0; i < 18 - length; i++)
-            System.out.print("");
-        return " ";
+        if (length < 4)
+            return "\t\t ";
+        else if (length < 8)
+            return "\t ";
+        else
+            return " ";
     }
 
     static String lineUpPrice(int length) {
-        for (int i = 0; i < 6 - length; i++)
-            System.out.print("");
-        return " ";
+        if (length < 4)
+            return "\t\t";
+        else if (length < 8)
+            return "\t";
+        else
+            return "";
+    }
+
+    static String lineUpCategory(int length) {
+        if (length < 5)
+            return "\t\t";
+        else if (length < 9)
+            return "\t";
+        else
+            return " ";
     }
 
     static String lineUpBrand(int length) {
-        for (int i = 0; i < 18 - length; i++)
-            System.out.print("");
-        return " ";
+        if (length < 6)
+            return "\t\t\t";
+        else if (length < 10)
+            return "\t\t";
+        else
+            return "\t";
     }
 
     static String lineUpProductID(int length) {
-        for (int i = 0; i < 6 - length; i++)
-            System.out.print("");
-        return " ";
+        if (length < 6)
+            return "\t\t";
+        else if (length < 10)
+            return "\t";
+        else
+            return " ";
     }
 
+/*
+Copy and Paste in Terminal:
+3
+1
+2
+1
+Pure
+179
+Latitude 64
+90210
+3
 
+2
+2
+Compass
+1829
+Innova
+21
+93812
+
+2
+3
+Sapphire
+18
+Discraft
+987654321
+1
+
+1
+2
+
+*/
     static void removeProduct(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         if (products.size() == 0)
             System.out.println("Please add a product before you remove it");
@@ -212,3 +258,6 @@ public abstract class Super {
 
     }
 }
+
+
+
