@@ -17,7 +17,7 @@ public class Customer extends Super {
             case "1" -> showProducts(sc, categoryList, products);
             case "2" -> printCategoryList(sc, categoryList, products);
             case "3" -> printProductsInCategory(choice, categoryList, products);
-            case "4" -> search();
+            case "4" -> search(sc, categoryList, products);
             default -> System.out.println("Please choose one of the alternatives below:");
         }
     }

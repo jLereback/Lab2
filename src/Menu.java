@@ -1,44 +1,58 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
-public class Menu {
+public abstract class Menu {
 
     static void printStartMenu() {
         System.out.println("""
-                
+                                
                 Welcome to Disc Shop!
                 =====================
                 Please choose your role for today:
                 1. Customer
                 2. Admin
                 3. Master
-                e. Quit
+                e. Log out
                 """);
     }
+
     static void printMasterMenu() {
         System.out.println("""
                             
                 Disc Shop
                 =========
-                1. Product
+                1. Inventory
                 2. Categories
-                3. Inventory balance
-                4. Search product
-                5. Shop
+                3. Search product
+                4. Shop
                 e. Switch user
                 """);
     }
-    static void printMasterProductMenu() {
+
+    static void printMasterInventoryMenu() {
         System.out.println("""
                             
                 Product Menu
                 ============
-                1. Show products
-                2. Add product
-                3. Remove product
-                e. Back to Main menu
+                1. Print inventory
+                2. Add new product
+                3. Edit inventory
+                4. Remove product
+                e. Main menu
                 """);
     }
+
+    static void editChosenProduct(String choice, ArrayList<Product> products) {
+        System.out.println("""
+                
+                Would you like to increase or decrease stock?
+                1. Increase
+                2. Decrease
+                e. Previous menu
+                """);
+    }
+
     static void printMasterCategoryMenu() {
         System.out.println("""
                             
@@ -47,12 +61,13 @@ public class Menu {
                 1. Add category
                 2. Print categories
                 3. Delete category
-                e. Back to Main menu
+                e. Main menu
                 """);
     }
+
     static void printCustomerMenu() {
         System.out.println("""
-                
+                                
                 Disc Shop
                 =========
                 1. Show products
@@ -62,9 +77,10 @@ public class Menu {
                 e. Switch user
                 """);
     }
+
     static void printShopMenu() {
         System.out.println("""
-                
+                                
                 Shop Menu
                 =========
                 1. Add to cart
@@ -74,17 +90,7 @@ public class Menu {
                 e. Main Menu
                 """);
     }
-    static void printProductMenu(ArrayList<Category> categoryList) {
-        System.out.println("""
-                
-                Which category would you like to use?
-                """);
-        for (int i = 0; i < categoryList.size(); i++) {
-            System.out.println((i + 1) + ". " + categoryList.get(i).toString());
-        }
-        System.out.println("""
-                e. Main menu""");
-    }
+
     static void printAdminMenu() {
         System.out.println("""
                             
@@ -97,6 +103,7 @@ public class Menu {
                 e. Switch user
                 """);
     }
+
     static void printAdminProductMenu() {
         System.out.println("""
                             
@@ -104,19 +111,21 @@ public class Menu {
                 ============
                 1. Add product
                 2. Remove product
-                e. Back to Main menu
+                e. Main menu
                 """);
     }
+
     static void printChosenMenu() {
         System.out.println("""
-            
-            Would you like to see products from all categories
-            or products from a specific one?
-            1. Choose specific category
-            2. All categories
-            e. Back to Main menu
-            """);
+                            
+                Would you like to see products from all categories
+                or products from a specific one?
+                1. Choose specific category
+                2. All categories
+                e. Previous menu
+                """);
     }
+
     static void printAdminCategoryMenu() {
         System.out.println("""
                             
@@ -125,32 +134,53 @@ public class Menu {
                 1. Add category
                 2. Print categories
                 3. Delete category
-                e. Back to Main menu
+                e. Main menu
                 """);
     }
+
+    static void printEdibleProductMenu(Scanner sc, ArrayList<Product> products) {
+        System.out.println("""
+                                
+                What product would you like to edit?""");
+        for (int i = 0; i < products.size(); i++) {
+            System.out.println((i + 1) + ". " + products.get(i).getName());
+        }
+        System.out.println("e. Previous menu");
+    }
+
+    static void printProductMenu(ArrayList<Category> categoryList) {
+        System.out.println("""
+                                
+                Which category would you like to use?""");
+        for (int i = 0; i < categoryList.size(); i++) {
+            System.out.println((i + 1) + ". " + categoryList.get(i).toString());
+        }
+        System.out.println("e. Previous menu");
+    }
+
     static void printRemoveCategoryMenu(ArrayList<Category> categoryList, ArrayList<Product> products) {
         System.out.println("""
-                
+                                
                 Which category would you like to remove?
                 """);
         for (int i = 0; i < categoryList.size(); i++) {
             System.out.println((i + 1) + ". " + categoryList.get(i).toString());
         }
-        System.out.println("""
-                e. Main menu""");
+        System.out.println("e. Previous menu");
     }
+
     static void printRemoveProductMenu(ArrayList<Product> products) {
         System.out.println("""
-                
+                                
                 Which product would you like to remove?
                 """);
         for (int i = 0; i < products.size(); i++) {
-            System.out.println((i + 1) + ". " + products.get(i).toString());
+            System.out.println((i + 1) + ". " + products.get(i).getName());
         }
-        System.out.println("""
-                e. Main menu""");
+        System.out.println("e. Previous menu");
     }
-    static void quit () {
+
+    static void quit() {
         System.out.println("Welcome back");
     }
 }

@@ -19,10 +19,10 @@ public final class Product {
     private final BigDecimal price;
     private final Category category;
     private final String brand;
-    private final String productID;
-    private final int stock;
+    private final int productID;
+    private int stock;
 
-    public Product(String name, BigDecimal price, Category category, String brand, String productID, int stock) {
+    public Product(String name, BigDecimal price, Category category, String brand, int productID, int stock) {
         this.name = name;
         this.price = price;
         this.category = category;
@@ -31,44 +31,48 @@ public final class Product {
         this.stock = stock;
     }
 
-    private String inStock(Integer stock) {
-        if (stock < 5)
-            return stock.toString();
-        else
-            return "5+";
-    }
-
     public String getName() {
+
         return name;
     }
 
     public BigDecimal getPrice() {
+
         return price;
     }
 
     public Category getCategory() {
+
         return category;
     }
 
     public String getBrand() {
+
         return brand;
     }
 
-    public String getProductID() {
+    public int getProductID() {
+
         return productID;
     }
 
     public int getStock() {
+
         return stock;
+    }
+
+    public void editStock(int stock) {
+
+        this.stock = stock;
     }
 
     @Override
     public String toString() {
-        var nameSpace = Super.lineUpName(name.length());
-        var priceSpace = Super.lineUpPrice(price.toString().length());
-        var categorySpace = Super.lineUpCategory(category.toString().length());
-        var brandSpace = Super.lineUpBrand(brand.length());
-        var productIDSpace = Super.lineUpProductID(productID.length());
+        var nameSpace = LineUp.lineUpName(name.length());
+        var priceSpace = LineUp.lineUpPrice(price.toString().length());
+        var categorySpace = LineUp.lineUpCategory(category.toString().length());
+        var brandSpace = LineUp.lineUpBrand(brand.length());
+        var productIDSpace = LineUp.lineUpProductID(String.valueOf(productID).length());
 
         return name + nameSpace + "| $" +
                 price + priceSpace + "| " +
@@ -76,6 +80,13 @@ public final class Product {
                 brand + brandSpace + "| " +
                 productID + productIDSpace + "| " +
                 inStock(stock);
+    }
+
+    private String inStock(Integer stock) {
+        if (stock < 5)
+            return stock.toString();
+        else
+            return "5+";
     }
 
     @Override
@@ -93,7 +104,7 @@ public final class Product {
 
     @Override
     public int hashCode() {
+
         return Objects.hash(name, price, category, brand, productID, stock);
     }
-
 }

@@ -17,7 +17,7 @@ public class Admin extends Super {
             case "1" -> product(sc, categoryList, products);
             case "2" -> category(sc, categoryList, products);
             case "3" -> productsBalance(sc, categoryList, products);
-            case "4" -> search();
+            case "4" -> search(sc, categoryList, products);
             case "e" -> Menu.quit();
             default -> System.out.println("Please choose one of the alternatives below:");
         }

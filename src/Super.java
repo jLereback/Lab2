@@ -1,6 +1,7 @@
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.Scanner;
 
 
@@ -24,11 +25,9 @@ public abstract class Super {
 
     private static void chooseCategory(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         String choice;
-//        do {
         Menu.printProductMenu(categoryList);
         choice = sc.nextLine();
         chooseSpecificCategory(choice, sc, categoryList, products);
-//        } while (!choice.equals("e"));
     }
 
     private static void chooseSpecificCategory(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
@@ -41,20 +40,30 @@ public abstract class Super {
     static void printProductsInCategory(String choice, ArrayList<Category> categoryList, ArrayList<Product> products) {
         int choiceNumber = (Integer.parseInt(choice) - 1);
         Category categoryName = categoryList.get(choiceNumber);
-        System.out.println("Name" + lineUpName(4) +
-                "| Price" + lineUpPrice(5) +
-                "| Category" + lineUpCategory(8) +
-                "| Brand" + lineUpBrand(5) +
-                "| ProductID" + lineUpProductID(9) +
+        System.out.println("Name" + LineUp.lineUpName(4) +
+                "| Price" + LineUp.lineUpPrice(5) +
+                "| Category" + LineUp.lineUpCategory(8) +
+                "| Brand" + LineUp.lineUpBrand(5) +
+                "| ProductID" + LineUp.lineUpProductID(9) +
                 "| Stock");
         products.stream()
                 .filter(product -> product.getCategory().equals(categoryName))
                 .forEach(System.out::println);
     }
 
-    static void search() {
+    static void search(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        System.out.println("Search for a name or productID");
+        String searchString = sc.nextLine();
+        Product searchResult = products.stream()
+                .filter(product -> searchString.equals(String.valueOf(product.getProductID())) ||
+                                searchString.equals(String.valueOf(product.getName())) ||
+                                searchString.equals(String.valueOf(product.getCategory())) ||
+                                searchString.equals(String.valueOf(product.getPrice())) ||
+                                searchString.equals(String.valueOf(product.getBrand())))
+                .findAny()
+                .orElse(null);
+        System.out.println(searchResult);
     }
-
     static void addNewCategory(ArrayList<Category> categoryList, Scanner sc) {
         System.out.println("Insert the name of the new category:");
         categoryList.add(new Category(sc.nextLine()));
@@ -78,29 +87,85 @@ public abstract class Super {
         System.out.println("To add a new product in this category (" + categoryList.get(choice).toString() +
                 "), \nyou need to fill in the following information:");
 
-        String name = setInfo("Name: ", sc);
-        BigDecimal price = setPrice("Price: ", sc);
-        String brand = setInfo("Brand: ", sc);
-        String productID = setInfo("Product ID: ", sc);
-        int stock = setStock("Stock: ", sc);
-        sc.nextLine();
+        String name = setAndCompareName(sc, products);
+        BigDecimal price = setPrice(sc);
+        String brand = setBrand(sc);
+        int productID = setAndCompareProductID(sc, products);
+        int stock = setStock(sc);
+        
         products.add(new Product(name, price, categoryList.get(choice), brand, productID, stock));
     }
 
-    private static BigDecimal setPrice(String s, Scanner sc) {
-        System.out.print(s);
-        return new BigDecimal(sc.nextLine());
+
+    private static String setAndCompareName(Scanner sc, ArrayList<Product> products) {
+        Optional<Product> possibleDuplicateName;
+        String name;
+        do {
+            System.out.print("Name: ");
+            name = setName(sc);
+            if (products.size()==0)
+                return name;
+            String finalName = name;
+            possibleDuplicateName = products.stream()
+                    .filter(product -> product.getName().equals(finalName))
+                    .findFirst();
+            if (possibleDuplicateName.isPresent()) {
+                printDuplicateProductMessage();
+            }
+        } while (possibleDuplicateName.isPresent());
+        return name;
     }
 
-    static String setInfo(String s, Scanner sc) {
-        System.out.print(s);
+    private static int setAndCompareProductID(Scanner sc, ArrayList<Product> products) {
+        Optional<Product> possibleDuplicateProductID;
+        int productID;
+        do {
+            System.out.print("ProductID: ");
+            productID = setProductID(sc);
+            if (products.size()==0)
+                return productID;
+            int finalProductID = productID;
+            possibleDuplicateProductID = products.stream()
+                    .filter(product -> product.getProductID()== finalProductID)
+                    .findAny();
+            if (possibleDuplicateProductID.isPresent()) {
+                printDuplicateProductMessage();
+            }
+        } while (possibleDuplicateProductID.isPresent());
+        return productID;
+    }
+
+    private static void printDuplicateProductMessage() {
+        System.out.println("This product already exists, please try again");
+    }
+
+    private static String setName(Scanner sc) {
         return sc.nextLine();
     }
 
-    static Integer setStock(String s, Scanner sc) {
-        System.out.print(s);
-        return sc.nextInt();
+    private static String setBrand(Scanner sc) {
+        System.out.print("Brand: ");
+        return sc.nextLine();
     }
+
+    private static int setProductID(Scanner sc) {
+        int productID = sc.nextInt();
+        sc.nextLine();
+        return productID;
+    }
+
+    private static BigDecimal setPrice(Scanner sc) {
+        System.out.print("Price: ");
+        return new BigDecimal(sc.nextLine());
+    }
+
+    static Integer setStock(Scanner sc) {
+        System.out.print("Stock: ");
+        int stock = sc.nextInt();
+        sc.nextLine();
+        return stock;
+    }
+
 
     static void productsBalance(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         products.forEach(System.out::println);
@@ -121,102 +186,25 @@ public abstract class Super {
     }
 
     private static void removeChosenCategory(int choiceNumber, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
-        System.out.println("The chosen product is now deleted");
+        System.out.println("The chosen category is now deleted");
         categoryList.remove(choiceNumber);
     }
 
     static void printAllProducts(ArrayList<Product> products, ArrayList<Category> categoryList) {
-        System.out.println("Name" + lineUpName(4) +
-                "| Price" + lineUpPrice(5) +
-                "| Category" + lineUpCategory(8) +
-                "| Brand" + lineUpBrand(5) +
-                "| ProductID" + lineUpProductID(9) +
+        System.out.println("Name" + LineUp.lineUpName(4) +
+                "| Price" + LineUp.lineUpPrice(5) +
+                "| Category" + LineUp.lineUpCategory(8) +
+                "| Brand" + LineUp.lineUpBrand(5) +
+                "| ProductID" + LineUp.lineUpProductID(9) +
                 "| Stock");
         for (Product product : products) {
             System.out.println(product);
         }
     }
 
-    static String lineUpName(int length) {
-        if (length < 4)
-            return "\t\t ";
-        else if (length < 8)
-            return "\t ";
-        else
-            return " ";
-    }
-
-    static String lineUpPrice(int length) {
-        if (length < 4)
-            return "\t\t";
-        else if (length < 8)
-            return "\t";
-        else
-            return "";
-    }
-
-    static String lineUpCategory(int length) {
-        if (length < 5)
-            return "\t\t";
-        else if (length < 9)
-            return "\t";
-        else
-            return " ";
-    }
-
-    static String lineUpBrand(int length) {
-        if (length < 6)
-            return "\t\t\t";
-        else if (length < 10)
-            return "\t\t";
-        else
-            return "\t";
-    }
-
-    static String lineUpProductID(int length) {
-        if (length < 6)
-            return "\t\t";
-        else if (length < 10)
-            return "\t";
-        else
-            return " ";
-    }
-
-/*
-Copy and Paste in Terminal:
-3
-1
-2
-1
-Pure
-179
-Latitude 64
-90210
-3
-
-2
-2
-Compass
-1829
-Innova
-21
-93812
-
-2
-3
-Sapphire
-18
-Discraft
-987654321
-1
-
-1
-2
-
-*/
     static void removeProduct(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         if (products.size() == 0)
-            System.out.println("Please add a product before you remove it");
+            System.out.println("A product need to be added before it can be removed");
         else {
             removeExistingProduct(sc, categoryList, products);
         }
