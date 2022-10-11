@@ -1,8 +1,8 @@
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.IntStream.rangeClosed;
 
 
 public abstract class Super {
@@ -52,18 +52,40 @@ public abstract class Super {
     }
 
     static void search(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
-        System.out.println("Search for a name or productID");
+        System.out.println("""
+                If you want to search for a product within a price range
+                        -> write 'price' and press enter
+                Search for a name, productID, brand or category
+
+                """);
         String searchString = sc.nextLine();
-        Product searchResult = products.stream()
-                .filter(product -> searchString.equals(String.valueOf(product.getProductID())) ||
-                                searchString.equals(String.valueOf(product.getName())) ||
-                                searchString.equals(String.valueOf(product.getCategory())) ||
-                                searchString.equals(String.valueOf(product.getPrice())) ||
-                                searchString.equals(String.valueOf(product.getBrand())))
-                .findAny()
-                .orElse(null);
-        System.out.println(searchResult);
+        if (searchString.equals("price")) {
+            System.out.println(searchString);
+
+        } else {
+            ArrayList<Product> searchResult = getSearchResult(products, searchString);
+
+            if (searchResult.isEmpty())
+                System.out.println("""
+                        There is no match based on your search string
+                        Please double check your spelling or choose another criteria""");
+            else {
+                System.out.println("Search result:");
+                searchResult.forEach(System.out::println);
+            }
+        }
     }
+
+    private static ArrayList<Product> getSearchResult(ArrayList<Product> products, String searchString) {
+        return (ArrayList<Product>) products.stream()
+                .filter(product -> searchString.equals(String.valueOf(product.getProductID())) ||
+                           searchString.equals(String.valueOf(product.getName())) ||
+                           searchString.equals(String.valueOf(product.getCategory())) ||
+                           searchString.equals(String.valueOf(product.getPrice())) ||
+                           searchString.equals(String.valueOf(product.getBrand())))
+                .collect(Collectors.toList());
+    }
+
     static void addNewCategory(ArrayList<Category> categoryList, Scanner sc) {
         System.out.println("Insert the name of the new category:");
         categoryList.add(new Category(sc.nextLine()));
@@ -92,7 +114,7 @@ public abstract class Super {
         String brand = setBrand(sc);
         int productID = setAndCompareProductID(sc, products);
         int stock = setStock(sc);
-        
+
         products.add(new Product(name, price, categoryList.get(choice), brand, productID, stock));
     }
 
@@ -103,7 +125,7 @@ public abstract class Super {
         do {
             System.out.print("Name: ");
             name = setName(sc);
-            if (products.size()==0)
+            if (products.size() == 0)
                 return name;
             String finalName = name;
             possibleDuplicateName = products.stream()
@@ -122,11 +144,11 @@ public abstract class Super {
         do {
             System.out.print("ProductID: ");
             productID = setProductID(sc);
-            if (products.size()==0)
+            if (products.size() == 0)
                 return productID;
             int finalProductID = productID;
             possibleDuplicateProductID = products.stream()
-                    .filter(product -> product.getProductID()== finalProductID)
+                    .filter(product -> product.getProductID() == finalProductID)
                     .findAny();
             if (possibleDuplicateProductID.isPresent()) {
                 printDuplicateProductMessage();
