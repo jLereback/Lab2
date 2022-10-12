@@ -13,6 +13,7 @@ public class Main {
         categoryList.add(new Category("Midrange"));
         categoryList.add(new Category("Driver"));
         products = Json.readFromFile();
+        Json.saveToFile(products);
 
 
         Start.menu(sc, categoryList, products);

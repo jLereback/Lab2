@@ -142,20 +142,16 @@ public abstract class Menu {
         System.out.println("""
                                 
                 What product would you like to edit?""");
-        for (int i = 0; i < products.size(); i++) {
-            System.out.println((i + 1) + ". " + products.get(i).getName());
-        }
-        System.out.println("e. Previous menu");
+        printAllProductNames(products);
+        printOptionE();
     }
 
     static void printProductMenu(ArrayList<Category> categoryList) {
         System.out.println("""
                                 
                 Which category would you like to use?""");
-        for (int i = 0; i < categoryList.size(); i++) {
-            System.out.println((i + 1) + ". " + categoryList.get(i).toString());
-        }
-        System.out.println("e. Previous menu");
+        printAllCategories(categoryList);
+        printOptionE();
     }
 
     static void printRemoveCategoryMenu(ArrayList<Category> categoryList, ArrayList<Product> products) {
@@ -163,10 +159,18 @@ public abstract class Menu {
                                 
                 Which category would you like to remove?
                 """);
+        printAllCategories(categoryList);
+        printOptionE();
+    }
+
+    private static void printOptionE() {
+        System.out.println("e. Previous menu");
+    }
+
+    private static void printAllCategories(ArrayList<Category> categoryList) {
         for (int i = 0; i < categoryList.size(); i++) {
             System.out.println((i + 1) + ". " + categoryList.get(i).toString());
         }
-        System.out.println("e. Previous menu");
     }
 
     static void printRemoveProductMenu(ArrayList<Product> products) {
@@ -174,10 +178,38 @@ public abstract class Menu {
                                 
                 Which product would you like to remove?
                 """);
+        printAllProductNames(products);
+        printOptionE();
+    }
+
+    static void printAddToCartMenu(ArrayList<Product> products) {
+        System.out.println("""
+                
+                Add all products you want to buy in the cart
+                """);
+
+        printAllProductNames(products);
+        printNewLine();
+        printOptionP();
+        printOptionV();
+        printOptionE();
+    }
+
+    private static void printNewLine() {
+        System.out.print("\n");
+    }
+    private static void printOptionV() {
+        System.out.println("v. View cart");
+    }
+
+    private static void printOptionP() {
+        System.out.println("p. Proceed to checkout");
+    }
+
+    static void printAllProductNames(ArrayList<Product> products) {
         for (int i = 0; i < products.size(); i++) {
             System.out.println((i + 1) + ". " + products.get(i).getName());
         }
-        System.out.println("e. Previous menu");
     }
 
     static void quit() {

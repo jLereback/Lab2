@@ -36,8 +36,8 @@ public abstract class Super {
     }
 
     static void printProductsInCategory(String choice, ArrayList<Category> categoryList, ArrayList<Product> products) {
-        int choiceNumber = (Integer.parseInt(choice) - 1);
-        Category categoryName = categoryList.get(choiceNumber);
+        int chosenCategory = (Integer.parseInt(choice) - 1);
+        Category categoryName = categoryList.get(chosenCategory);
         System.out.println("Name" + LineUp.lineUpName(4) +
                 "| Price" + LineUp.lineUpPrice(5) +
                 "| Category" + LineUp.lineUpCategory(8) +
@@ -98,8 +98,8 @@ public abstract class Super {
         }
     }
 
-    static void addNewProduct(int choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
-        System.out.println("To add a new product in this category (" + categoryList.get(choice).toString() +
+    static void addNewProduct(int chosenCategory, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        System.out.println("To add a new product in this category (" + categoryList.get(chosenCategory).toString() +
                 "), \nyou need to fill in the following information:");
 
         String name = setAndCompareName(sc, products);
@@ -108,7 +108,8 @@ public abstract class Super {
         int productID = setAndCompareProductID(sc, products);
         int stock = setStock(sc);
 
-        products.add(new Product(name, price, categoryList.get(choice), brand, productID, stock));
+        products.add(new Product(name, price, categoryList.get(chosenCategory), brand, productID, stock));
+        Json.saveToFile(products);
     }
 
 
@@ -200,9 +201,9 @@ public abstract class Super {
         }
     }
 
-    private static void removeChosenCategory(int choiceNumber, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+    private static void removeChosenCategory(int chosenProduct, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         System.out.println("The chosen category is now deleted");
-        categoryList.remove(choiceNumber);
+        categoryList.remove(chosenProduct);
     }
 
     static void printAllProducts(ArrayList<Product> products, ArrayList<Category> categoryList) {
@@ -242,11 +243,27 @@ public abstract class Super {
     private static void removeChosenProduct(int choiceNumber, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         System.out.println("The chosen product is now deleted");
         products.remove(choiceNumber);
+        Json.saveToFile(products);
     }
 
 
     static void addToCart(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+        String choice;
+        Menu.printAddToCartMenu(products);
+        choice = sc.nextLine();
+        try {
+            if (choice.equals("e"))
+                System.out.println("Going back to previous menu");
+            else if (choice.equals("p"))
+                toCheckout(sc, categoryList, products);
+            else if ((Integer.parseInt(choice) <= categoryList.size()))
+                addChosenProductToCart((Integer.parseInt(choice) - 1), sc, categoryList, products);
+        } catch (NumberFormatException e) {
+            System.out.println("Please choose one of the alternatives below:");
+        }
+    }
 
+    private static void addChosenProductToCart(int chosenProduct, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
     }
 
     static void showCart(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
