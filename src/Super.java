@@ -53,36 +53,31 @@ public abstract class Super {
 
     static void search(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         System.out.println("""
-                If you want to search for a product within a price range
-                        -> write 'price' and press enter
                 Search for a name, productID, brand or category
 
                 """);
-        String searchString = sc.nextLine();
-        if (searchString.equals("price")) {
-            System.out.println(searchString);
+        String searchString = sc.nextLine().toLowerCase();
 
-        } else {
-            ArrayList<Product> searchResult = getSearchResult(products, searchString);
+        List<Product> searchResult = getSearchResult(products, searchString);
 
-            if (searchResult.isEmpty())
-                System.out.println("""
-                        There is no match based on your search string
-                        Please double check your spelling or choose another criteria""");
-            else {
-                System.out.println("Search result:");
-                searchResult.forEach(System.out::println);
-            }
+        if (searchResult.isEmpty())
+            System.out.println("""
+                    There is no match based on your search string
+                    Please double check your spelling or choose another criteria""");
+        else {
+            System.out.println("Search result:");
+            searchResult.forEach(System.out::println);
         }
     }
 
-    private static ArrayList<Product> getSearchResult(ArrayList<Product> products, String searchString) {
-        return (ArrayList<Product>) products.stream()
+    private static List<Product> getSearchResult(ArrayList<Product> products, String searchString) {
+        return products.stream()
                 .filter(product -> searchString.equals(String.valueOf(product.getProductID())) ||
-                           searchString.equals(String.valueOf(product.getName())) ||
-                           searchString.equals(String.valueOf(product.getCategory())) ||
-                           searchString.equals(String.valueOf(product.getPrice())) ||
-                           searchString.equals(String.valueOf(product.getBrand())))
+                        (String.valueOf(product.getName())).contains(searchString) ||
+                        searchString.equals(String.valueOf(product.getCategory())) ||
+                        searchString.matches("Latitude\s?64") ||
+                        searchString.equals(String.valueOf(product.getPrice())) ||
+                        searchString.equals(String.valueOf(product.getBrand())))
                 .collect(Collectors.toList());
     }
 

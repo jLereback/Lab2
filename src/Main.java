@@ -10,10 +10,11 @@ public class Main {
 
         var products = new ArrayList<Product>();
         var categoryList = new ArrayList<Category>();
-
         categoryList.add(new Category("Putt"));
         categoryList.add(new Category("Midrange"));
         categoryList.add(new Category("Driver"));
+
+        AddFromFile.addFromFile(categoryList);
 
         Start.menu(sc, categoryList, products);
     }
