@@ -2,8 +2,6 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.stream.IntStream.rangeClosed;
-
 
 public abstract class Super {
 
@@ -75,7 +73,7 @@ public abstract class Super {
                 .filter(product -> searchString.equals(String.valueOf(product.getProductID())) ||
                         (String.valueOf(product.getName())).contains(searchString) ||
                         searchString.equals(String.valueOf(product.getCategory())) ||
-                        searchString.matches("Latitude\s?64") ||
+                        searchString.matches("latitude\s?64") ||
                         searchString.equals(String.valueOf(product.getPrice())) ||
                         searchString.equals(String.valueOf(product.getBrand())))
                 .collect(Collectors.toList());
