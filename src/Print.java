@@ -1,10 +1,11 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
-public abstract class Menu {
+public abstract class Print {
 
-    static void printStartMenu() {
+    static void startMenu() {
         System.out.println("""
                                 
                 Welcome to Disc Shop!
@@ -17,7 +18,7 @@ public abstract class Menu {
                 """);
     }
 
-    static void printMasterMenu() {
+    static void masterStartMenu() {
         System.out.println("""
                             
                 Disc Shop
@@ -30,7 +31,7 @@ public abstract class Menu {
                 """);
     }
 
-    static void printMasterInventoryMenu() {
+    static void masterInventoryMenu() {
         System.out.println("""
                             
                 Product Menu
@@ -45,7 +46,7 @@ public abstract class Menu {
 
     static void editChosenProduct(String choice, ArrayList<Product> products) {
         System.out.println("""
-                
+                                
                 Would you like to increase or decrease stock?
                 1. Increase
                 2. Decrease
@@ -53,7 +54,7 @@ public abstract class Menu {
                 """);
     }
 
-    static void printMasterCategoryMenu() {
+    static void masterCategoryMenu() {
         System.out.println("""
                             
                 Category Menu
@@ -65,7 +66,7 @@ public abstract class Menu {
                 """);
     }
 
-    static void printCustomerMenu() {
+    static void customerMenu() {
         System.out.println("""
                                 
                 Disc Shop
@@ -78,20 +79,20 @@ public abstract class Menu {
                 """);
     }
 
-    static void printShopMenu() {
+    static void shopMenu() {
         System.out.println("""
                                 
                 Shop Menu
                 =========
                 1. Add to cart
-                2. Show cart
+                2. View cart
                 3. Edit cart
                 4. Checkout
                 e. Main Menu
                 """);
     }
 
-    static void printAdminMenu() {
+    static void adminMenu() {
         System.out.println("""
                             
                 Disc Shop
@@ -104,7 +105,7 @@ public abstract class Menu {
                 """);
     }
 
-    static void printAdminProductMenu() {
+    static void adminProductMenu() {
         System.out.println("""
                             
                 Product Menu
@@ -115,7 +116,7 @@ public abstract class Menu {
                 """);
     }
 
-    static void printChosenMenu() {
+    static void chosenMenu() {
         System.out.println("""
                             
                 Would you like to see products from all categories
@@ -126,7 +127,7 @@ public abstract class Menu {
                 """);
     }
 
-    static void printAdminCategoryMenu() {
+    static void adminCategoryMenu() {
         System.out.println("""
                             
                 Category Menu
@@ -138,81 +139,122 @@ public abstract class Menu {
                 """);
     }
 
-    static void printEdibleProductMenu(Scanner sc, ArrayList<Product> products) {
-        System.out.println("""
-                                
-                What product would you like to edit?""");
-        printAllProductNames(products);
-        printOptionE();
+    static void duplicateProductMessage() {
+        System.out.println("This product already exists, please try again");
     }
 
-    static void printProductMenu(ArrayList<Category> categoryList) {
-        System.out.println("""
-                                
-                Which category would you like to use?""");
-        printAllCategories(categoryList);
-        printOptionE();
+    static void edibleProductMenu(Scanner sc, ArrayList<Product> products) {
+        Ask.forProductToEdit();
+        Print.allProductNamesWithNumber(products);
+        Print.optionE();
     }
 
-    static void printRemoveCategoryMenu(ArrayList<Category> categoryList, ArrayList<Product> products) {
-        System.out.println("""
-                                
-                Which category would you like to remove?
-                """);
-        printAllCategories(categoryList);
-        printOptionE();
+
+    static void productMenu(ArrayList<Category> categoryList) {
+        Ask.forCategoryToUse();
+        Print.allCategories(categoryList);
+        Print.optionE();
     }
 
-    private static void printOptionE() {
+
+    static void removeCategoryMenu(ArrayList<Category> categoryList, ArrayList<Product> products) {
+        Ask.forCategoryToRemove();
+        Print.allCategories(categoryList);
+        Print.optionE();
+    }
+
+
+    private static void optionE() {
         System.out.println("e. Previous menu");
     }
 
-    private static void printAllCategories(ArrayList<Category> categoryList) {
+    private static void allCategories(ArrayList<Category> categoryList) {
         for (int i = 0; i < categoryList.size(); i++) {
             System.out.println((i + 1) + ". " + categoryList.get(i).toString());
         }
     }
 
-    static void printRemoveProductMenu(ArrayList<Product> products) {
+    static void removeProductMenu(ArrayList<Product> products) {
         System.out.println("""
                                 
                 Which product would you like to remove?
                 """);
-        printAllProductNames(products);
-        printOptionE();
+        Print.allProductNamesWithNumber(products);
+        Print.optionE();
     }
 
-    static void printAddToCartMenu(ArrayList<Product> products) {
+    static void addToCartMenu(ArrayList<Product> products) {
         System.out.println("""
-                
-                Add all products you want to buy in the cart
+                                
+                Add the product you want to buy in the cart
                 """);
-
-        printAllProductNames(products);
-        printNewLine();
-        printOptionP();
-        printOptionV();
-        printOptionE();
+        System.out.println("\t" + Super.printProductFieldNames());
+        Print.allProductsWithNumber(products);
+        newLine();
+        Print.optionP();
+        Print.optionV();
+        Print.optionE();
     }
 
-    private static void printNewLine() {
+    private static void newLine() {
         System.out.print("\n");
     }
-    private static void printOptionV() {
+
+    private static void optionV() {
         System.out.println("v. View cart");
     }
 
-    private static void printOptionP() {
+    private static void optionP() {
         System.out.println("p. Proceed to checkout");
     }
 
-    static void printAllProductNames(ArrayList<Product> products) {
+    static void noProductFound() {
+        System.out.println("""
+                There is no match based on your search string
+                Please double check your spelling or choose another criteria""");
+    }
+
+    static void allProductNamesWithNumber(ArrayList<Product> products) {
         for (int i = 0; i < products.size(); i++) {
-            System.out.println((i + 1) + ". " + products.get(i).getName());
+            System.out.print((i + 1) + ". ");
+            System.out.println(products.get(i).getName());
         }
     }
 
-    static void quit() {
+
+    static void allProductsWithNumber(ArrayList<Product> products) {
+        for (int i = 0; i < products.size(); i++) {
+            if (i > 9) {
+                System.out.print((i + 1) + ". ");
+                System.out.println(products.get(i).toString());
+            } else {
+                System.out.print((i + 1) + ".  ");
+                System.out.println(products.get(i).toString());
+            }
+        }
+    }
+
+    static void cart(HashMap<Product, Integer> shoppingCart) {
+        shoppingCart.forEach((key, value) -> System.out.println(key.printInCart() + "x" + value));
+    }
+
+    static void cartFieldNames() {
+        System.out.println(("Name" + LineUp.lineUpName(4) +
+                "| Price" + LineUp.lineUpPrice(5) +
+                "| ProductID" + LineUp.lineUpProductID(9) +
+                "| Amount"));
+    }
+
+    static void cartWithNumbers(HashMap<Product, Integer> shoppingCart, List<String> keyList, List<Integer> valueList) {
+        for (int i = 0; i < shoppingCart.size(); i++) {
+            if (i > 9)
+                System.out.println((i + 1) + ". " + keyList.get(i) + "x" + valueList.get(i));
+            else
+                System.out.println((i + 1) + ".  " + keyList.get(i) + "x" + valueList.get(i));
+        }
+    }
+
+    static void quitMessage() {
         System.out.println("Welcome back");
     }
 }

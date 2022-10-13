@@ -30,4 +30,7 @@ public final class Category {
     }
 
 
+    public String toLowerCase() {
+        return category.toLowerCase();
+    }
 }

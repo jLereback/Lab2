@@ -82,6 +82,16 @@ public final class Product {
                 inStock(stock);
     }
 
+    public String printInCart() {
+        var nameSpace = LineUp.lineUpName(name.length());
+        var priceSpace = LineUp.lineUpPrice(price.toString().length());
+        var productIDSpace = LineUp.lineUpProductID(String.valueOf(productID).length());
+
+        return name + nameSpace + "| $" +
+                price + priceSpace + "| " +
+                productID + productIDSpace + "| ";
+    }
+
     private String inStock(Integer stock) {
         if (stock < 5)
             return stock.toString();

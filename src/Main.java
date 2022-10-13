@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
 
         var products = new ArrayList<Product>();
@@ -15,7 +15,10 @@ public class Main {
         products = Json.readFromFile();
         Json.saveToFile(products);
 
+        var shoppingCart = new HashMap<Product, Integer>();
 
-        Start.menu(sc, categoryList, products);
+
+
+        Start.menu(sc, categoryList, products, shoppingCart);
     }
 }

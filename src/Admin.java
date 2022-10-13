@@ -1,12 +1,11 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class Admin extends Super {
     static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         String choice;
         do {
-            Menu.printAdminMenu();
+            Print.adminMenu();
             choice = sc.nextLine().toLowerCase();
             switchMenu(choice, sc, categoryList, products);
         } while (!choice.equals("e"));
@@ -18,7 +17,7 @@ public class Admin extends Super {
             case "2" -> category(sc, categoryList, products);
             case "3" -> productsBalance(sc, categoryList, products);
             case "4" -> search(sc, categoryList, products);
-            case "e" -> Menu.quit();
+            case "e" -> Print.quitMessage();
             default -> System.out.println("Please choose one of the alternatives below:");
         }
     }
@@ -26,7 +25,7 @@ public class Admin extends Super {
     private static void product(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         String choice;
         do {
-            Menu.printAdminProductMenu();
+            Print.adminProductMenu();
             choice = sc.nextLine().toLowerCase();
             switchProduct(choice, sc, categoryList, products);
         } while (!choice.equals("e"));
@@ -44,7 +43,7 @@ public class Admin extends Super {
     public static void category(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
         String choice;
         do {
-            Menu.printAdminCategoryMenu();
+            Print.adminCategoryMenu();
             choice = sc.nextLine().toLowerCase();
             switchCategories(categoryList, products, choice, sc);
         } while (!choice.equals("e"));
