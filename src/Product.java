@@ -33,10 +33,6 @@ public final class Product {
         this.stock = stock;
     }
 
-    public Product clone() throws CloneNotSupportedException {
-        return (Product) super.clone();
-    }
-
     public String getName() {
 
         return name;

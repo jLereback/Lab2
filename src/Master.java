@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Master extends Super {
-    static void menu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) throws CloneNotSupportedException {
+    static void menu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
         String choice;
         do {
             Print.masterStartMenu();
@@ -10,7 +10,7 @@ public class Master extends Super {
         } while (!choice.equals("e"));
     }
 
-    private static void switchMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) throws CloneNotSupportedException {
+    private static void switchMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
         switch (choice) {
             case "1" -> inventory(sc, categoryList, products);
             case "2" -> category(sc, categoryList, products);
@@ -53,27 +53,32 @@ public class Master extends Super {
         }
     }
 
-    private static void showShopMenu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) throws CloneNotSupportedException {
+    private static void showShopMenu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
         String choice;
-
-        var visibleListOfProducts = new ArrayList<Product>();
-
-        for (Product product : products) {
-            visibleListOfProducts.add(new Product(product.getName(), product.getPrice(), product.getCategory(), product.getBrand(), product.getProductID(), product.getStock()));
-        }
-
+        var visibleCopyOfProducts = getCopyOfProducts(products);
         do {
             Print.shopMenu();
             choice = sc.nextLine().toLowerCase();
-            switchShopMenu(choice, sc, categoryList, products, shoppingCart, visibleListOfProducts);
+            switchShopMenu(choice, sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
         } while (!choice.equals("e"));
     }
-    private static void switchShopMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleListOfProducts) {
+
+    private static List<Product> getCopyOfProducts(List<Product> products) {
+        var visibleCopyOfProducts = new ArrayList<Product>();
+
+        for (Product product : products) {
+            visibleCopyOfProducts.add(new Product(product.getName(), product.getPrice(), product.getCategory(), product.getBrand(), product.getProductID(), product.getStock()));
+        }
+        return visibleCopyOfProducts;
+    }
+
+
+    private static void switchShopMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
         switch (choice) {
-            case "1" -> addToCart(sc, categoryList, products, shoppingCart, visibleListOfProducts);
-            case "2" -> viewCart(sc, categoryList, products, shoppingCart, visibleListOfProducts);
-            case "3" -> editCart(sc, categoryList, products, shoppingCart, visibleListOfProducts);
-            case "4" -> toCheckout(sc, categoryList, products, shoppingCart, visibleListOfProducts);
+            case "1" -> addToCart(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
+            case "2" -> viewCart(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
+            case "3" -> editCart(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
+            case "4" -> toCheckout(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
             case "e" -> System.out.println("Going back to previous menu");
             default -> System.out.println("Please choose one of the alternatives below:");
         }

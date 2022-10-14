@@ -101,6 +101,7 @@ public abstract class Super {
             Print.chooseOneOfTheAlternativesBelow();
         }
     }
+
     static void addNewProduct(int chosenCategory, Scanner sc, List<Category> categoryList, List<Product> products) {
         System.out.println("To add a new product in this category (" + categoryList.get(chosenCategory).toString() +
                 "), \nyou need to fill in the following information:");
@@ -300,55 +301,82 @@ public abstract class Super {
             return "decrease";
     }
 
-    static void addToCart(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleListOfProducts) {
+    static void addToCart(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
         String choice;
-        //var visibleListOfProducts = List.copyOf(products);
-        Print.addToCartMenu(visibleListOfProducts);
+        Print.addToCartMenu(visibleCopyOfProducts);
         choice = sc.nextLine().toLowerCase();
         try {
-            if (choice.equals("e")) {
+            if (choice.equals("e"))
                 Print.goingBackToPreviousMenu();
-            } else if ((Integer.parseInt(choice) <= products.size())) {
-                Product tempChosenProduct = visibleListOfProducts.get(Integer.parseInt(choice) -1);
-                Product chosenProduct = products.get(Integer.parseInt(choice) - 1);
-
-                System.out.println(tempChosenProduct);
-                System.out.println(chosenProduct);
-
-                addProductToCart(tempChosenProduct, sc, categoryList, products, shoppingCart, visibleListOfProducts, chosenProduct);
-            }
-            else 
+            else if ((Integer.parseInt(choice) <= products.size())) {
+                checkChosenProduct(sc, categoryList, products, shoppingCart, visibleCopyOfProducts, choice);
+            } else
                 Print.chooseOneOfTheAlternativesBelow();
         } catch (NumberFormatException e) {
             Print.chooseOneOfTheAlternativesBelow();
         }
     }
 
-    private static void addProductToCart(Product tempChosenProduct, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleListOfProducts, Product chosenProduct) {
-        System.out.println("How many " + tempChosenProduct.getName() + " would you like to add?");
+    private static void checkChosenProduct(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts, String choice) {
+        if (getTempChosenProduct(visibleCopyOfProducts, choice).getStock() <= 0)
+            System.out.println("This product is out of stock");
+        else
+            addProductToCart(getTempChosenProduct(visibleCopyOfProducts, choice), sc, categoryList, products, shoppingCart, visibleCopyOfProducts, getChosenProduct(products, choice));
+    }
+    private static Product getTempChosenProduct(List<Product> visibleCopyOfProducts, String choice) {
+        return visibleCopyOfProducts.get(Integer.parseInt(choice) - 1);
+    }
+
+    private static Product getChosenProduct(List<Product> products, String choice) {
+        return products.get(Integer.parseInt(choice) - 1);
+    }
+
+    private static void addProductToCart(Product tempChosenProduct, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts, Product chosenProduct) {
+        Ask.howManyToAdd(tempChosenProduct);
         int amountInCart = getInput(sc);
 
-        if (shoppingCart.containsKey(chosenProduct)) {
-            int newAmountInCart = shoppingCart.get(chosenProduct) + amountInCart;
-            shoppingCart.replace(chosenProduct, shoppingCart.get(chosenProduct), newAmountInCart);
-            tempChosenProduct.editStock(tempChosenProduct.getStock() - amountInCart);
+        if (tempChosenProduct.getStock() < amountInCart)
+            addAvailableAmountToCart(tempChosenProduct, shoppingCart, chosenProduct);
+        else
+            addAmountToCart(tempChosenProduct, shoppingCart, chosenProduct, amountInCart);
+    }
 
-        } else {
-            shoppingCart.put(chosenProduct, amountInCart);
-            tempChosenProduct.editStock(tempChosenProduct.getStock() - amountInCart);
-        }
+    private static void addAvailableAmountToCart(Product tempChosenProduct, HashMap<Product, Integer> shoppingCart, Product chosenProduct) {
+        int amountInCart;
+        Print.addAvailableAmount(tempChosenProduct);
+        amountInCart = tempChosenProduct.getStock();
+        addAmountToCart(tempChosenProduct, shoppingCart, chosenProduct, amountInCart);
+    }
+
+
+    private static void addAmountToCart(Product tempChosenProduct, HashMap<Product, Integer> shoppingCart, Product chosenProduct, int amountInCart) {
+        if (shoppingCart.containsKey(chosenProduct))
+            addAmountToProductInCart(tempChosenProduct, shoppingCart, chosenProduct, amountInCart);
+        else
+            addNewProductInCart(tempChosenProduct, shoppingCart, chosenProduct, amountInCart);
+    }
+
+    private static void addNewProductInCart(Product tempChosenProduct, HashMap<Product, Integer> shoppingCart, Product chosenProduct, int amountInCart) {
+        shoppingCart.put(chosenProduct, amountInCart);
+        tempChosenProduct.editStock(tempChosenProduct.getStock() - amountInCart);
+    }
+
+    private static void addAmountToProductInCart(Product tempChosenProduct, HashMap<Product, Integer> shoppingCart, Product chosenProduct, int amountInCart) {
+        int newAmountInCart = shoppingCart.get(chosenProduct) + amountInCart;
+        shoppingCart.replace(chosenProduct, shoppingCart.get(chosenProduct), newAmountInCart);
+        tempChosenProduct.editStock(tempChosenProduct.getStock() - amountInCart);
     }
 
     private static int getInput(Scanner sc) {
         return Integer.parseInt(sc.nextLine());
     }
 
-    static void viewCart(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleListOfProducts) {
+    static void viewCart(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
         Print.cartFieldNames();
         Print.cart(shoppingCart);
     }
 
-    static void editCart(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleListOfProducts) {
+    static void editCart(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
         if (shoppingCart.size() == 0)
             System.out.println("""
                     The cart is empty""");
@@ -410,6 +438,6 @@ public abstract class Super {
     }
 
 
-    static void toCheckout(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleListOfProducts) {
+    static void toCheckout(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
     }
 }

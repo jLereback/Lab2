@@ -165,7 +165,7 @@ public abstract class Print {
 
     private static void allCategories(List<Category> categoryList) {
         for (int i = 0; i < categoryList.size(); i++) {
-            System.out.println((i + 1) + ". " + categoryList.get(i).toString());
+            System.out.println(number(i) + ". " + categoryList.get(i).toString());
         }
     }
 
@@ -188,6 +188,13 @@ public abstract class Print {
         Print.optionE();
     }
 
+    static void addAvailableAmount(Product tempChosenProduct) {
+        System.out.printf("""
+                Only %d products are available for purchase
+                Those are added to the cart
+                """, tempChosenProduct.getStock());
+    }
+
     private static void newLine() {
         System.out.print("\n");
     }
@@ -208,22 +215,48 @@ public abstract class Print {
 
     static void allProductNamesWithNumber(List<Product> products) {
         for (int i = 0; i < products.size(); i++) {
-            System.out.print((i + 1) + ". ");
-            System.out.println(products.get(i).getName());
+            System.out.print(number(i) + smallSpace() + productNames(i, products));
+        }
+    }
+    static void allProductsWithNumber(List<Product> products) {
+        for (int i = 0; i < products.size(); i++) {
+            Print.productsWithNumber(products, i);
         }
     }
 
-
-    static void allProductsWithNumber(List<Product> products) {
-        for (int i = 0; i < products.size(); i++) {
-            if (i > 9) {
-                System.out.print((i + 1) + ". ");
-                System.out.println(products.get(i).toString());
-            } else {
-                System.out.print((i + 1) + ".  ");
-                System.out.println(products.get(i).toString());
-            }
+    private static void productsWithNumber(List<Product> products, int i) {
+        if (products.get(i).getStock() <= 0)
+            Print.productsInStock(i, productOutOfStock(i, products), productOutOfStock(i, products));
+        else {
+            Print.productsInStock(i, productsInStock(i, products), productsInStock(i, products));
         }
+    }
+
+    private static void productsInStock(int i, String optionSmallSpace, String optionBigSpace) {
+        if (i > 9) {
+            System.out.print(number(i) + smallSpace() + optionSmallSpace);
+        } else {
+            System.out.print(number(i) + bigSpace() + optionBigSpace);
+        }
+    }
+
+    private static String productOutOfStock(int i, List<Product> products) {
+        return productNames(i, products) + " | Out Of Stock";
+    }
+
+    private static String productNames(int i, List<Product> products) {
+        return products.get(i).getName();
+    }
+
+    private static String productsInStock(int index, List<Product> products) {
+        return products.get(index).toString();
+    }
+
+    private static String bigSpace() {
+        return ".  ";
+    }
+    private static String smallSpace() {
+        return ". ";
     }
 
     static void chooseOneOfTheAlternativesBelow() {
@@ -243,22 +276,41 @@ public abstract class Print {
 
     static void cartWithNumbers(HashMap<Product, Integer> shoppingCart, List<String> keyList, List<Integer> valueList) {
         for (int i = 0; i < shoppingCart.size(); i++) {
-            if (i > 9)
-                System.out.println((i + 1) + ". " + keyList.get(i) + "x" + valueList.get(i));
-            else
-                System.out.println((i + 1) + ".  " + keyList.get(i) + "x" + valueList.get(i));
+            Print.cart(keyList, valueList, i);
         }
     }
+
+    private static void cart(List<String> keyList, List<Integer> valueList, int i) {
+        if (i > 9)
+            System.out.println(number(i) + smallSpace() + cartNames(keyList, i) + "x" + amountInCart(valueList, i));
+        else
+            System.out.println(number(i) + bigSpace() + cartNames(keyList, i) + "x" + amountInCart(valueList, i));
+    }
+
+    private static Integer amountInCart(List<Integer> valueList, int i) {
+        return valueList.get(i);
+    }
+
+    private static String cartNames(List<String> keyList, int i) {
+        return keyList.get(i);
+    }
+
+    private static int number(int i) {
+        return i + 1;
+    }
+
     static void productRemovedFromCart() {
         System.out.println("""
                 The product is removed from your cart
                 """);
     }
+
     static void goingBackToPreviousMenu() {
         System.out.println("""
                 Going back to previous menu
                 """);
     }
+
     static void quitMessage() {
         System.out.println("Welcome back");
     }
