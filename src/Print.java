@@ -190,9 +190,9 @@ public abstract class Print {
 
     static void addAvailableAmount(Product tempChosenProduct) {
         System.out.printf("""
-                Only %d products are available for purchase
-                Those are added to the cart
-                """, tempChosenProduct.getStock());
+                Only %d %s are available for purchase
+                All %s in stock are added to cart
+                """, tempChosenProduct.getStock(), tempChosenProduct.getName(), tempChosenProduct.getName());
     }
 
     private static void newLine() {
@@ -220,11 +220,11 @@ public abstract class Print {
     }
     static void allProductsWithNumber(List<Product> products) {
         for (int i = 0; i < products.size(); i++) {
-            Print.productsWithNumber(products, i);
+            Print.productsWithNumber(i, products);
         }
     }
 
-    private static void productsWithNumber(List<Product> products, int i) {
+    private static void productsWithNumber(int i, List<Product> products) {
         if (products.get(i).getStock() <= 0)
             Print.productsInStock(i, productOutOfStock(i, products), productOutOfStock(i, products));
         else {
@@ -250,6 +250,10 @@ public abstract class Print {
 
     private static String productsInStock(int index, List<Product> products) {
         return products.get(index).toString();
+    }
+
+    static void productAddedToCart(Product tempChosenProduct, int amountInCart) {
+        System.out.println(amountInCart + " " + tempChosenProduct.getName() + " are added to cart");
     }
 
     private static String bigSpace() {
@@ -299,9 +303,9 @@ public abstract class Print {
         return i + 1;
     }
 
-    static void productRemovedFromCart() {
+    static void productRemovedCart() {
         System.out.println("""
-                The product is removed from your cart
+                The product is removed from cart
                 """);
     }
 
