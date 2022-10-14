@@ -1,8 +1,8 @@
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Admin extends Super {
-    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+    static void menu(Scanner sc, List<Category> categoryList, List<Product> products) {
         String choice;
         do {
             Print.adminMenu();
@@ -11,7 +11,7 @@ public class Admin extends Super {
         } while (!choice.equals("e"));
     }
 
-    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+    private static void switchMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products) {
         switch (choice) {
             case "1" -> product(sc, categoryList, products);
             case "2" -> category(sc, categoryList, products);
@@ -22,7 +22,7 @@ public class Admin extends Super {
         }
     }
 
-    private static void product(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+    private static void product(Scanner sc, List<Category> categoryList, List<Product> products) {
         String choice;
         do {
             Print.adminProductMenu();
@@ -31,7 +31,7 @@ public class Admin extends Super {
         } while (!choice.equals("e"));
     }
 
-    private static void switchProduct(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+    private static void switchProduct(String choice, Scanner sc, List<Category> categoryList, List<Product> products) {
         switch (choice) {
             case "1" -> addProduct(sc, categoryList, products);
             case "2" -> removeProduct(sc, categoryList, products);
@@ -40,7 +40,7 @@ public class Admin extends Super {
         }
     }
 
-    public static void category(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+    public static void category(Scanner sc, List<Category> categoryList, List<Product> products) {
         String choice;
         do {
             Print.adminCategoryMenu();
@@ -49,7 +49,7 @@ public class Admin extends Super {
         } while (!choice.equals("e"));
     }
 
-    private static void switchCategories(ArrayList<Category> categoryList, ArrayList<Product> products, String choice, Scanner sc) {
+    private static void switchCategories(List<Category> categoryList, List<Product> products, String choice, Scanner sc) {
         switch (choice) {
             case "1" -> addNewCategory(categoryList, sc);
             case "2" -> printCategories(categoryList);

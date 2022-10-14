@@ -1,9 +1,9 @@
-import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class Master extends Super {
-    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Integer> shoppingCart) throws Exception {
+    static void menu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) throws Exception {
         String choice;
         do {
             Print.masterStartMenu();
@@ -12,7 +12,7 @@ public class Master extends Super {
         } while (!choice.equals("e"));
     }
 
-    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Integer> shoppingCart) throws Exception {
+    private static void switchMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) throws Exception {
         switch (choice) {
             case "1" -> inventory(sc, categoryList, products);
             case "2" -> category(sc, categoryList, products);
@@ -23,7 +23,7 @@ public class Master extends Super {
         }
     }
 
-    private static void inventory(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+    private static void inventory(Scanner sc, List<Category> categoryList, List<Product> products) {
         String choice;
         do {
             Print.masterInventoryMenu();
@@ -33,7 +33,7 @@ public class Master extends Super {
     }
 
 
-    private static void switchInventory(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+    private static void switchInventory(String choice, Scanner sc, List<Category> categoryList, List<Product> products) {
         switch (choice) {
             case "1" -> printInventory(sc, categoryList, products);
             case "2" -> addProduct(sc, categoryList, products);
@@ -43,18 +43,19 @@ public class Master extends Super {
             default -> System.out.println("Please choose one of the alternatives below:");
         }
     }
-    private static void printInventory(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+    private static void printInventory(Scanner sc, List<Category> categoryList, List<Product> products) {
         if (products.size() == 0) {
             System.out.println("""
                     Please add a product before print it""");
         } else {
-            Print.chosenMenu();
+            Ask.forCategoryToPrint();
+            Print.alternatives();
             String choice = sc.nextLine().toLowerCase();
             switchProductMenu(choice, sc, categoryList, products);
         }
     }
 
-    private static void showShopMenu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Integer> shoppingCart) throws Exception {
+    private static void showShopMenu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) throws Exception {
         String choice;
         do {
             Print.shopMenu();
@@ -62,7 +63,7 @@ public class Master extends Super {
             switchShopMenu(choice, sc, categoryList, products, shoppingCart);
         } while (!choice.equals("e"));
     }
-    private static void switchShopMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Integer> shoppingCart) throws Exception {
+    private static void switchShopMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) throws Exception {
         switch (choice) {
             case "1" -> addToCart(sc, categoryList, products, shoppingCart);
             case "2" -> viewCart(sc, categoryList, products, shoppingCart);
@@ -73,7 +74,7 @@ public class Master extends Super {
         }
     }
 
-    public static void category(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products) {
+    public static void category(Scanner sc, List<Category> categoryList, List<Product> products) {
         String choice;
         do {
             Print.masterCategoryMenu();
@@ -82,7 +83,7 @@ public class Master extends Super {
         } while (!choice.equals("e"));
     }
 
-    private static void switchCategories(ArrayList<Category> categoryList, String choice, Scanner sc, ArrayList<Product> products) {
+    private static void switchCategories(List<Category> categoryList, String choice, Scanner sc, List<Product> products) {
         switch (choice) {
             case "1" -> addNewCategory(categoryList, sc);
             case "2" -> printCategories(categoryList);

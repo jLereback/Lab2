@@ -93,7 +93,7 @@ public final class Product {
     }
 
     private String inStock(Integer stock) {
-        if (stock < 5)
+        if (stock <= 5)
             return stock.toString();
         else
             return "5+";

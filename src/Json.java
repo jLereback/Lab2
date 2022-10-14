@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import java.math.BigDecimal;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.List;
 
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Json {
-    static void saveToFile(ArrayList<Product> products) {
+    static void saveToFile(List<Product> products) {
         Gson gson = new Gson();
 
         String json = gson.toJson(products);
@@ -23,7 +24,7 @@ public class Json {
             throw new RuntimeException(e);
         }
     }
-    static ArrayList<Product> readFromFile() throws IOException {
+    static List<Product> readFromFile() throws IOException {
 
         return new Gson().fromJson(Files.readString(Path.of("src/products.json")), new TypeToken<ArrayList<Product>>() {}.getType());
     }

@@ -1,10 +1,10 @@
-import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class Start {
 
-    static void menu(Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Integer> shoppingCart) throws Exception {
+    static void menu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) throws Exception {
         String choice;
         do {
             Print.startMenu();
@@ -13,7 +13,7 @@ public class Start {
         } while (!choice.equals("e"));
     }
 
-    private static void switchMenu(String choice, Scanner sc, ArrayList<Category> categoryList, ArrayList<Product> products, HashMap<Product, Integer> shoppingCart) throws Exception {
+    private static void switchMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) throws Exception {
         switch (choice) {
             case "1" -> Customer.menu(sc, categoryList, products);
             case "2" -> Admin.menu(sc, categoryList, products);

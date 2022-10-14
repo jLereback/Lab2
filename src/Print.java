@@ -1,7 +1,5 @@
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Scanner;
 
 public abstract class Print {
 
@@ -44,14 +42,14 @@ public abstract class Print {
                 """);
     }
 
-    static void editChosenProduct(String choice, ArrayList<Product> products) {
-        System.out.println("""
+    static void editChosenProduct(String choice, List<Product> products, String stockOrAmount) {
+        System.out.printf("""
                                 
-                Would you like to increase or decrease stock?
+                Would you like to increase or decrease the %s?
                 1. Increase
                 2. Decrease
                 e. Previous menu
-                """);
+                """, stockOrAmount);
     }
 
     static void masterCategoryMenu() {
@@ -116,11 +114,8 @@ public abstract class Print {
                 """);
     }
 
-    static void chosenMenu() {
+    static void alternatives() {
         System.out.println("""
-                            
-                Would you like to see products from all categories
-                or products from a specific one?
                 1. Choose specific category
                 2. All categories
                 e. Previous menu
@@ -143,21 +138,21 @@ public abstract class Print {
         System.out.println("This product already exists, please try again");
     }
 
-    static void edibleProductMenu(Scanner sc, ArrayList<Product> products) {
+    static void edibleProductMenu(Scanner sc, List<Product> products) {
         Ask.forProductToEdit();
         Print.allProductNamesWithNumber(products);
         Print.optionE();
     }
 
 
-    static void productMenu(ArrayList<Category> categoryList) {
+    static void productMenu(List<Category> categoryList) {
         Ask.forCategoryToUse();
         Print.allCategories(categoryList);
         Print.optionE();
     }
 
 
-    static void removeCategoryMenu(ArrayList<Category> categoryList, ArrayList<Product> products) {
+    static void removeCategoryMenu(List<Category> categoryList, List<Product> products) {
         Ask.forCategoryToRemove();
         Print.allCategories(categoryList);
         Print.optionE();
@@ -168,13 +163,13 @@ public abstract class Print {
         System.out.println("e. Previous menu");
     }
 
-    private static void allCategories(ArrayList<Category> categoryList) {
+    private static void allCategories(List<Category> categoryList) {
         for (int i = 0; i < categoryList.size(); i++) {
             System.out.println((i + 1) + ". " + categoryList.get(i).toString());
         }
     }
 
-    static void removeProductMenu(ArrayList<Product> products) {
+    static void removeProductMenu(List<Product> products) {
         System.out.println("""
                                 
                 Which product would you like to remove?
@@ -183,16 +178,13 @@ public abstract class Print {
         Print.optionE();
     }
 
-    static void addToCartMenu(ArrayList<Product> products) {
+    static void addToCartMenu(List<Product> products) {
         System.out.println("""
                                 
                 Add the product you want to buy in the cart
                 """);
         System.out.println("\t" + Super.printProductFieldNames());
         Print.allProductsWithNumber(products);
-        newLine();
-        Print.optionP();
-        Print.optionV();
         Print.optionE();
     }
 
@@ -214,7 +206,7 @@ public abstract class Print {
                 Please double check your spelling or choose another criteria""");
     }
 
-    static void allProductNamesWithNumber(ArrayList<Product> products) {
+    static void allProductNamesWithNumber(List<Product> products) {
         for (int i = 0; i < products.size(); i++) {
             System.out.print((i + 1) + ". ");
             System.out.println(products.get(i).getName());
@@ -222,7 +214,7 @@ public abstract class Print {
     }
 
 
-    static void allProductsWithNumber(ArrayList<Product> products) {
+    static void allProductsWithNumber(List<Product> products) {
         for (int i = 0; i < products.size(); i++) {
             if (i > 9) {
                 System.out.print((i + 1) + ". ");
@@ -253,7 +245,16 @@ public abstract class Print {
                 System.out.println((i + 1) + ".  " + keyList.get(i) + "x" + valueList.get(i));
         }
     }
-
+    static void productRemovedFromCart() {
+        System.out.println("""
+                The product is removed from your cart
+                """);
+    }
+    static void goingBackToPreviousMenu() {
+        System.out.println("""
+                Going back to previous menu
+                """);
+    }
     static void quitMessage() {
         System.out.println("Welcome back");
     }

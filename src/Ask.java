@@ -19,9 +19,14 @@ public class Ask {
                 What product would you like to edit?""");
     }
 
-    static void forNewStock(String choice) {
-        System.out.println("How much would you like to " + Super.increaseOrDecrease(choice) + " the stock?");
+    static void forNewStockOrAmount(String choice, String type) {
+        System.out.printf("How much would you like to %s the %s?\n", Super.increaseOrDecrease(choice), type);
     }
-
+    static void forCategoryToPrint() {
+        System.out.println("""
+                                
+                Would you like to see products from all
+                categories or products from a specific one?""");
+    }
 
 }
