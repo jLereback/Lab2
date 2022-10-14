@@ -252,14 +252,14 @@ public abstract class Super {
         if (choice.equals("e"))
             Print.goingBackToPreviousMenu();
         else if (Integer.parseInt(choice) <= products.size()) {
-            int chosenProduct = (Integer.parseInt(choice) - 1);
+            Product chosenProduct = products.get(Integer.parseInt(choice) - 1);
             Print.editChosenProduct(choice, products, "stock");
             choice = sc.nextLine().toLowerCase();
             switchEditProductMenu(choice, chosenProduct, sc, products);
         }
     }
 
-    private static void switchEditProductMenu(String choice, int chosenProduct, Scanner sc, List<Product> products) {
+    private static void switchEditProductMenu(String choice, Product chosenProduct, Scanner sc, List<Product> products) {
         switch (choice) {
             case "1" -> increaseStock(sc, choice, chosenProduct, products);
             case "2" -> decreaseStock(sc, choice, chosenProduct, products);
@@ -268,30 +268,30 @@ public abstract class Super {
         }
     }
 
-    private static void increaseStock(Scanner sc, String choice, int chosenProduct, List<Product> products) {
+    private static void increaseStock(Scanner sc, String choice, Product chosenProduct, List<Product> products) {
         Ask.forNewStockOrAmount(choice, "stock");
-        products.get(chosenProduct).editStock(products.get(chosenProduct).getStock() + sc.nextInt());
+        chosenProduct.editStock(chosenProduct.getStock() + sc.nextInt());
         sc.nextLine();
         printNewStock(chosenProduct, products);
     }
 
-    private static void decreaseStock(Scanner sc, String choice, int chosenProduct, List<Product> products) {
+    private static void decreaseStock(Scanner sc, String choice, Product chosenProduct, List<Product> products) {
         Ask.forNewStockOrAmount(choice, "stock");
         int decreasingStock = sc.nextInt();
         sc.nextLine();
-        if (products.get(chosenProduct).getStock() - decreasingStock < 1) {
+        if (chosenProduct.getStock() - decreasingStock < 1) {
             System.out.println("""
                     You need at least one piece of the specified product in your inventory
                     """);
             decreaseStock(sc, choice, chosenProduct, products);
         } else {
-            products.get(chosenProduct).editStock(products.get(chosenProduct).getStock() - decreasingStock);
+            chosenProduct.editStock(chosenProduct.getStock() - decreasingStock);
             printNewStock(chosenProduct, products);
         }
     }
 
-    private static void printNewStock(int chosenProduct, List<Product> products) {
-        System.out.println("The new stock for " + products.get(chosenProduct).getName() + " is: " + products.get(chosenProduct).getStock());
+    private static void printNewStock(Product chosenProduct, List<Product> products) {
+        System.out.println("The new stock for " + chosenProduct.getName() + " is: " + chosenProduct.getStock());
     }
 
     static String increaseOrDecrease(String choice) {
@@ -318,14 +318,12 @@ public abstract class Super {
     }
 
     private static void checkChosenProduct(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts, String choice) {
-        if (getTempChosenProduct(visibleCopyOfProducts, choice).getStock() <= 0)
+        if (getChosenProduct(visibleCopyOfProducts, choice).getStock() <= 0)
             System.out.println("This product is out of stock");
         else
-            addProductToCart(getTempChosenProduct(visibleCopyOfProducts, choice), sc, categoryList, products, shoppingCart, visibleCopyOfProducts, getChosenProduct(products, choice));
+            addProductToCart(getChosenProduct(visibleCopyOfProducts, choice), sc, categoryList, products, shoppingCart, visibleCopyOfProducts, getChosenProduct(products, choice));
     }
-    private static Product getTempChosenProduct(List<Product> visibleCopyOfProducts, String choice) {
-        return visibleCopyOfProducts.get(Integer.parseInt(choice) - 1);
-    }
+
 
     private static Product getChosenProduct(List<Product> products, String choice) {
         return products.get(Integer.parseInt(choice) - 1);
@@ -358,12 +356,16 @@ public abstract class Super {
 
     private static void addNewProductInCart(Product tempChosenProduct, HashMap<Product, Integer> shoppingCart, Product chosenProduct, int amountInCart) {
         shoppingCart.put(chosenProduct, amountInCart);
-        tempChosenProduct.editStock(tempChosenProduct.getStock() - amountInCart);
+        updateProductStock(tempChosenProduct, amountInCart);
     }
 
     private static void addAmountToProductInCart(Product tempChosenProduct, HashMap<Product, Integer> shoppingCart, Product chosenProduct, int amountInCart) {
         int newAmountInCart = shoppingCart.get(chosenProduct) + amountInCart;
         shoppingCart.replace(chosenProduct, shoppingCart.get(chosenProduct), newAmountInCart);
+        updateProductStock(tempChosenProduct, amountInCart);
+    }
+
+    private static void updateProductStock(Product tempChosenProduct, int amountInCart) {
         tempChosenProduct.editStock(tempChosenProduct.getStock() - amountInCart);
     }
 
@@ -433,7 +435,7 @@ public abstract class Super {
             shoppingCart.remove(chosenProduct);
         } else {
             shoppingCart.replace(chosenProduct, currentAmount, newAmount);
-            System.out.println("The amount of specified product in cart is updated");
+            System.out.println("The specified product in cart is updated");
         }
     }
 

@@ -234,9 +234,9 @@ public abstract class Print {
 
     private static void productsInStock(int i, String optionSmallSpace, String optionBigSpace) {
         if (i > 9) {
-            System.out.print(number(i) + smallSpace() + optionSmallSpace);
+            System.out.println(number(i) + smallSpace() + optionSmallSpace);
         } else {
-            System.out.print(number(i) + bigSpace() + optionBigSpace);
+            System.out.println(number(i) + bigSpace() + optionBigSpace);
         }
     }
 
