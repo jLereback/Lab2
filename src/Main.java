@@ -16,8 +16,6 @@ public class Main {
         Json.saveToFile(products);
         var shoppingCart = new HashMap<Product, Integer>();
 
-
-
         Start.menu(sc, categoryList, products, shoppingCart);
     }
 }

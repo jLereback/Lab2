@@ -178,13 +178,13 @@ public abstract class Print {
         Print.optionE();
     }
 
-    static void addToCartMenu(List<Product> products) {
+    static void addToCartMenu(List<Product> productList) {
         System.out.println("""
                                 
                 Add the product you want to buy in the cart
                 """);
         System.out.println("\t" + Super.printProductFieldNames());
-        Print.allProductsWithNumber(products);
+        Print.allProductsWithNumber(productList);
         Print.optionE();
     }
 
@@ -224,6 +224,10 @@ public abstract class Print {
                 System.out.println(products.get(i).toString());
             }
         }
+    }
+
+    static void chooseOneOfTheAlternativesBelow() {
+        System.out.println("Please choose one of the alternatives below:");
     }
 
     static void cart(HashMap<Product, Integer> shoppingCart) {

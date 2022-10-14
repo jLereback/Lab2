@@ -12,7 +12,9 @@ Todo:
 
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Objects;
+
 
 public final class Product {
     private final String name;
@@ -29,6 +31,10 @@ public final class Product {
         this.brand = brand;
         this.productID = productID;
         this.stock = stock;
+    }
+
+    public Product clone() throws CloneNotSupportedException {
+        return (Product) super.clone();
     }
 
     public String getName() {

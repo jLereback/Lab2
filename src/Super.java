@@ -15,9 +15,9 @@ public abstract class Super {
     static void switchProductMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products) {
         switch (choice) {
             case "1" -> chooseCategory(sc, categoryList, products);
-            case "2" -> allProducts(products, categoryList);
+            case "2" -> chooseAllProducts(products, categoryList);
             case "e" -> Print.goingBackToPreviousMenu();
-            default -> numberFormatExceptionMessage();
+            default -> Print.chooseOneOfTheAlternativesBelow();
         }
     }
 
@@ -98,14 +98,9 @@ public abstract class Super {
             else if ((Integer.parseInt(choice) <= categoryList.size()))
                 addNewProduct((Integer.parseInt(choice) - 1), sc, categoryList, products);
         } catch (NumberFormatException e) {
-            numberFormatExceptionMessage();
+            Print.chooseOneOfTheAlternativesBelow();
         }
     }
-
-    private static void numberFormatExceptionMessage() {
-        System.out.println("Please choose one of the alternatives below:");
-    }
-
     static void addNewProduct(int chosenCategory, Scanner sc, List<Category> categoryList, List<Product> products) {
         System.out.println("To add a new product in this category (" + categoryList.get(chosenCategory).toString() +
                 "), \nyou need to fill in the following information:");
@@ -193,7 +188,7 @@ public abstract class Super {
             else if ((Integer.parseInt(choice) <= categoryList.size()))
                 removeChosenCategory((Integer.parseInt(choice) - 1), sc, categoryList, products);
         } catch (NumberFormatException e) {
-            numberFormatExceptionMessage();
+            Print.chooseOneOfTheAlternativesBelow();
         }
     }
 
@@ -202,7 +197,7 @@ public abstract class Super {
         categoryList.remove(chosenProduct);
     }
 
-    static void allProducts(List<Product> products, List<Category> categoryList) {
+    static void chooseAllProducts(List<Product> products, List<Category> categoryList) {
         System.out.println(printProductFieldNames());
         for (Product product : products) {
             System.out.println(product);
@@ -227,7 +222,7 @@ public abstract class Super {
             else if ((Integer.parseInt(choice) <= products.size()))
                 removeChosenProduct((Integer.parseInt(choice) - 1), sc, categoryList, products);
         } catch (NumberFormatException e) {
-            numberFormatExceptionMessage();
+            Print.chooseOneOfTheAlternativesBelow();
         }
     }
 
@@ -268,7 +263,7 @@ public abstract class Super {
             case "1" -> increaseStock(sc, choice, chosenProduct, products);
             case "2" -> decreaseStock(sc, choice, chosenProduct, products);
             case "e" -> Print.goingBackToPreviousMenu();
-            default -> numberFormatExceptionMessage();
+            default -> Print.chooseOneOfTheAlternativesBelow();
         }
     }
 
@@ -305,36 +300,42 @@ public abstract class Super {
             return "decrease";
     }
 
-    static void addToCart(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart){
+    static void addToCart(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleListOfProducts) {
         String choice;
-
-        Print.addToCartMenu(products);
-        choice = sc.nextLine();
+        //var visibleListOfProducts = List.copyOf(products);
+        Print.addToCartMenu(visibleListOfProducts);
+        choice = sc.nextLine().toLowerCase();
         try {
             if (choice.equals("e")) {
                 Print.goingBackToPreviousMenu();
-            }
-            else if ((Integer.parseInt(choice) <= categoryList.size())) {
+            } else if ((Integer.parseInt(choice) <= products.size())) {
+                Product tempChosenProduct = visibleListOfProducts.get(Integer.parseInt(choice) -1);
                 Product chosenProduct = products.get(Integer.parseInt(choice) - 1);
-                addProductToCart(chosenProduct, sc, categoryList, products, shoppingCart);
+
+                System.out.println(tempChosenProduct);
+                System.out.println(chosenProduct);
+
+                addProductToCart(tempChosenProduct, sc, categoryList, products, shoppingCart, visibleListOfProducts, chosenProduct);
             }
+            else 
+                Print.chooseOneOfTheAlternativesBelow();
         } catch (NumberFormatException e) {
-            numberFormatExceptionMessage();
+            Print.chooseOneOfTheAlternativesBelow();
         }
     }
 
-    private static void addProductToCart(Product chosenProduct, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
-        System.out.println("How many " + chosenProduct.getName() + " would you like to add?");
+    private static void addProductToCart(Product tempChosenProduct, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleListOfProducts, Product chosenProduct) {
+        System.out.println("How many " + tempChosenProduct.getName() + " would you like to add?");
         int amountInCart = getInput(sc);
 
         if (shoppingCart.containsKey(chosenProduct)) {
             int newAmountInCart = shoppingCart.get(chosenProduct) + amountInCart;
-            shoppingCart.replace(chosenProduct, amountInCart, newAmountInCart);
+            shoppingCart.replace(chosenProduct, shoppingCart.get(chosenProduct), newAmountInCart);
+            tempChosenProduct.editStock(tempChosenProduct.getStock() - amountInCart);
+
         } else {
             shoppingCart.put(chosenProduct, amountInCart);
-            chosenProduct.editStock(chosenProduct.getStock() - amountInCart);
-
-
+            tempChosenProduct.editStock(tempChosenProduct.getStock() - amountInCart);
         }
     }
 
@@ -342,12 +343,12 @@ public abstract class Super {
         return Integer.parseInt(sc.nextLine());
     }
 
-    static void viewCart(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
+    static void viewCart(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleListOfProducts) {
         Print.cartFieldNames();
         Print.cart(shoppingCart);
     }
 
-    static void editCart(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
+    static void editCart(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleListOfProducts) {
         if (shoppingCart.size() == 0)
             System.out.println("""
                     The cart is empty""");
@@ -375,26 +376,26 @@ public abstract class Super {
             int currentAmount = shoppingCart.get(chosenProduct);
             Print.editChosenProduct(choice, products, "amount");
             choice = sc.nextLine().toLowerCase();
-            switchEditProductInCart(choice, chosenProduct, currentAmount, sc, products, shoppingCart, listOfCart);
+            switchEditProductInCart(choice, chosenProduct, currentAmount, sc, products, shoppingCart);
         }
     }
 
-    private static void switchEditProductInCart(String choice, Product chosenProduct, int currentAmount, Scanner sc, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> keyList) {
+    private static void switchEditProductInCart(String choice, Product chosenProduct, int currentAmount, Scanner sc, List<Product> products, HashMap<Product, Integer> shoppingCart) {
         switch (choice) {
-            case "1" -> increaseItemInCart(sc, choice, chosenProduct, currentAmount, products, shoppingCart, keyList);
-            case "2" -> decreaseAmountInCart(sc, choice, chosenProduct, currentAmount, products, shoppingCart, keyList);
+            case "1" -> increaseItemInCart(sc, choice, chosenProduct, currentAmount, products, shoppingCart);
+            case "2" -> decreaseAmountInCart(sc, choice, chosenProduct, currentAmount, products, shoppingCart);
             case "e" -> Print.goingBackToPreviousMenu();
-            default -> numberFormatExceptionMessage();
+            default -> Print.chooseOneOfTheAlternativesBelow();
         }
     }
 
-    private static void increaseItemInCart(Scanner sc, String choice, Product chosenProduct, int currentAmount, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> keyList) {
+    private static void increaseItemInCart(Scanner sc, String choice, Product chosenProduct, int currentAmount, List<Product> products, HashMap<Product, Integer> shoppingCart) {
         Ask.forNewStockOrAmount(choice, "amount");
         int newAmount = currentAmount + getInput(sc);
         shoppingCart.replace(chosenProduct, currentAmount, newAmount);
     }
 
-    private static void decreaseAmountInCart(Scanner sc, String choice, Product chosenProduct, int currentAmount, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> keyList) {
+    private static void decreaseAmountInCart(Scanner sc, String choice, Product chosenProduct, int currentAmount, List<Product> products, HashMap<Product, Integer> shoppingCart) {
         Ask.forNewStockOrAmount(choice, "amount");
         int decreasingAmount = getInput(sc);
         int newAmount = currentAmount - decreasingAmount;
@@ -409,7 +410,6 @@ public abstract class Super {
     }
 
 
-
-    static void toCheckout(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
+    static void toCheckout(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleListOfProducts) {
     }
 }
