@@ -416,7 +416,7 @@ public abstract class Super {
     private static Product getTempChosenProduct(List<Product> visibleCopyOfProducts, Product chosenProduct) {
         for (Product visibleCopyOfProduct : visibleCopyOfProducts) {
             if (visibleCopyOfProduct.getName().equals(chosenProduct.getName())) {
-                return chosenProduct;
+                return visibleCopyOfProduct;
             }
         }
         return  null;
