@@ -221,7 +221,7 @@ public abstract class Shop extends Super {
         freeShipping();
 
         products = visibleCopyOfProducts;
-        Json.saveProductsToFile(products);
+        Json.exportProductsToFile(products);
 
         Print.receipt();
     }

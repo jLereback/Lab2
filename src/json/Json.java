@@ -16,7 +16,7 @@ import java.nio.file.Path;
 public class Json {
     static Path productPath = Path.of("src/Json/products.json");
     static Path categoryPath = Path.of("src/Json/categories.json");
-    public static void saveProductsToFile(List<Product> products) {
+    public static void exportProductsToFile(List<Product> products) {
         Gson gson = new Gson();
 
         String json = gson.toJson(products);
@@ -27,12 +27,12 @@ public class Json {
             throw new RuntimeException(e);
         }
     }
-    public static List<Product> readProductsFromFile() throws IOException {
+    public static List<Product> importProductsFromFile() throws IOException {
 
         return new Gson().fromJson(Files.readString(productPath), new TypeToken<ArrayList<Product>>() {}.getType());
     }
 
-    public static void saveCategoriesToFile(List<Category> categoryList) {
+    public static void exportCategoryListToFile(List<Category> categoryList) {
         Gson gson = new Gson();
 
         String json = gson.toJson(categoryList);
@@ -44,7 +44,7 @@ public class Json {
         }
     }
 
-    public static List<Category> readCategoriesFromFile() throws IOException {
+    public static List<Category> importCategoryListFromFile() throws IOException {
 
         return new Gson().fromJson(Files.readString(categoryPath), new TypeToken<ArrayList<Category>>() {}.getType());
     }

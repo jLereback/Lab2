@@ -3,7 +3,6 @@ import inventory.Product;
 import json.Json;
 import resten.Start;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -14,9 +13,9 @@ public class Main {
 
         List<Product> products;
         List<Category> categoryList;
-        products = Json.readProductsFromFile();
+        products = Json.importProductsFromFile();
 //        Json.saveProductsToFile(products);
-        categoryList = Json.readCategoriesFromFile();
+        categoryList = Json.importCategoryListFromFile();
 //        Json.saveCategoriesToFile(categoryList);
         var shoppingCart = new HashMap<Product, Integer>();
 

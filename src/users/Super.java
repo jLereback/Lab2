@@ -94,6 +94,7 @@ public abstract class Super {
     public static void addNewCategory(List<Category> categoryList, Scanner sc) {
         System.out.println("Insert the name of the new category:");
         categoryList.add(new Category(sc.nextLine()));
+        Json.exportCategoryListToFile(categoryList);
     }
 
     public static void addProduct(Scanner sc, List<Category> categoryList, List<Product> products) {
@@ -121,7 +122,7 @@ public abstract class Super {
         int stock = setStock(sc);
 
         products.add(new Product(name, price, categoryList.get(chosenCategory), brand, productID, stock));
-        Json.saveProductsToFile(products);
+        Json.exportProductsToFile(products);
     }
 
     private static String setAndCompareName(Scanner sc, List<Product> products) {
@@ -204,6 +205,7 @@ public abstract class Super {
     private static void removeChosenCategory(int chosenProduct, Scanner sc, List<Category> categoryList, List<Product> products) {
         System.out.println("The chosen category is now deleted");
         categoryList.remove(chosenProduct);
+        Json.exportCategoryListToFile(categoryList);
     }
 
     public static void chooseAllProducts(List<Product> products, List<Category> categoryList) {
@@ -238,7 +240,7 @@ public abstract class Super {
     private static void removeChosenProduct(int choiceNumber, Scanner sc, List<Category> categoryList, List<Product> products) {
         System.out.println("The chosen product is now deleted");
         products.remove(choiceNumber);
-        Json.saveProductsToFile(products);
+        Json.exportProductsToFile(products);
     }
 
     public static void editStock(Scanner sc, List<Category> categoryList, List<Product> products) {
