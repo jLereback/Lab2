@@ -18,14 +18,15 @@ public class Customer extends Super {
         } while (!choice.equals("e"));
     }
 
-    private static void switchCustomerMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products) {
+    private static void switchCustomerMenu
+            (String choice, Scanner sc, List<Category> categoryList, List<Product> products) {
         switch (choice) {
             case "1" -> showProducts(sc, categoryList, products);
 /*
             case "2" -> printCategoryList(sc, categoryList, products);
 */
             case "3" -> printProductsInCategory(choice, categoryList, products);
-            case "4" -> search(sc, categoryList, products);
+            case "4" -> search(sc, products);
             default -> System.out.println("Please choose one of the alternatives below:");
         }
     }

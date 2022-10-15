@@ -2,7 +2,6 @@ package resten;
 
 import inventory.Category;
 import inventory.Product;
-import resten.Print;
 import users.Admin;
 import users.Customer;
 import users.Master;
@@ -13,7 +12,8 @@ import java.util.Scanner;
 
 public class Start {
 
-    public static void menu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
+    public static void menu(Scanner sc, List<Category> categoryList, List<Product> products,
+                            HashMap<Product, Integer> shoppingCart) {
         String choice;
         do {
             Print.startMenu();
@@ -22,7 +22,8 @@ public class Start {
         } while (!choice.equals("e"));
     }
 
-    private static void switchMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
+    private static void switchMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products,
+                                   HashMap<Product, Integer> shoppingCart) {
         switch (choice) {
             case "1" -> Customer.menu(sc, categoryList, products);
             case "2" -> Admin.menu(sc, categoryList, products);

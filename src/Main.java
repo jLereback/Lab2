@@ -11,14 +11,9 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
 
-        List<Product> products;
-        List<Category> categoryList;
-        products = Json.importProductsFromFile();
-//        Json.saveProductsToFile(products);
-        categoryList = Json.importCategoryListFromFile();
-//        Json.saveCategoriesToFile(categoryList);
+        List<Category> categoryList = Json.importCategoryListFromFile();
+        List<Product> products = Json.importProductsFromFile();
         var shoppingCart = new HashMap<Product, Integer>();
-
         Start.menu(sc, categoryList, products, shoppingCart);
     }
 }

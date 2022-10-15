@@ -2,10 +2,12 @@ package resten;
 
 import inventory.Category;
 import inventory.Product;
+import json.Json;
 import users.Super;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class Print {
@@ -49,7 +51,7 @@ public abstract class Print {
                 """);
     }
 
-    public static void editChosenProduct(String choice, List<Product> products, String stockOrAmount) {
+    public static void editChosenProduct(String stockOrAmount) {
         System.out.printf("""
                                 
                 Would you like to increase or decrease the %s?
@@ -145,7 +147,7 @@ public abstract class Print {
         System.out.println("This product already exists, please try again");
     }
 
-    public static void edibleProductMenu(Scanner sc, List<Product> products) {
+    public static void edibleProductMenu(List<Product> products) {
         Ask.forProductToEdit();
         Print.allProductNamesWithNumber(products);
         Print.optionE();
@@ -159,7 +161,7 @@ public abstract class Print {
     }
 
 
-    public static void removeCategoryMenu(List<Category> categoryList, List<Product> products) {
+    public static void removeCategoryMenu(List<Category> categoryList) {
         Ask.forCategoryToRemove();
         Print.allCategories(categoryList);
         Print.optionE();
@@ -202,6 +204,12 @@ public abstract class Print {
                 """, tempChosenProduct.getStock(), tempChosenProduct.getName(), tempChosenProduct.getName());
     }
 
+    public static void chosenProductUpdated() {
+        System.out.println("The chosen product in cart is updated");
+    }
+    public static void newStock(Product chosenProduct) {
+        System.out.println("The new stock for " + chosenProduct.getName() + " is: " + chosenProduct.getStock());
+    }
     public static void leavingShop() {
         Ask.ifLeaving();
         System.out.println("1. Stay in shop");
@@ -215,14 +223,6 @@ public abstract class Print {
 
     public static void newLine() {
         System.out.print("\n");
-    }
-
-    public static String optionViewCart() {
-        return "View cart";
-    }
-
-    public static String optionToCheckout() {
-        return "Proceed to checkout";
     }
 
     public static void noProductFound() {
@@ -244,7 +244,7 @@ public abstract class Print {
 
     private static void productsWithNumber(int i, List<Product> products) {
         if (products.get(i).getStock() <= 0)
-            Print.productsInStock(i, productOutOfStock(i, products), productOutOfStock(i, products));
+            Print.productsInStock(i, productOutOfStock(i, products),productOutOfStock(i, products));
         else {
             Print.productsInStock(i, productsInStock(i, products), productsInStock(i, products));
         }
@@ -301,20 +301,13 @@ public abstract class Print {
                 "| Amount"));
     }
 
-
-
-    public static void shippingPriceInCart(BigDecimal totalPrice, BigDecimal totalAmountInCart, String priceSpace) {
-        boolean freeShipping = true;
-        if (freeShipping)
-            System.out.println("Shipping |" + LineUp.withTab(6) + "| Free");
-        else
-            System.out.println("Shipping |" + LineUp.withTab(6) + "| $7");
+    public static void cartIsEmpty() {
+        System.out.println("""
+                The cart is empty""");
     }
-    public static void productPriceInCart(BigDecimal totalPrice, BigDecimal totalAmountInCart, String priceSpace) {
-        System.out.println("Products |" + LineUp.withTab(6) + "| $" + totalPrice);
-    }
-    public static void totalPriceInCart(BigDecimal totalPrice, BigDecimal shippingCost, String priceSpace) {
-        System.out.println(LineUp.withTab(6) + "  Total | $" + totalPrice.add(shippingCost));
+    public static void cartWithNames(HashMap<Product, Integer> shoppingCart) {
+        Print.cartFieldNames();
+        Print.cart(shoppingCart);
     }
 
     public static void cartWithNumbers(HashMap<Product, Integer> shoppingCart, List<String> keyList, List<Integer> valueList) {
@@ -342,7 +335,7 @@ public abstract class Print {
         return i + 1;
     }
 
-    public static void productRemovedCart() {
+    public static void productRemovedFromCart() {
         System.out.println("""
                 The product is removed from cart
                 """);
@@ -362,4 +355,5 @@ public abstract class Print {
     public static void receipt() {
         System.out.println("THIS IS THE RECEIPT");
     }
+
 }

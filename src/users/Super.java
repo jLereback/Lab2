@@ -20,23 +20,22 @@ public abstract class Super {
         }
     }
 
-    public static void switchProductMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products) {
+    public static void switchProductMenu
+            (String choice, Scanner sc, List<Category> categoryList, List<Product> products) {
         switch (choice) {
             case "1" -> chooseCategory(sc, categoryList, products);
-            case "2" -> chooseAllProducts(products, categoryList);
+            case "2" -> chooseAllProducts(products);
             case "e" -> Print.goingBackToPreviousMenu();
             default -> Print.chooseOneOfTheAlternativesBelow();
         }
     }
 
     private static void chooseCategory(Scanner sc, List<Category> categoryList, List<Product> products) {
-        String choice;
         Print.productMenu(categoryList);
-        choice = sc.nextLine();
-        chooseSpecificCategory(choice, sc, categoryList, products);
+        chooseSpecificCategory(sc.nextLine(), categoryList, products);
     }
 
-    private static void chooseSpecificCategory(String choice, Scanner sc, List<Category> categoryList, List<Product> products) {
+    private static void chooseSpecificCategory(String choice, List<Category> categoryList, List<Product> products) {
         if (choice.equals("e"))
             Print.goingBackToPreviousMenu();
         else if ((Integer.parseInt(choice) <= categoryList.size()))
@@ -61,7 +60,7 @@ public abstract class Super {
                 "| Stock");
     }
 
-    public static void search(Scanner sc, List<Category> categoryList, List<Product> products) {
+    public static void search(Scanner sc, List<Product> products) {
         System.out.println("""
                 Search for a name, productID, brand or category""");
         String searchString = sc.nextLine().toLowerCase();
@@ -81,14 +80,34 @@ public abstract class Super {
 
     private static List<Product> getSearchResult(List<Product> products, String searchString) {
         return products.stream()
-                .filter(product -> searchString.equals(String.valueOf(product.getProductID())) ||
-                        searchString.equals(product.getName().toLowerCase()) ||
-                        product.getName().toLowerCase().contains(searchString) ||
-                        searchString.equals(product.getCategory().toLowerCase()) ||
-                        searchString.matches("e\s?64") ||
-                        searchString.equals(String.valueOf(product.getPrice())) ||
-                        searchString.equals(product.getBrand().toLowerCase()))
+                .filter(product ->
+                        searchProductID(searchString, product) ||
+                        searchName(searchString, product) ||
+                        searchCategory(searchString, product) ||
+                        searchPrice(searchString, product) ||
+                        searchBrand(searchString, product))
                 .collect(Collectors.toList());
+    }
+
+    private static boolean searchProductID(String searchString, Product product) {
+        return searchString.equals(String.valueOf(product.getProductID()));
+    }
+
+    private static boolean searchBrand(String searchString, Product product) {
+        return searchString.equals(product.getBrand().toLowerCase()) || searchString.matches("e\s?64");
+    }
+
+    private static boolean searchPrice(String searchString, Product product) {
+        return searchString.equals(String.valueOf(product.getPrice()));
+    }
+
+    private static boolean searchCategory(String searchString, Product product) {
+        return searchString.equals(product.getCategory().toLowerCase());
+    }
+
+    private static boolean searchName(String searchString, Product product) {
+        return searchString.equals(product.getName().toLowerCase()) ||
+                product.getName().toLowerCase().contains(searchString);
     }
 
     public static void addNewCategory(List<Category> categoryList, Scanner sc) {
@@ -111,7 +130,8 @@ public abstract class Super {
         }
     }
 
-    public static void addNewProduct(int chosenCategory, Scanner sc, List<Category> categoryList, List<Product> products) {
+    public static void addNewProduct
+            (int chosenCategory, Scanner sc, List<Category> categoryList, List<Product> products) {
         System.out.println("To add a new product in this category (" + categoryList.get(chosenCategory).toString() +
                 "), \nyou need to fill in the following information:");
 
@@ -184,46 +204,46 @@ public abstract class Super {
         return Integer.parseInt(sc.nextLine());
     }
 
-    public static void productsBalance(Scanner sc, List<Category> categoryList, List<Product> products) {
+    public static void productsBalance(List<Product> products) {
         products.forEach(System.out::println);
     }
 
-    public static void deleteCategory(Scanner sc, List<Category> categoryList, List<Product> products) {
+    public static void deleteCategory(Scanner sc, List<Category> categoryList) {
         String choice;
-        Print.removeCategoryMenu(categoryList, products);
+        Print.removeCategoryMenu(categoryList);
         choice = sc.nextLine();
         try {
             if (choice.equals("e"))
                 Print.goingBackToPreviousMenu();
             else if ((Integer.parseInt(choice) <= categoryList.size()))
-                removeChosenCategory((Integer.parseInt(choice) - 1), sc, categoryList, products);
+                removeChosenCategory((Integer.parseInt(choice) - 1), categoryList);
         } catch (NumberFormatException e) {
             Print.chooseOneOfTheAlternativesBelow();
         }
     }
 
-    private static void removeChosenCategory(int chosenProduct, Scanner sc, List<Category> categoryList, List<Product> products) {
+    private static void removeChosenCategory(int chosenProduct, List<Category> categoryList) {
         System.out.println("The chosen category is now deleted");
         categoryList.remove(chosenProduct);
         Json.exportCategoryListToFile(categoryList);
     }
 
-    public static void chooseAllProducts(List<Product> products, List<Category> categoryList) {
+    public static void chooseAllProducts(List<Product> products) {
         System.out.println(printProductFieldNames());
         for (Product product : products) {
             System.out.println(product);
         }
     }
 
-    public static void removeProduct(Scanner sc, List<Category> categoryList, List<Product> products) {
+    public static void removeProduct(Scanner sc, List<Product> products) {
         if (products.size() == 0)
             System.out.println("A product need to be added before it can be removed");
         else {
-            removeExistingProduct(sc, categoryList, products);
+            removeExistingProduct(sc, products);
         }
     }
 
-    private static void removeExistingProduct(Scanner sc, List<Category> categoryList, List<Product> products) {
+    private static void removeExistingProduct(Scanner sc, List<Product> products) {
         String choice;
         Print.removeProductMenu(products);
         choice = sc.nextLine();
@@ -231,19 +251,19 @@ public abstract class Super {
             if (choice.equals("e"))
                 Print.goingBackToPreviousMenu();
             else if ((Integer.parseInt(choice) <= products.size()))
-                removeChosenProduct((Integer.parseInt(choice) - 1), sc, categoryList, products);
+                removeChosenProduct((Integer.parseInt(choice) - 1), products);
         } catch (NumberFormatException e) {
             Print.chooseOneOfTheAlternativesBelow();
         }
     }
 
-    private static void removeChosenProduct(int choiceNumber, Scanner sc, List<Category> categoryList, List<Product> products) {
+    private static void removeChosenProduct(int choiceNumber, List<Product> products) {
         System.out.println("The chosen product is now deleted");
         products.remove(choiceNumber);
         Json.exportProductsToFile(products);
     }
 
-    public static void editStock(Scanner sc, List<Category> categoryList, List<Product> products) {
+    public static void editStock(Scanner sc, List<Product> products) {
         if (products.size() == 0)
             System.out.println("""
                     A product need to be added before it can be edited""");
@@ -253,7 +273,7 @@ public abstract class Super {
 
     private static void editStockInProduct(Scanner sc, List<Product> products) {
         String choice;
-        Print.edibleProductMenu(sc, products);
+        Print.edibleProductMenu(products);
         choice = sc.nextLine();
         chooseProduct(choice, sc, products);
     }
@@ -263,29 +283,29 @@ public abstract class Super {
             Print.goingBackToPreviousMenu();
         else if (Integer.parseInt(choice) <= products.size()) {
             Product chosenProduct = products.get(Integer.parseInt(choice) - 1);
-            Print.editChosenProduct(choice, products, "stock");
+            Print.editChosenProduct("stock");
             choice = sc.nextLine().toLowerCase();
-            switchEditProductMenu(choice, chosenProduct, sc, products);
+            switchEditProductMenu(choice, chosenProduct, sc);
         }
     }
 
-    private static void switchEditProductMenu(String choice, Product chosenProduct, Scanner sc, List<Product> products) {
+    private static void switchEditProductMenu(String choice, Product chosenProduct, Scanner sc) {
         switch (choice) {
-            case "1" -> increaseStock(sc, choice, chosenProduct, products);
-            case "2" -> decreaseStock(sc, choice, chosenProduct, products);
+            case "1" -> increaseStock(sc, choice, chosenProduct);
+            case "2" -> decreaseStock(sc, choice, chosenProduct);
             case "e" -> Print.goingBackToPreviousMenu();
             default -> Print.chooseOneOfTheAlternativesBelow();
         }
     }
 
-    private static void increaseStock(Scanner sc, String choice, Product chosenProduct, List<Product> products) {
+    private static void increaseStock(Scanner sc, String choice, Product chosenProduct) {
         Ask.forNewStockOrAmount(choice, "stock");
         chosenProduct.editStock(chosenProduct.getStock() + sc.nextInt());
         sc.nextLine();
-        printNewStock(chosenProduct, products);
+        Print.newStock(chosenProduct);
     }
 
-    private static void decreaseStock(Scanner sc, String choice, Product chosenProduct, List<Product> products) {
+    private static void decreaseStock(Scanner sc, String choice, Product chosenProduct) {
         Ask.forNewStockOrAmount(choice, "stock");
         int decreasingStock = sc.nextInt();
         sc.nextLine();
@@ -293,15 +313,11 @@ public abstract class Super {
             System.out.println("""
                     You need at least one piece of the specified product in your inventory
                     """);
-            decreaseStock(sc, choice, chosenProduct, products);
+            decreaseStock(sc, choice, chosenProduct);
         } else {
             chosenProduct.editStock(chosenProduct.getStock() - decreasingStock);
-            printNewStock(chosenProduct, products);
+            Print.newStock(chosenProduct);
         }
-    }
-
-    private static void printNewStock(Product chosenProduct, List<Product> products) {
-        System.out.println("The new stock for " + chosenProduct.getName() + " is: " + chosenProduct.getStock());
     }
 
     public static String getIncreaseOrDecrease(String choice) {

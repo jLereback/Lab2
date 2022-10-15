@@ -25,15 +25,15 @@ public abstract class LineUp {
         else if (length < 9)
             return "\t";
         else
-            return " ";
+            return "";
     }
 
     public static String brand(int length) {
         if (length < 6)
-            return "\t".repeat(Math.max(0, 3));
+            return "\t\t\t";
 
         else if (length < 10)
-            return "\t".repeat(Math.max(0, 2));
+            return "\t\t";
 
         else
             return "\t";
@@ -45,12 +45,10 @@ public abstract class LineUp {
         else if (length < 10)
             return "\t";
         else
-            return " ";
+            return "";
     }
 
-    public static String withTab(int timesOfTab){
-        return "\t".repeat(Math.max(0, timesOfTab));
+    public static String withTab(int numOfTabs){
+        return "\t".repeat(Math.max(0, numOfTabs));
     }
-
 }
-

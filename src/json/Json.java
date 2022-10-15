@@ -48,4 +48,16 @@ public class Json {
 
         return new Gson().fromJson(Files.readString(categoryPath), new TypeToken<ArrayList<Category>>() {}.getType());
     }
+
+    public static void exportReceipt(String receipt) {
+        Gson gson = new Gson();
+
+        String json = gson.toJson(receipt);
+
+        try {
+            Files.writeString(Path.of("src/Json/products.json"), json);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
