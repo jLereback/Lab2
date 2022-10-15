@@ -1,3 +1,8 @@
+import inventory.Category;
+import inventory.Product;
+import json.Json;
+import resten.Start;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,13 +12,12 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
 
-        List<Product> products = new ArrayList<Product>();
-        var categoryList = new ArrayList<Category>();
-        categoryList.add(new Category("Putt"));
-        categoryList.add(new Category("Midrange"));
-        categoryList.add(new Category("Driver"));
-        products = Json.readFromFile();
-        Json.saveToFile(products);
+        List<Product> products;
+        List<Category> categoryList;
+        products = Json.readProductsFromFile();
+//        Json.saveProductsToFile(products);
+        categoryList = Json.readCategoriesFromFile();
+//        Json.saveCategoriesToFile(categoryList);
         var shoppingCart = new HashMap<Product, Integer>();
 
         Start.menu(sc, categoryList, products, shoppingCart);

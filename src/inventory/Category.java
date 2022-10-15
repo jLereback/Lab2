@@ -1,3 +1,5 @@
+package inventory;
+
 import java.util.Objects;
 
 public final class Category {

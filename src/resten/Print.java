@@ -1,10 +1,16 @@
+package resten;
+
+import inventory.Category;
+import inventory.Product;
+import users.Super;
+
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.List;
 
 public abstract class Print {
 
-    static void startMenu() {
+    public static void startMenu() {
         System.out.println("""
                                 
                 Welcome to Disc Shop!
@@ -17,7 +23,7 @@ public abstract class Print {
                 """);
     }
 
-    static void masterStartMenu() {
+    public static void masterStartMenu() {
         System.out.println("""
                             
                 Disc Shop
@@ -30,7 +36,7 @@ public abstract class Print {
                 """);
     }
 
-    static void masterInventoryMenu() {
+    public static void masterInventoryMenu() {
         System.out.println("""
                             
                 Product Menu
@@ -43,7 +49,7 @@ public abstract class Print {
                 """);
     }
 
-    static void editChosenProduct(String choice, List<Product> products, String stockOrAmount) {
+    public static void editChosenProduct(String choice, List<Product> products, String stockOrAmount) {
         System.out.printf("""
                                 
                 Would you like to increase or decrease the %s?
@@ -53,7 +59,7 @@ public abstract class Print {
                 """, stockOrAmount);
     }
 
-    static void masterCategoryMenu() {
+    public static void masterCategoryMenu() {
         System.out.println("""
                             
                 Category Menu
@@ -65,7 +71,7 @@ public abstract class Print {
                 """);
     }
 
-    static void customerMenu() {
+    public static void customerMenu() {
         System.out.println("""
                                 
                 Disc Shop
@@ -78,7 +84,7 @@ public abstract class Print {
                 """);
     }
 
-    static void shopMenu() {
+    public static void shopMenu() {
         System.out.println("""
                                 
                 Shop Menu
@@ -91,7 +97,7 @@ public abstract class Print {
                 """);
     }
 
-    static void adminMenu() {
+    public static void adminMenu() {
         System.out.println("""
                             
                 Disc Shop
@@ -104,7 +110,7 @@ public abstract class Print {
                 """);
     }
 
-    static void adminProductMenu() {
+    public static void adminProductMenu() {
         System.out.println("""
                             
                 Product Menu
@@ -115,7 +121,7 @@ public abstract class Print {
                 """);
     }
 
-    static void alternatives() {
+    public static void alternatives() {
         System.out.println("""
                 1. Choose specific category
                 2. All categories
@@ -123,7 +129,7 @@ public abstract class Print {
                 """);
     }
 
-    static void adminCategoryMenu() {
+    public static void adminCategoryMenu() {
         System.out.println("""
                             
                 Category Menu
@@ -135,25 +141,25 @@ public abstract class Print {
                 """);
     }
 
-    static void duplicateProductMessage() {
+    public static void duplicateProductMessage() {
         System.out.println("This product already exists, please try again");
     }
 
-    static void edibleProductMenu(Scanner sc, List<Product> products) {
+    public static void edibleProductMenu(Scanner sc, List<Product> products) {
         Ask.forProductToEdit();
         Print.allProductNamesWithNumber(products);
         Print.optionE();
     }
 
 
-    static void productMenu(List<Category> categoryList) {
+    public static void productMenu(List<Category> categoryList) {
         Ask.forCategoryToUse();
         Print.allCategories(categoryList);
         Print.optionE();
     }
 
 
-    static void removeCategoryMenu(List<Category> categoryList, List<Product> products) {
+    public static void removeCategoryMenu(List<Category> categoryList, List<Product> products) {
         Ask.forCategoryToRemove();
         Print.allCategories(categoryList);
         Print.optionE();
@@ -170,7 +176,7 @@ public abstract class Print {
         }
     }
 
-    static void removeProductMenu(List<Product> products) {
+    public static void removeProductMenu(List<Product> products) {
         System.out.println("""
                                 
                 Which product would you like to remove?
@@ -179,7 +185,7 @@ public abstract class Print {
         Print.optionE();
     }
 
-    static void addToCartMenu(List<Product> productList) {
+    public static void addToCartMenu(List<Product> productList) {
         System.out.println("""
                                 
                 Add the product you want to buy in the cart
@@ -189,14 +195,14 @@ public abstract class Print {
         Print.optionE();
     }
 
-    static void addAvailableAmount(Product tempChosenProduct) {
+    public static void addAvailableAmount(Product tempChosenProduct) {
         System.out.printf("""
                 Only %d %s are available for purchase
                 All %s in stock are added to cart
                 """, tempChosenProduct.getStock(), tempChosenProduct.getName(), tempChosenProduct.getName());
     }
 
-    static void leavingShop() {
+    public static void leavingShop() {
         Ask.ifLeaving();
         System.out.println("1. Stay in shop");
         Print.shopOptionE();
@@ -207,30 +213,30 @@ public abstract class Print {
     }
 
 
-    private static void newLine() {
+    public static void newLine() {
         System.out.print("\n");
     }
 
-    static String optionViewCart() {
+    public static String optionViewCart() {
         return "View cart";
     }
 
-    static String optionToCheckout() {
+    public static String optionToCheckout() {
         return "Proceed to checkout";
     }
 
-    static void noProductFound() {
+    public static void noProductFound() {
         System.out.println("""
                 There is no match based on your search string
                 Please double check your spelling or choose another criteria""");
     }
 
-    static void allProductNamesWithNumber(List<Product> products) {
+    public static void allProductNamesWithNumber(List<Product> products) {
         for (int i = 0; i < products.size(); i++) {
-            System.out.print(number(i) + smallSpace() + productNames(i, products));
+            System.out.print(number(i) + smallSpace() + productName(i, products));
         }
     }
-    static void allProductsWithNumber(List<Product> products) {
+    public static void allProductsWithNumber(List<Product> products) {
         for (int i = 0; i < products.size(); i++) {
             Print.productsWithNumber(i, products);
         }
@@ -253,10 +259,11 @@ public abstract class Print {
     }
 
     private static String productOutOfStock(int i, List<Product> products) {
-        return productNames(i, products) + " | Out Of Stock";
+        var nameSpace = LineUp.name(productName(i, products).length());
+        return productName(i, products) + nameSpace + "| Out Of Stock";
     }
 
-    private static String productNames(int i, List<Product> products) {
+    private static String productName(int i, List<Product> products) {
         return products.get(i).getName();
     }
 
@@ -264,7 +271,7 @@ public abstract class Print {
         return products.get(index).toString();
     }
 
-    static void productAddedToCart(Product tempChosenProduct, int amountInCart) {
+    public static void productAddedToCart(Product tempChosenProduct, int amountInCart) {
         System.out.println(amountInCart + " " + tempChosenProduct.getName() + " are added to cart");
     }
 
@@ -275,39 +282,42 @@ public abstract class Print {
         return ". ";
     }
 
-    static void chooseOneOfTheAlternativesBelow() {
+    public static void chooseOneOfTheAlternativesBelow() {
         System.out.println("Please choose one of the alternatives below:");
     }
 
-    static void availableAmountAlreadyInCart() {
+    public static void availableAmountAlreadyInCart() {
         System.out.println("You already have the available amount of specified product in cart");
     }
 
-    static void cart(HashMap<Product, Integer> shoppingCart) {
+    public static void cart(HashMap<Product, Integer> shoppingCart) {
         shoppingCart.forEach((key, value) -> System.out.println(key.printInCart() + "x" + value));
     }
 
-    static void cartFieldNames() {
-        System.out.println(("Name" + LineUp.lineUpName(4) +
-                "| Price" + LineUp.lineUpPrice(5) +
-                "| ProductID" + LineUp.lineUpProductID(9) +
+    public static void cartFieldNames() {
+        System.out.println(("Name" + LineUp.name(4) +
+                "| Price" + LineUp.price(5) +
+                "| ProductID" + LineUp.productID(9) +
                 "| Amount"));
     }
 
-    static void checkoutFieldNames(BigDecimal totalPrice, BigDecimal totalAmountInCart) {
-        var priceSpace = LineUp.lineUpPrice(totalPrice.toString().length());
-        Print.newLine();
-        Print.totalPrintAndItems(totalPrice, totalAmountInCart, priceSpace);
+
+
+    public static void shippingPriceInCart(BigDecimal totalPrice, BigDecimal totalAmountInCart, String priceSpace) {
+        boolean freeShipping = true;
+        if (freeShipping)
+            System.out.println("Shipping |" + LineUp.withTab(6) + "| Free");
+        else
+            System.out.println("Shipping |" + LineUp.withTab(6) + "| $7");
+    }
+    public static void productPriceInCart(BigDecimal totalPrice, BigDecimal totalAmountInCart, String priceSpace) {
+        System.out.println("Products |" + LineUp.withTab(6) + "| $" + totalPrice);
+    }
+    public static void totalPriceInCart(BigDecimal totalPrice, BigDecimal shippingCost, String priceSpace) {
+        System.out.println(LineUp.withTab(6) + "  Total | $" + totalPrice.add(shippingCost));
     }
 
-    private static void totalPrintAndItems(BigDecimal totalPrice, BigDecimal totalAmountInCart, String priceSpace) {
-        System.out.println(("Total" + LineUp.lineUpName(5) +
-                "| $" + totalPrice + priceSpace +
-                "| Items" + LineUp.lineUpProductID(5) +
-                "| " + totalAmountInCart));
-    }
-
-    static void cartWithNumbers(HashMap<Product, Integer> shoppingCart, List<String> keyList, List<Integer> valueList) {
+    public static void cartWithNumbers(HashMap<Product, Integer> shoppingCart, List<String> keyList, List<Integer> valueList) {
         for (int i = 0; i < shoppingCart.size(); i++) {
             Print.cart(keyList, valueList, i);
         }
@@ -332,19 +342,24 @@ public abstract class Print {
         return i + 1;
     }
 
-    static void productRemovedCart() {
+    public static void productRemovedCart() {
         System.out.println("""
                 The product is removed from cart
                 """);
     }
 
-    static void goingBackToPreviousMenu() {
+    public static void goingBackToPreviousMenu() {
         System.out.println("""
                 Going back to previous menu
                 """);
     }
 
-    static void quitMessage() {
+    public static void quitMessage() {
         System.out.println("Welcome back");
+    }
+
+    //TODO: MAKE THE RECEIPT
+    public static void receipt() {
+        System.out.println("THIS IS THE RECEIPT");
     }
 }

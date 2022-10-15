@@ -1,7 +1,16 @@
+package users;
+
+import resten.Ask;
+import resten.Print;
+import inventory.Product;
+import inventory.Category;
+
 import java.util.*;
 
+import static shop.Shop.*;
+
 public class Master extends Super {
-    static void menu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
+    public static void menu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
         String choice;
         do {
             Print.masterStartMenu();
@@ -100,19 +109,10 @@ public class Master extends Super {
     private static void switchLeaveShop(String choice, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
         if (choice.equals("1"))
             doShopMenuWhile(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
-        else if (choice.equals("e"))
+        else if (choice.equals("e")) {
             shoppingCart.clear();
             menu(sc, categoryList, products, shoppingCart);
-/*        else
-            Print.chooseOneOfTheAlternativesBelow();*/
-/*
-            switch (choice) {
-            case "1" -> viewCart(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
-            case "2" -> toCheckout(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
-            case "e" -> System.out.println("Going back to Main Menu");
-            default -> Print.chooseOneOfTheAlternativesBelow();
         }
-*/
     }
 
     public static void category(Scanner sc, List<Category> categoryList, List<Product> products) {

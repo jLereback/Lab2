@@ -1,4 +1,4 @@
-/*
+package inventory;/*
 Todo: Lägg till en köpedel i master
 Todo: Implementera köpedelen i customer
 Todo: När man köper x varor ska "skock" minskas med samma antal
@@ -7,8 +7,9 @@ Todo: Skriva kvitto
 */
 
 
+import resten.LineUp;
+
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Objects;
 
 
@@ -66,11 +67,11 @@ public final class Product {
 
     @Override
     public String toString() {
-        var nameSpace = LineUp.lineUpName(name.length());
-        var priceSpace = LineUp.lineUpPrice(price.toString().length());
-        var categorySpace = LineUp.lineUpCategory(category.toString().length());
-        var brandSpace = LineUp.lineUpBrand(brand.length());
-        var productIDSpace = LineUp.lineUpProductID(String.valueOf(productID).length());
+        var nameSpace = LineUp.name(name.length());
+        var priceSpace = LineUp.price(price.toString().length());
+        var categorySpace = LineUp.category(category.toString().length());
+        var brandSpace = LineUp.brand(brand.length());
+        var productIDSpace = LineUp.productID(String.valueOf(productID).length());
 
         return name + nameSpace + "| $" +
                 price + priceSpace + "| " +
@@ -81,9 +82,9 @@ public final class Product {
     }
 
     public String printInCart() {
-        var nameSpace = LineUp.lineUpName(name.length());
-        var priceSpace = LineUp.lineUpPrice(price.toString().length());
-        var productIDSpace = LineUp.lineUpProductID(String.valueOf(productID).length());
+        var nameSpace = LineUp.name(name.length());
+        var priceSpace = LineUp.price(price.toString().length());
+        var productIDSpace = LineUp.productID(String.valueOf(productID).length());
 
         return name + nameSpace + "| $" +
                 price + priceSpace + "| " +

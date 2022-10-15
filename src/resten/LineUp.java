@@ -1,5 +1,7 @@
+package resten;
+
 public abstract class LineUp {
-    static String lineUpName(int length) {
+    public static String name(int length) {
         if (length < 4)
             return "\t\t ";
         else if (length < 8)
@@ -8,7 +10,7 @@ public abstract class LineUp {
             return " ";
     }
 
-    static String lineUpPrice(int length) {
+    public static String price(int length) {
         if (length < 4)
             return "\t\t";
         else if (length < 8)
@@ -17,7 +19,7 @@ public abstract class LineUp {
             return "";
     }
 
-    static String lineUpCategory(int length) {
+    public static String category(int length) {
         if (length < 5)
             return "\t\t";
         else if (length < 9)
@@ -26,16 +28,18 @@ public abstract class LineUp {
             return " ";
     }
 
-    static String lineUpBrand(int length) {
+    public static String brand(int length) {
         if (length < 6)
-            return "\t\t\t";
+            return "\t".repeat(Math.max(0, 3));
+
         else if (length < 10)
-            return "\t\t";
+            return "\t".repeat(Math.max(0, 2));
+
         else
             return "\t";
     }
 
-    static String lineUpProductID(int length) {
+    public static String productID(int length) {
         if (length < 6)
             return "\t\t";
         else if (length < 10)
@@ -43,4 +47,10 @@ public abstract class LineUp {
         else
             return " ";
     }
+
+    public static String withTab(int timesOfTab){
+        return "\t".repeat(Math.max(0, timesOfTab));
+    }
+
 }
+

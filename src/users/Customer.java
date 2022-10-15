@@ -1,9 +1,15 @@
+package users;
+
+import resten.Print;
+import inventory.Product;
+import inventory.Category;
+
 import java.util.List;
 import java.util.Scanner;
 
 public class Customer extends Super {
 
-    static void menu(Scanner sc, List<Category> categoryList, List<Product> products) {
+    public static void menu(Scanner sc, List<Category> categoryList, List<Product> products) {
         String choice;
         do {
             Print.customerMenu();
@@ -48,7 +54,7 @@ public class Customer extends Super {
             System.out.println("""
                     There are no categories in this shop at the moment
                     Please come back later""");
-            Start.menu(sc, categoryList, products, cart);
+            resten.Start.menu(sc, categoryList, products, cart);
         } else
             categoryList.forEach(System.out::println);
     }*/

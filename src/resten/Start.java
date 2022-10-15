@@ -1,10 +1,19 @@
+package resten;
+
+import inventory.Category;
+import inventory.Product;
+import resten.Print;
+import users.Admin;
+import users.Customer;
+import users.Master;
+
 import java.util.List;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class Start {
 
-    static void menu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
+    public static void menu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
         String choice;
         do {
             Print.startMenu();
