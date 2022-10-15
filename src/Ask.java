@@ -25,7 +25,7 @@ public class Ask {
         System.out.printf("""
                 
                 How much would you like to %s the %s?
-                """, Super.increaseOrDecrease(choice), type);
+                """, Super.getIncreaseOrDecrease(choice), type);
     }
     static void forCategoryToPrint() {
         System.out.println("""
@@ -42,4 +42,10 @@ public class Ask {
                 """, tempChosenProduct.getName());
     }
 
+    static void ifLeaving() {
+        System.out.print("""
+                If you leave the shop, the cart will reset
+                Do you still want to leave?
+                """);
+    }
 }

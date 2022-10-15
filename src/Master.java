@@ -17,7 +17,7 @@ public class Master extends Super {
             case "3" -> search(sc, categoryList, products);
             case "4" -> showShopMenu(sc, categoryList, products, shoppingCart);
             case "e" -> Print.quitMessage();
-            default -> System.out.println("Please choose one of the alternatives below:");
+            default -> Print.chooseOneOfTheAlternativesBelow();
         }
     }
 
@@ -41,6 +41,7 @@ public class Master extends Super {
             default -> System.out.println("Please choose one of the alternatives below:");
         }
     }
+
     private static void printInventory(Scanner sc, List<Category> categoryList, List<Product> products) {
         if (products.size() == 0) {
             System.out.println("""
@@ -54,8 +55,12 @@ public class Master extends Super {
     }
 
     private static void showShopMenu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
-        String choice;
         var visibleCopyOfProducts = getCopyOfProducts(products);
+        doShopMenuWhile(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
+    }
+
+    private static void doShopMenuWhile(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
+        String choice;
         do {
             Print.shopMenu();
             choice = sc.nextLine().toLowerCase();
@@ -79,9 +84,36 @@ public class Master extends Super {
             case "2" -> viewCart(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
             case "3" -> editCart(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
             case "4" -> toCheckout(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
-            case "e" -> System.out.println("Going back to previous menu");
+            case "e" -> leaveShop(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
             default -> System.out.println("Please choose one of the alternatives below:");
         }
+    }
+
+    private static void leaveShop(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
+        String choice;
+        do {
+            Print.leavingShop();
+            choice = sc.nextLine().toLowerCase();
+            switchLeaveShop(choice, sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
+        } while (!choice.equals("1") && (!choice.equals("2")));
+    }
+
+    private static void switchLeaveShop(String choice, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
+        if (choice.equals("1"))
+            doShopMenuWhile(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
+        else if (choice.equals("e"))
+            shoppingCart.clear();
+            menu(sc, categoryList, products, shoppingCart);
+/*        else
+            Print.chooseOneOfTheAlternativesBelow();*/
+/*
+            switch (choice) {
+            case "1" -> viewCart(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
+            case "2" -> toCheckout(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
+            case "e" -> System.out.println("Going back to Main Menu");
+            default -> Print.chooseOneOfTheAlternativesBelow();
+        }
+*/
     }
 
     public static void category(Scanner sc, List<Category> categoryList, List<Product> products) {

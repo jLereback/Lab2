@@ -86,7 +86,7 @@ public abstract class Print {
                 2. View cart
                 3. Edit cart
                 4. Checkout
-                e. Main Menu
+                e. Leave shop
                 """);
     }
 
@@ -195,16 +195,27 @@ public abstract class Print {
                 """, tempChosenProduct.getStock(), tempChosenProduct.getName(), tempChosenProduct.getName());
     }
 
+    static void leavingShop() {
+        Ask.ifLeaving();
+        System.out.println("1. Stay in shop");
+        Print.shopOptionE();
+    }
+
+    private static void shopOptionE() {
+        System.out.println("e. Leave shop");
+    }
+
+
     private static void newLine() {
         System.out.print("\n");
     }
 
-    private static void optionV() {
-        System.out.println("v. View cart");
+    static String optionViewCart() {
+        return "View cart";
     }
 
-    private static void optionP() {
-        System.out.println("p. Proceed to checkout");
+    static String optionToCheckout() {
+        return "Proceed to checkout";
     }
 
     static void noProductFound() {
@@ -265,6 +276,10 @@ public abstract class Print {
 
     static void chooseOneOfTheAlternativesBelow() {
         System.out.println("Please choose one of the alternatives below:");
+    }
+
+    static void availableAmountAlreadyInCart() {
+        System.out.println("You already have the available amount of specified product in cart");
     }
 
     static void cart(HashMap<Product, Integer> shoppingCart) {

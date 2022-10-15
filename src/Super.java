@@ -294,7 +294,7 @@ public abstract class Super {
         System.out.println("The new stock for " + chosenProduct.getName() + " is: " + chosenProduct.getStock());
     }
 
-    static String increaseOrDecrease(String choice) {
+    static String getIncreaseOrDecrease(String choice) {
         if (choice.equals("1"))
             return "increase";
         else
@@ -348,8 +348,6 @@ public abstract class Super {
     }
 
 
-
-
     private static void addAmountToCart(Product tempChosenProduct, HashMap<Product, Integer> shoppingCart, Product chosenProduct, int amountInCart) {
         if (shoppingCart.containsKey(chosenProduct))
             addAmountToProductInCart(tempChosenProduct, shoppingCart, chosenProduct, amountInCart);
@@ -363,8 +361,7 @@ public abstract class Super {
     }
 
     private static void addAmountToProductInCart(Product tempChosenProduct, HashMap<Product, Integer> shoppingCart, Product chosenProduct, int amountInCart) {
-        int newAmountInCart = shoppingCart.get(chosenProduct) + amountInCart;
-        shoppingCart.replace(chosenProduct, shoppingCart.get(chosenProduct), newAmountInCart);
+        increaseSpecifiedAmount(chosenProduct, shoppingCart.get(chosenProduct), shoppingCart, amountInCart);
         updateProductStock(tempChosenProduct, amountInCart);
     }
 
@@ -419,25 +416,60 @@ public abstract class Super {
                 return visibleCopyOfProduct;
             }
         }
-        return  null;
+        return null;
     }
 
     private static void switchEditProductInCart(String choice, Product chosenProduct, Product tempChosenProduct, int currentAmount, Scanner sc, List<Product> products, HashMap<Product, Integer> shoppingCart) {
         switch (choice) {
-            case "1" -> increaseItemInCart(sc, choice, chosenProduct, currentAmount, products, shoppingCart);
-            case "2" -> decreaseAmountInCart(sc, choice, chosenProduct, tempChosenProduct, currentAmount, products, shoppingCart);
+            case "1" ->
+                    increaseItemInCart(sc, choice, chosenProduct, tempChosenProduct, currentAmount, products, shoppingCart);
+            case "2" ->
+                    decreaseAmountInCart(sc, choice, chosenProduct, tempChosenProduct, currentAmount, products, shoppingCart);
             case "e" -> Print.goingBackToPreviousMenu();
             default -> Print.chooseOneOfTheAlternativesBelow();
         }
     }
 
-    private static void increaseItemInCart(Scanner sc, String choice, Product chosenProduct, int currentAmount, List<Product> products, HashMap<Product, Integer> shoppingCart) {
+    private static void increaseItemInCart(Scanner sc, String choice, Product chosenProduct, Product tempChosenProduct, int currentAmount, List<Product> products, HashMap<Product, Integer> shoppingCart) {
+        if (tempChosenProduct.getStock() == 0)
+            Print.availableAmountAlreadyInCart();
+        else {
+            increaseSpecifiedProduct(sc, choice, chosenProduct, tempChosenProduct, currentAmount, shoppingCart);
+        }
+    }
+
+
+
+    private static void increaseSpecifiedProduct(Scanner sc, String choice, Product chosenProduct, Product tempChosenProduct, int currentAmount, HashMap<Product, Integer> shoppingCart) {
         Ask.forNewStockOrAmount(choice, "amount");
-        int newAmount = currentAmount + getInput(sc);
+        int increasingAmount = getInput(sc);
+        if (tempChosenProduct.getStock() < increasingAmount) {
+            increaseAvailableAmount(chosenProduct, tempChosenProduct, currentAmount, shoppingCart);
+        } else
+            increaseSpecifiedAmount(chosenProduct, currentAmount, shoppingCart, increasingAmount);
+    }
+
+    private static void increaseSpecifiedAmount(Product chosenProduct, int currentAmount, HashMap<Product, Integer> shoppingCart, int increasingAmount) {
+        int newAmount = currentAmount + increasingAmount;
         shoppingCart.replace(chosenProduct, currentAmount, newAmount);
     }
 
-    private static void decreaseAmountInCart(Scanner sc, String choice, Product chosenProduct,Product tempChosenProduct, int currentAmount, List<Product> products, HashMap<Product, Integer> shoppingCart) {
+    private static void increaseAvailableAmount(Product chosenProduct, Product tempChosenProduct, int currentAmount, HashMap<Product, Integer> shoppingCart) {
+        int availableAmount = tempChosenProduct.getStock();
+        int newAmount = currentAmount + availableAmount;
+        tempChosenProduct.editStock(tempChosenProduct.getStock() - availableAmount);
+        shoppingCart.replace(chosenProduct, currentAmount, newAmount);
+    }
+
+    private static void addAvailableAmountOfProductInCart(Product tempChosenProduct, HashMap<Product, Integer> shoppingCart, Product chosenProduct) {
+        int amountInCart;
+        Print.addAvailableAmount(tempChosenProduct);
+        amountInCart = tempChosenProduct.getStock();
+        addAmountToCart(tempChosenProduct, shoppingCart, chosenProduct, amountInCart);
+        Print.productAddedToCart(tempChosenProduct, amountInCart);
+    }
+
+    private static void decreaseAmountInCart(Scanner sc, String choice, Product chosenProduct, Product tempChosenProduct, int currentAmount, List<Product> products, HashMap<Product, Integer> shoppingCart) {
         Ask.forNewStockOrAmount(choice, "amount");
         int decreasingAmount = getInput(sc);
         int newAmount = currentAmount - decreasingAmount;
