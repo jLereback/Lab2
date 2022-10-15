@@ -103,7 +103,7 @@ public class Master extends Super {
             case "1" -> addToCart(sc, products, shoppingCart, visibleCopyOfProducts);
             case "2" -> viewCart(shoppingCart);
             case "3" -> editCart(sc, products, shoppingCart, visibleCopyOfProducts);
-            case "4" -> toCheckout(sc, products, shoppingCart, visibleCopyOfProducts);
+            case "4" -> checkOut_Step1(sc, products, shoppingCart, visibleCopyOfProducts);
             case "e" -> leaveShop(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
             default -> System.out.println("Please choose one of the alternatives below:");
         }

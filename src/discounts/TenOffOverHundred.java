@@ -2,14 +2,14 @@ package discounts;
 
 import java.math.BigDecimal;
 
-public class TenOffOverHundred implements Discounter {
+import static java.math.BigDecimal.valueOf;
 
+public class TenOffOverHundred implements Discounter {
     @Override
     public BigDecimal apply(BigDecimal totalPrice) {
-        if (totalPrice.compareTo(new BigDecimal(100)) >= 0)
-            return totalPrice.multiply(BigDecimal.valueOf(0.9));
+        if (totalPrice.compareTo(valueOf(100)) >= 0)
+            return totalPrice.multiply(valueOf(0.9));
         else
             return totalPrice;
     }
-
 }

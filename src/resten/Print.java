@@ -192,7 +192,7 @@ public abstract class Print {
                                 
                 Add the product you want to buy in the cart
                 """);
-        System.out.println("\t" + Super.printProductFieldNames());
+        System.out.println("\t" + productFieldNames());
         Print.allProductsWithNumber(productList);
         Print.optionE();
     }
@@ -296,11 +296,18 @@ public abstract class Print {
 
     public static void cartFieldNames() {
         System.out.println(("Name" + LineUp.name(4) +
-                "| Price" + LineUp.price(5) +
+                "| Apiece" + LineUp.price(6) +
                 "| ProductID" + LineUp.productID(9) +
                 "| Amount"));
     }
-
+    public static String productFieldNames() {
+        return ("Name" + LineUp.name(4) +
+                "| Apiece" + LineUp.price(6) +
+                "| Category" + LineUp.category(8) +
+                "| Brand" + LineUp.brand(5) +
+                "| ProductID" + LineUp.productID(9) +
+                "| Stock");
+    }
     public static void cartIsEmpty() {
         System.out.println("""
                 The cart is empty""");

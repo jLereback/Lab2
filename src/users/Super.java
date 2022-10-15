@@ -45,19 +45,10 @@ public abstract class Super {
     public static void printProductsInCategory(String choice, List<Category> categoryList, List<Product> products) {
         int chosenCategory = (Integer.parseInt(choice) - 1);
         Category categoryName = categoryList.get(chosenCategory);
-        System.out.println(printProductFieldNames());
+        System.out.println(Print.productFieldNames());
         products.stream()
                 .filter(product -> product.getCategory().equals(categoryName))
                 .forEach(System.out::println);
-    }
-
-    public static String printProductFieldNames() {
-        return ("Name" + LineUp.name(4) +
-                "| Price" + LineUp.price(5) +
-                "| Category" + LineUp.category(8) +
-                "| Brand" + LineUp.brand(5) +
-                "| ProductID" + LineUp.productID(9) +
-                "| Stock");
     }
 
     public static void search(Scanner sc, List<Product> products) {
@@ -195,7 +186,7 @@ public abstract class Super {
     }
 
     private static BigDecimal setPrice(Scanner sc) {
-        System.out.print("Price: ");
+        System.out.print("Price apiece: ");
         return new BigDecimal(sc.nextLine());
     }
 
@@ -229,7 +220,7 @@ public abstract class Super {
     }
 
     public static void chooseAllProducts(List<Product> products) {
-        System.out.println(printProductFieldNames());
+        System.out.println(Print.productFieldNames());
         for (Product product : products) {
             System.out.println(product);
         }
