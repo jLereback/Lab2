@@ -77,7 +77,6 @@ public class Master extends Super {
         return visibleCopyOfProducts;
     }
 
-
     private static void switchShopMenu(String choice, Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
         switch (choice) {
             case "1" -> addToCart(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);

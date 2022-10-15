@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.List;
 
@@ -291,6 +292,19 @@ public abstract class Print {
                 "| Price" + LineUp.lineUpPrice(5) +
                 "| ProductID" + LineUp.lineUpProductID(9) +
                 "| Amount"));
+    }
+
+    static void checkoutFieldNames(BigDecimal totalPrice, BigDecimal totalAmountInCart) {
+        var priceSpace = LineUp.lineUpPrice(totalPrice.toString().length());
+        Print.newLine();
+        Print.totalPrintAndItems(totalPrice, totalAmountInCart, priceSpace);
+    }
+
+    private static void totalPrintAndItems(BigDecimal totalPrice, BigDecimal totalAmountInCart, String priceSpace) {
+        System.out.println(("Total" + LineUp.lineUpName(5) +
+                "| $" + totalPrice + priceSpace +
+                "| Items" + LineUp.lineUpProductID(5) +
+                "| " + totalAmountInCart));
     }
 
     static void cartWithNumbers(HashMap<Product, Integer> shoppingCart, List<String> keyList, List<Integer> valueList) {

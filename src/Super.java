@@ -439,7 +439,6 @@ public abstract class Super {
     }
 
 
-
     private static void increaseSpecifiedProduct(Scanner sc, String choice, Product chosenProduct, Product tempChosenProduct, int currentAmount, HashMap<Product, Integer> shoppingCart) {
         Ask.forNewStockOrAmount(choice, "amount");
         int increasingAmount = getInput(sc);
@@ -457,7 +456,8 @@ public abstract class Super {
     private static void increaseAvailableAmount(Product chosenProduct, Product tempChosenProduct, int currentAmount, HashMap<Product, Integer> shoppingCart) {
         int availableAmount = tempChosenProduct.getStock();
         int newAmount = currentAmount + availableAmount;
-        tempChosenProduct.editStock(tempChosenProduct.getStock() - availableAmount);
+        int emptyStock = 0;
+        tempChosenProduct.editStock(emptyStock);
         shoppingCart.replace(chosenProduct, currentAmount, newAmount);
     }
 
@@ -490,5 +490,27 @@ public abstract class Super {
 
 
     static void toCheckout(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
+        Print.cartFieldNames();
+        Print.cart(shoppingCart);
+        List<Product> listOfCart = shoppingCart.keySet().stream().toList();
+        var priceOfEachProduct = shoppingCart.keySet().stream().map(Product::getPrice).toList();
+        var totalAmountAsList = shoppingCart.values().stream().map(BigDecimal::new).toList();
+        BigDecimal totalAmountInCart = totalAmountAsList.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+        List<BigDecimal> totalPriceList = new ArrayList<>();
+
+        for (int i = 0; i < priceOfEachProduct.size(); i++) {
+            BigDecimal totalPrice = priceOfEachProduct.get(i).multiply(totalAmountAsList.get(i));
+            totalPriceList.add(totalPrice);
+        }
+
+        BigDecimal totalPrice = totalPriceList.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        Print.checkoutFieldNames(totalPrice, totalAmountInCart);
     }
 }
+
+//Todo: Calculate total price: Get product price and multiply with the value (amount in cart) in the HashMap
+//Todo: Get total amount of products in cart: Put all values into an Array and add all elements with each
+// shoppingCart.values().stream().toArray();
+
+// shoppingCart.keySet().stream().map(Product::getPrice).mapToInt(BigDecimal::intValue).sum();
