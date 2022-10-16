@@ -7,7 +7,7 @@ import resten.Print;
 import inventory.Category;
 import inventory.Product;
 
-public class Admin extends Super {
+public class Admin extends CommonStuff {
     public static void menu(Scanner sc, List<Category> categoryList, List<Product> products) {
         String choice;
         do {
@@ -21,8 +21,8 @@ public class Admin extends Super {
         switch (choice) {
             case "1" -> product(sc, categoryList, products);
             case "2" -> category(sc, categoryList);
-            case "3" -> Super.productsBalance(products);
-            case "4" -> Super.search(sc, products);
+            case "3" -> CommonStuff.productsBalance(products);
+            case "4" -> CommonStuff.search(sc, products);
             case "e" -> Print.quitMessage();
             default -> System.out.println("Please choose one of the alternatives below:");
         }
@@ -39,8 +39,8 @@ public class Admin extends Super {
 
     private static void switchProduct(String choice, Scanner sc, List<Category> categoryList, List<Product> products) {
         switch (choice) {
-            case "1" -> Super.addProduct(sc, categoryList, products);
-            case "2" -> Super.removeProduct(sc, products);
+            case "1" -> CommonStuff.addProduct(sc, categoryList, products);
+            case "2" -> CommonStuff.removeProduct(sc, products);
             case "e" -> System.out.println("Going back to previous menu");
             default -> System.out.println("Please choose one of the alternatives below:");
         }
@@ -57,9 +57,9 @@ public class Admin extends Super {
 
     private static void switchCategories(List<Category> categoryList, String choice, Scanner sc) {
         switch (choice) {
-            case "1" -> Super.addNewCategory(categoryList, sc);
-            case "2" -> Super.printCategories(categoryList);
-            case "3" -> Super.deleteCategory(sc, categoryList);
+            case "1" -> CommonStuff.addNewCategory(categoryList, sc);
+            case "2" -> CommonStuff.printCategories(categoryList);
+            case "3" -> CommonStuff.deleteCategory(sc, categoryList);
             default -> System.out.println("Please choose one of the alternatives below:");
         }
     }

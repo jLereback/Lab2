@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class Super {
+public abstract class CommonStuff {
     public static void printCategories(List<Category> categoryList) {
         if (categoryList.size() == 0) {
             System.out.println("Please create a category before you print it");
@@ -72,10 +72,10 @@ public abstract class Super {
         return products.stream()
                 .filter(product ->
                         searchProductID(searchString, product) ||
-                        searchName(searchString, product) ||
-                        searchCategory(searchString, product) ||
-                        searchPrice(searchString, product) ||
-                        searchBrand(searchString, product))
+                                searchName(searchString, product) ||
+                                searchCategory(searchString, product) ||
+                                searchPrice(searchString, product) ||
+                                searchBrand(searchString, product))
                 .collect(Collectors.toList());
     }
 
@@ -316,11 +316,4 @@ public abstract class Super {
         else
             return "decrease";
     }
-
-
-
-
-
-
-
 }

@@ -2,12 +2,12 @@ package shop;
 
 import resten.Ask;
 import resten.Print;
-import users.Super;
+import users.CommonStuff;
 import inventory.*;
 
 import java.util.*;
 
-public abstract class Shop extends Super {
+public abstract class Shop extends CommonStuff {
     public static void addToCart(Scanner sc, List<Product> products, HashMap<Product, Integer> shoppingCart,
                                  List<Product> visibleCopyOfProducts) {
         String choice;

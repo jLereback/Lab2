@@ -53,15 +53,14 @@ public class Files {
 
         return new Gson().fromJson(java.nio.file.Files.readString(categoryPath),
                 new TypeToken<ArrayList<Category>>() {
-        }.getType());
+                }.getType());
     }
 
     public static void exportReceipt(String receipt) {
         try {
             java.nio.file.Files.writeString(receiptPath, receipt, StandardOpenOption.APPEND);
-            String fileContent = java.nio.file.Files.readString(receiptPath);
             System.out.println(receipt);
-            System.out.printf("You can find the receipt in the following path: %s", receiptPath);
+            System.out.printf("You can find the receipt in the following path: %s\n", receiptPath);
 
 
         } catch (IOException e) {
@@ -69,4 +68,3 @@ public class Files {
         }
     }
 }
-

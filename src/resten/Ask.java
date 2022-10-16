@@ -1,7 +1,7 @@
 package resten;
 
 import inventory.Product;
-import users.Super;
+import users.CommonStuff;
 
 public class Ask {
 
@@ -30,7 +30,7 @@ public class Ask {
         System.out.printf("""
                 
                 How much would you like to %s the %s?
-                """, Super.getIncreaseOrDecrease(choice), type);
+                """, CommonStuff.getIncreaseOrDecrease(choice), type);
     }
     public static void forCategoryToPrint() {
         System.out.println("""

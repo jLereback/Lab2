@@ -1,29 +1,14 @@
 
-
 ͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟
            Receipt
           Disc Shop
-	2022-10-16	06:43:35
+	2022-10-16	21:26:37
 
-Products |				|  $46
-Shipping | 				|	$7
-Discount |				| - $0
-
-				  Total |  $53
-        Welcome back
-͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟
-
-
-͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟
-           Receipt
-          Disc Shop
-	2022-10-16	07:37:57
-
-Products |				| $111
+Products |				| $146
 Shipping | Free			|	$0
 Discount |				| - $7
 
-				  Total | $104
+				  Total | $139
 
         Welcome back
 ͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟

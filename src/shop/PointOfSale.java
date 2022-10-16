@@ -15,39 +15,33 @@ import java.util.concurrent.TimeUnit;
 import static java.math.BigDecimal.valueOf;
 
 public class PointOfSale {
-    public static List<Product> checkOut(Scanner sc, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts, List<Product> products) {
+    public static void checkOut(Scanner sc, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
         BigDecimal ordTotalPrice = getOrdTotalPrice(shoppingCart);
         Print.checkOutTotalPrice(ordTotalPrice);
         String choice = checkPromoCode(sc);
-
-        BigDecimal discountedPrice = Discounter.applyDiscount(ordTotalPrice, getUserInputOfPromoCode(sc, choice));
+        BigDecimal discountedPrice = Discounter.applyDiscount
+                (ordTotalPrice, getUserInputOfPromoCode(sc, choice));
 
         loadCheckingDiscounts();
 
         System.out.println(Print.checkOutCart(discountedPrice, ordTotalPrice));
-
-        return saveReceiptAndUpdateProductList(sc, shoppingCart, discountedPrice, ordTotalPrice, visibleCopyOfProducts, products);
+        saveReceiptAndUpdateProductList
+                (sc, discountedPrice, ordTotalPrice, visibleCopyOfProducts);
     }
 
-    private static List<Product> saveReceiptAndUpdateProductList(Scanner sc, HashMap<Product, Integer> shoppingCart,
-                                                                 BigDecimal discountedPrice, BigDecimal ordTotalPrice,
-                                                                 List<Product> visibleCopyOfProducts, List<Product> products) {
+    private static void saveReceiptAndUpdateProductList(Scanner sc, BigDecimal discountedPrice, BigDecimal ordTotalPrice,
+                                                        List<Product> visibleCopyOfProducts) {
         Print.saveReceiptOption();
         String choice = sc.nextLine();
         if (choice.equals("1")) {
-            Files.exportReceipt(getReceipt(shoppingCart, discountedPrice, ordTotalPrice));
+            Files.exportReceipt(getReceipt(discountedPrice, ordTotalPrice));
             Files.exportProductsToFile(visibleCopyOfProducts);
-            return visibleCopyOfProducts;
         } else if (choice.equals("2")) {
-            System.out.println(getReceipt(shoppingCart, discountedPrice, ordTotalPrice));
+            System.out.println(getReceipt(discountedPrice, ordTotalPrice));
             Files.exportProductsToFile(visibleCopyOfProducts);
-            return visibleCopyOfProducts;
-        } else {
+        } else
             System.out.println("Going back to the shop");
-            return products;
-        }
     }
-
 
     private static String checkPromoCode(Scanner sc) {
         Print.promoCodeOption();
@@ -102,9 +96,10 @@ public class PointOfSale {
                 .multiply(getAmountOfEachProductInCart(shoppingCart).get(i));
     }
 
-    public static String getReceipt(HashMap<Product, Integer> shoppingCart, BigDecimal discountedPrice, BigDecimal ordPrice) {
+    public static String getReceipt(BigDecimal discountedPrice, BigDecimal ordPrice) {
         String[] dateAndTimeArray = getDateAndTime();
-        String dateAndTime = LineUp.withTab(1) + dateAndTimeArray[0] + LineUp.withTab(1) + dateAndTimeArray[1];
+        String dateAndTime = LineUp.withTab
+                (1) + dateAndTimeArray[0] + LineUp.withTab(1) + dateAndTimeArray[1];
         BigDecimal price = ordPrice.subtract(discountedPrice);
         if (price.equals(valueOf(0)))
             return String.format("""
