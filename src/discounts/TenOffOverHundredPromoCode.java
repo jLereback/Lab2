@@ -1,10 +1,8 @@
 package discounts;
 
-import resten.Print;
+import misc.Print;
 
 import java.math.BigDecimal;
-import java.util.Objects;
-import java.util.Scanner;
 
 import static java.math.BigDecimal.valueOf;
 import static shop.PointOfSale.tryAgain;

@@ -1,15 +1,15 @@
 package users;
 
-import resten.Ask;
-import resten.Print;
+import misc.Ask;
+import misc.Print;
 import inventory.Product;
 import inventory.Category;
 
 import java.util.*;
 
-import static users.SuperShop.showShopMenu;
+import static users.CommonShop.showShopMenu;
 
-public class Master extends CommonStuff {
+public class Master extends Common {
     public static void menu(Scanner sc, List<Category> categoryList, List<Product> products,
                             HashMap<Product, Integer> shoppingCart) {
         String choice;

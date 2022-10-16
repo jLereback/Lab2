@@ -1,9 +1,8 @@
 package discounts;
 
-import resten.LineUp;
+import misc.LineUp;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Stream;
 

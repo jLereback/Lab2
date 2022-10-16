@@ -3,9 +3,9 @@ package shop;
 import discounts.Discounter;
 import inventory.Product;
 import files.Files;
-import resten.Ask;
-import resten.LineUp;
-import resten.Print;
+import misc.Ask;
+import misc.LineUp;
+import misc.Print;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;

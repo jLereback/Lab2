@@ -1,13 +1,13 @@
 package shop;
 
-import resten.Ask;
-import resten.Print;
-import users.CommonStuff;
+import misc.Ask;
+import misc.Print;
+import users.Common;
 import inventory.*;
 
 import java.util.*;
 
-public abstract class Shop extends CommonStuff {
+public abstract class Shop extends Common {
     public static void addToCart(Scanner sc, List<Product> products, HashMap<Product, Integer> shoppingCart,
                                  List<Product> visibleCopyOfProducts) {
         String choice;
@@ -79,18 +79,17 @@ public abstract class Shop extends CommonStuff {
         else
             Print.cartWithNames(shoppingCart);
     }
-    public static void editCart(Scanner sc, List<Product> products, HashMap<Product, Integer> shoppingCart,
+    public static void editCart(Scanner sc, HashMap<Product, Integer> shoppingCart,
                                 List<Product> visibleCopyOfProducts) {
         if (shoppingCart.size() == 0)
             Print.cartIsEmpty();
         else
-            editProductInCart(sc, shoppingCart, products, visibleCopyOfProducts);
+            editProductInCart(sc, shoppingCart, visibleCopyOfProducts);
     }
-    private static void editProductInCart(Scanner sc, HashMap<Product, Integer> shoppingCart, List<Product> products,
-                                          List<Product> visibleCopyOfProducts) {
+    private static void editProductInCart(Scanner sc, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
         Ask.forProductToEdit();
         Print.cartWithNumbers(shoppingCart, getKeyList(shoppingCart), getValueList(shoppingCart));
-        chooseProductInCart(sc.nextLine(), sc, products, shoppingCart, getListOfCart(shoppingCart), visibleCopyOfProducts);
+        chooseProductInCart(sc.nextLine(), sc, shoppingCart, getListOfCart(shoppingCart), visibleCopyOfProducts);
     }
     private static List<Product> getListOfCart(HashMap<Product, Integer> shoppingCart) {
         return shoppingCart.keySet().stream().toList();
@@ -101,9 +100,8 @@ public abstract class Shop extends CommonStuff {
     private static List<Integer> getValueList(HashMap<Product, Integer> shoppingCart) {
         return shoppingCart.values().stream().toList();
     }
-    private static void chooseProductInCart(String choice, Scanner sc, List<Product> products,
-                                            HashMap<Product, Integer> shoppingCart, List<Product> listOfCart,
-                                            List<Product> visibleCopyOfProducts) {
+    private static void chooseProductInCart(String choice, Scanner sc, HashMap<Product, Integer> shoppingCart,
+                                            List<Product> listOfCart, List<Product> visibleCopyOfProducts) {
         if (choice.equals("e"))
             Print.goingBackToPreviousMenu();
         else if (Integer.parseInt(choice) <= listOfCart.size())

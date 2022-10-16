@@ -7,7 +7,7 @@ Todo: Skriva kvitto
 */
 
 
-import resten.LineUp;
+import misc.LineUp;
 
 import java.math.BigDecimal;
 import java.util.Objects;

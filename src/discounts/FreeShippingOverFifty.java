@@ -1,8 +1,6 @@
 package discounts;
 
 import java.math.BigDecimal;
-import java.util.Objects;
-
 import static java.math.BigDecimal.valueOf;
 
 public class FreeShippingOverFifty implements Discounter {

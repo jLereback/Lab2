@@ -3,14 +3,14 @@ package users;
 import inventory.Category;
 import inventory.Product;
 import files.Files;
-import resten.Ask;
-import resten.Print;
+import misc.Ask;
+import misc.Print;
 
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class CommonStuff {
+public abstract class Common {
     public static void printCategories(List<Category> categoryList) {
         if (categoryList.size() == 0) {
             System.out.println("Please create a category before you print it");

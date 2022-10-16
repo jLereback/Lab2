@@ -1,6 +1,6 @@
 package users;
 
-import resten.Print;
+import misc.Print;
 import inventory.Product;
 import inventory.Category;
 
@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-import static users.SuperShop.showShopMenu;
+import static users.CommonShop.showShopMenu;
 
-public class Customer extends CommonStuff {
+public class Customer extends Common {
 
     public static void menu(Scanner sc, List<Category> categoryList, List<Product> products, HashMap<Product, Integer> shoppingCart) {
         String choice;

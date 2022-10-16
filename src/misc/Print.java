@@ -1,4 +1,4 @@
-package resten;
+package misc;
 
 import inventory.Category;
 import inventory.Product;

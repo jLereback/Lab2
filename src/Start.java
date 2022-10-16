@@ -1,5 +1,4 @@
-package resten;
-
+import misc.Print;
 import inventory.Category;
 import inventory.Product;
 import users.Admin;

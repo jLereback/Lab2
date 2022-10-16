@@ -2,8 +2,7 @@ package users;
 
 import inventory.Category;
 import inventory.Product;
-import resten.Print;
-import shop.PointOfSale;
+import misc.Print;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +12,7 @@ import java.util.Scanner;
 import static shop.PointOfSale.checkOut;
 import static shop.Shop.*;
 
-public class SuperShop {
+public class CommonShop {
     static void showShopMenu(Scanner sc, List<Category> categoryList, List<Product> products,
                              HashMap<Product, Integer> shoppingCart) {
         var visibleCopyOfProducts = getCopyOfProducts(products);
@@ -50,7 +49,7 @@ public class SuperShop {
         switch (choice) {
             case "1" -> addToCart(sc, products, shoppingCart, visibleCopyOfProducts);
             case "2" -> viewCart(shoppingCart);
-            case "3" -> editCart(sc, products, shoppingCart, visibleCopyOfProducts);
+            case "3" -> editCart(sc, shoppingCart, visibleCopyOfProducts);
             case "4" -> checkOut(sc, shoppingCart, visibleCopyOfProducts);
             case "e" -> leaveShop(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
             default -> System.out.println("Please choose one of the alternatives below:");
