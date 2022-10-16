@@ -49,10 +49,10 @@ public class Json {
         return new Gson().fromJson(Files.readString(categoryPath), new TypeToken<ArrayList<Category>>() {}.getType());
     }
 
-    public static void exportReceipt(String receipt) {
+    public static void exportReceipt(String receiptLite) {
         Gson gson = new Gson();
 
-        String json = gson.toJson(receipt);
+        String json = gson.toJson(receiptLite);
 
         try {
             Files.writeString(Path.of("src/Json/products.json"), json);

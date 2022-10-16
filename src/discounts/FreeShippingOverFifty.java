@@ -1,15 +1,22 @@
 package discounts;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import static java.math.BigDecimal.valueOf;
 
 public class FreeShippingOverFifty implements Discounter {
     @Override
-    public BigDecimal apply(BigDecimal totalPrice) {
-        if (totalPrice.compareTo(valueOf(50)) >= 0)
-            return totalPrice.subtract(valueOf(7));
+    public BigDecimal apply(BigDecimal ordinaryPrice, String promoCode) {
+        if (ordinaryPrice.compareTo(valueOf(50)) > 0)
+            return ordinaryPrice.subtract(valueOf(7));
         else
-            return totalPrice;
+            return ordinaryPrice;
     }
+
+    @Override
+    public BigDecimal apply(BigDecimal ordinaryPrice) {
+        return ordinaryPrice.add(valueOf(7));
+    }
+
 }

@@ -126,8 +126,7 @@ public class Master extends Super {
         if (choice.equals("1"))
             doShopMenuWhile(sc, categoryList, products, shoppingCart, visibleCopyOfProducts);
         else if (choice.equals("e")) {
-            shoppingCart.clear();
-            menu(sc, categoryList, products, shoppingCart);
+            System.exit(0);
         }
     }
 

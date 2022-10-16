@@ -1,12 +1,10 @@
 package resten;
 
+import discounts.Discounter;
 import inventory.Category;
 import inventory.Product;
-import json.Json;
-import users.Super;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -207,13 +205,44 @@ public abstract class Print {
     public static void chosenProductUpdated() {
         System.out.println("The chosen product in cart is updated");
     }
+
     public static void newStock(Product chosenProduct) {
         System.out.println("The new stock for " + chosenProduct.getName() + " is: " + chosenProduct.getStock());
     }
+
     public static void leavingShop() {
         Ask.ifLeaving();
         System.out.println("1. Stay in shop");
         Print.shopOptionE();
+    }
+
+    public static void promoCodeMenu() {
+        Ask.ifUsingPromoCode();
+        Print.yesAndNo();
+    }
+
+    public static void limitedPromoCode() {
+        System.out.println("""
+                
+                This code is limited to carts with a total value over $50
+                """);
+    }
+    public static void tryNewPromoCode(String userInputCode) {
+        Print.notValidPromoCode();
+        Ask.toTryAgain();
+        Print.yesAndNo();
+    }
+
+    private static void yesAndNo() {
+        System.out.println("""
+                1. Yes
+                2. No
+                """);
+    }
+
+    private static void notValidPromoCode() {
+        System.out.println("""
+                This is not a valid code""");
     }
 
     private static void shopOptionE() {
@@ -236,6 +265,7 @@ public abstract class Print {
             System.out.print(number(i) + smallSpace() + productName(i, products));
         }
     }
+
     public static void allProductsWithNumber(List<Product> products) {
         for (int i = 0; i < products.size(); i++) {
             Print.productsWithNumber(i, products);
@@ -244,7 +274,7 @@ public abstract class Print {
 
     private static void productsWithNumber(int i, List<Product> products) {
         if (products.get(i).getStock() <= 0)
-            Print.productsInStock(i, productOutOfStock(i, products),productOutOfStock(i, products));
+            Print.productsInStock(i, productOutOfStock(i, products), productOutOfStock(i, products));
         else {
             Print.productsInStock(i, productsInStock(i, products), productsInStock(i, products));
         }
@@ -278,6 +308,7 @@ public abstract class Print {
     private static String bigSpace() {
         return ".  ";
     }
+
     private static String smallSpace() {
         return ". ";
     }
@@ -295,11 +326,12 @@ public abstract class Print {
     }
 
     public static void cartFieldNames() {
-        System.out.println(("Name" + LineUp.name(4) +
+        System.out.println("\nName" + LineUp.name(4) +
                 "| Apiece" + LineUp.price(6) +
                 "| ProductID" + LineUp.productID(9) +
-                "| Amount"));
+                "| Amount");
     }
+
     public static String productFieldNames() {
         return ("Name" + LineUp.name(4) +
                 "| Apiece" + LineUp.price(6) +
@@ -308,10 +340,12 @@ public abstract class Print {
                 "| ProductID" + LineUp.productID(9) +
                 "| Stock");
     }
+
     public static void cartIsEmpty() {
         System.out.println("""
                 The cart is empty""");
     }
+
     public static void cartWithNames(HashMap<Product, Integer> shoppingCart) {
         Print.cartFieldNames();
         Print.cart(shoppingCart);
@@ -355,7 +389,7 @@ public abstract class Print {
     }
 
     public static void quitMessage() {
-        System.out.println("Welcome back");
+        System.out.println(LineUp.withTab(2) + "Welcome back");
     }
 
     //TODO: MAKE THE RECEIPT

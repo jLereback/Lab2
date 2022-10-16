@@ -49,8 +49,22 @@ public class Ask {
 
     public static void ifLeaving() {
         System.out.print("""
+                
                 If you leave the shop, the cart will reset
                 Do you still want to leave?
                 """);
     }
+    public static void ifUsingPromoCode() {
+        System.out.println("""
+                
+                Would you like to use a Promo code?""");
+    }
+
+    public static void toTryAgain() {
+        System.out.println("""
+                
+                Would you like to try again?
+                """);
+    }
+
 }

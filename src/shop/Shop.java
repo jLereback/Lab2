@@ -1,7 +1,6 @@
 package shop;
 
 import discounts.Discounter;
-import json.Json;
 import resten.Ask;
 import resten.LineUp;
 import resten.Print;
@@ -247,31 +246,67 @@ public abstract class Shop extends Super {
         Print.productRemovedFromCart();
     }
 
-    public static void checkOut_Step1(Scanner sc, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
-        viewCart(shoppingCart);
-        List<BigDecimal> totalPriceList = new ArrayList<>();
-        getListOfTotalPrice(shoppingCart, totalPriceList);
-
-        BigDecimal totalPrice = totalPriceList.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        BigDecimal finalPrice = Discounter.applyDiscount(totalPrice);
-        if (Objects.equals(finalPrice, totalPrice))
-            freeShipping();
-        printCheckOutTotalPrice(finalPrice, totalPrice, getTotalNumOfProductsInCart(shoppingCart));
-
-        freeShipping();
-
-        products = visibleCopyOfProducts;
-        Json.exportProductsToFile(products);
-
-        receipt();
+    public static void checkOutTotalPrice(BigDecimal ordinaryPrice) {
+        productPriceInCart(ordinaryPrice);
+        printShippingCostInCart();
+        finalCostInCart(ordinaryPrice);
     }
 
-    //Todo: Om discountern skickade tillbaka pris med rabatt så ska det stå i checkouten att frakten är gratis
+    public static void printShippingCostInCart() {
+        System.out.println("Shipping |" + LineUp.withTab(4) + "| $7");
+    }
 
-    private static void getListOfTotalPrice(HashMap<Product, Integer> shoppingCart, List<BigDecimal> totalPriceList) {
+    public static void checkOut_Step1(Scanner sc, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
+//        viewCart(shoppingCart);
+        List<BigDecimal> ordinaryPriceList = new ArrayList<>();
+        putTotalPriceToList(ordinaryPriceList, shoppingCart);
+
+        BigDecimal ordinaryPrice = ordinaryPriceList.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+
+
+        checkOutTotalPrice(ordinaryPrice);
+
+        //printCheckOut(ordinaryPrice, getTotalNumOfProductsInCart(shoppingCart));
+
+
+        Print.promoCodeMenu();
+        BigDecimal discountedPrice = Discounter.applyDiscount(ordinaryPrice, getUserInputOfPromoCode(sc));
+
+        printCheckOutTotalPrice(discountedPrice, ordinaryPrice, getTotalNumOfProductsInCart(shoppingCart));
+
+
+        products = visibleCopyOfProducts;
+//        Json.exportProductsToFile(products);
+
+        Print.newLine();
+        Print.newLine();
+        Print.newLine();
+        Print.newLine();
+        Print.newLine();
+        System.out.println("͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟");
+        receipt(shoppingCart, discountedPrice, ordinaryPrice);
+        System.exit(0);
+    }
+
+    public static void printCheckOut(BigDecimal ordinaryPrice, BigDecimal totalAmountInCart) {
+        productPriceInCart(ordinaryPrice);
+        ordinaryPriceInCart(ordinaryPrice);
+    }
+
+    private static String getUserInputOfPromoCode(Scanner sc) {
+        int choice = Integer.parseInt(sc.nextLine());
+        if (choice == 1) {
+            System.out.println("\nFill in the code");
+            return sc.nextLine();
+        } else
+            return "null";
+    }
+
+    //Todo: Om discounter skickar tillbaka pris med rabatt så ska det stå i checkout att frakten är gratis
+
+    private static void putTotalPriceToList(List<BigDecimal> ordinaryPriceList, HashMap<Product, Integer> shoppingCart) {
         for (int i = 0; i < getProductPriceList(shoppingCart).size(); i++) {
-            totalPriceList.add(getTotalPrice(shoppingCart, i));
+            ordinaryPriceList.add(getTotalPrice(shoppingCart, i));
         }
     }
 
@@ -280,49 +315,51 @@ public abstract class Shop extends Super {
                 .multiply(getAmountOfEachProductInCart(shoppingCart).get(i));
     }
 
-    public static void receipt() {
-        String[] dateAndTime = getTimeAndDate();
-        String receipt = """
-                
-                """ + LineUp.withTab(2) + dateAndTime[0] + LineUp.withTab(2) + dateAndTime[1] +
-                """
-                
-                """;
-        Json.exportReceipt(receipt);
-    }
+    public static void receipt(HashMap<Product, Integer> shoppingCart, BigDecimal discountedPrice, BigDecimal ordinaryPrice) {
+        String[] dateAndTime = getDateAndTime();
+        String dateAndTimeInReceipt = LineUp.withTab(1) + dateAndTime[0] + LineUp.withTab(1) + dateAndTime[1];
+        String shopNameInReceipt = LineUp.withTab(2) + "  Disc Shop";
+        String receiptHeader = LineUp.withTab(2) + "   Receipt";
 
-    private static String[] getTimeAndDate() {
-        String pattern = "yyyy-MM-dd,hh:mm:ss";
-
-        String[] dateAndTime = new SimpleDateFormat(pattern).format(new Date()).split(",");
-
-        System.out.println(LineUp.withTab(2) + dateAndTime[0] + LineUp.withTab(2) + dateAndTime[1]);
-        return dateAndTime;
-    }
-
-
-    public static void printCheckOutTotalPrice(BigDecimal finalPrice, BigDecimal totalPrice, BigDecimal totalAmountInCart) {
-        var priceSpace = LineUp.price(finalPrice.toString().length());
-        BigDecimal shippingCost = valueOf(7);
+        System.out.println(receiptHeader);
+        System.out.println(shopNameInReceipt);
+        System.out.println(dateAndTimeInReceipt);
         Print.newLine();
-        productPriceInCart(finalPrice, totalAmountInCart, priceSpace);
-        shippingPriceInCart(finalPrice, totalPrice, priceSpace);
-        totalPriceInCart(finalPrice, shippingCost, priceSpace);
+        printCheckOutTotalPrice(discountedPrice, ordinaryPrice, getTotalNumOfProductsInCart(shoppingCart));
+        Print.newLine();
+        Print.quitMessage();
+        //        Json.exportReceipt(dateAndTimeInReceipt);
     }
 
-    public static void shippingPriceInCart(BigDecimal finalPrice, BigDecimal totalPrice, String priceSpace) {
-        if (Objects.equals(finalPrice, totalPrice))
-            System.out.println("Shipping |" + LineUp.withTab(6) + "| $7");
-        else
-            System.out.println("Shipping |" + LineUp.withTab(6) + "| Free");
+    private static String[] getDateAndTime() {
+        String pattern = "yyyy-MM-dd,hh:mm:ss";
+        return new SimpleDateFormat(pattern).format(new Date()).split(",");
     }
 
-    public static void productPriceInCart(BigDecimal finalPrice, BigDecimal totalAmountInCart, String priceSpace) {
-        System.out.println("Products |" + LineUp.withTab(6) + "| $" + finalPrice);
+    public static void printCheckOutTotalPrice(BigDecimal discountedPrice, BigDecimal ordinaryPrice, BigDecimal totalAmountInCart) {
+        productPriceInCart(ordinaryPrice);
+        shippingCostInCart(discountedPrice, ordinaryPrice);
+        finalCostInCart(ordinaryPrice);
     }
 
-    public static void totalPriceInCart(BigDecimal finalPrice, BigDecimal shippingCost, String priceSpace) {
-        System.out.println(LineUp.withTab(6) + "  Total | $" + finalPrice.add(shippingCost));
+    public static void shippingCostInCart(BigDecimal discountedPrice, BigDecimal ordinaryPrice) {
+        System.out.println("Shipping |" + LineUp.withTab(4) + Discounter.checkShippingCost(ordinaryPrice, discountedPrice));
+    }
+
+    public static void productPriceInCart(BigDecimal ordinaryPrice) {
+        System.out.println("Products |" + LineUp.withTab(4) + "| $" + ordinaryPrice);
+    }
+
+    public static void ordinaryPriceInCart(BigDecimal ordinaryPrice) {
+        System.out.println(LineUp.withTab(4) + "  Total | $" + ordinaryPrice);
+    }
+
+    public static void finalCostInCart(BigDecimal ordinaryPrice) {
+        System.out.println(LineUp.withTab(4) + "  Total | $" + Discounter.applyDiscount(ordinaryPrice));
+    }
+
+    public static void ordinaryCostInCart(BigDecimal ordinaryPrice) {
+        System.out.println(LineUp.withTab(4) + "  Total | $" + ordinaryPrice);
     }
 
     private static BigDecimal getTotalNumOfProductsInCart(HashMap<Product, Integer> shoppingCart) {
@@ -338,13 +375,5 @@ public abstract class Shop extends Super {
     private static List<BigDecimal> getProductPriceList(HashMap<Product, Integer> shoppingCart) {
         return shoppingCart.keySet().stream()
                 .map(Product::getPrice).toList();
-    }
-
-    private static void freeShipping() {
-
-    }
-
-    private BigDecimal getDiscountedPrice(BigDecimal priceToPay) {
-        return null;
     }
 }
