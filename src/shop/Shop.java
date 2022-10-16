@@ -1,6 +1,7 @@
 package shop;
 
 import discounts.Discounter;
+import json.Json;
 import resten.Ask;
 import resten.LineUp;
 import resten.Print;
@@ -8,9 +9,9 @@ import users.Super;
 import inventory.*;
 
 import java.math.BigDecimal;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static java.math.BigDecimal.valueOf;
 
@@ -247,157 +248,5 @@ public abstract class Shop extends Super {
         Print.productRemovedFromCart();
     }
 
-    public static void checkOutTotalPrice(BigDecimal ordinaryPrice) {
-        productPriceInCart(ordinaryPrice);
-        printShippingCostInCart();
-        Discounter.checkShippingCost(ordinaryPrice);
-        ordinaryPriceInCart(ordinaryPrice);
-    }
 
-    public static void printShippingCostInCart() {
-        System.out.println("Shipping |" + LineUp.withTab(4) + "|\t$7");
-    }
-
-    public static void checkOut_Step1(Scanner sc, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
-        List<BigDecimal> ordinaryPriceList = new ArrayList<>();
-        putTotalPriceToList(ordinaryPriceList, shoppingCart);
-
-        BigDecimal ordinaryTotalPrice = getOrdinaryTotalPrice(ordinaryPriceList);
-
-
-        checkOutTotalPrice(ordinaryTotalPrice);
-
-
-        Print.promoCodeMenu();
-
-
-        BigDecimal discountedPrice = Discounter.applyDiscount(ordinaryTotalPrice, getUserInputOfPromoCode(sc));
-
-        loadCheckingDiscounts();
-
-        printCheckOutTotalPrice(discountedPrice, ordinaryTotalPrice, getTotalNumOfProductsInCart(shoppingCart));
-
-
-        products = visibleCopyOfProducts;
-//        Json.exportProductsToFile(products);
-
-        Print.newLine();
-        Print.newLine();
-        Print.newLine();
-        Print.newLine();
-        Print.newLine();
-        System.out.println("͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟");
-        receipt(shoppingCart, discountedPrice, ordinaryTotalPrice);
-        System.exit(0);
-    }
-
-    private static void loadCheckingDiscounts() {
-        System.out.print("Checking discounts");
-        try {
-            for (int j = 0; j < 5; j++) {
-                System.out.print(".");
-                TimeUnit.SECONDS.sleep(1);
-            }
-            Print.newLine();
-            Print.newLine();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    private static BigDecimal getOrdinaryTotalPrice(List<BigDecimal> ordinaryPriceList) {
-        return ordinaryPriceList.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    private static String getUserInputOfPromoCode(Scanner sc) {
-        int choice = Integer.parseInt(sc.nextLine());
-        if (choice == 1) {
-            System.out.println("\nFill in the code");
-            return sc.nextLine();
-        } else
-            return "null";
-    }
-
-    private static void putTotalPriceToList(List<BigDecimal> ordinaryPriceList, HashMap<Product, Integer> shoppingCart) {
-        for (int i = 0; i < getProductPriceList(shoppingCart).size(); i++) {
-            ordinaryPriceList.add(getTotalPrice(shoppingCart, i));
-        }
-    }
-
-    private static BigDecimal getTotalPrice(HashMap<Product, Integer> shoppingCart, int i) {
-        return getProductPriceList(shoppingCart).get(i)
-                .multiply(getAmountOfEachProductInCart(shoppingCart).get(i));
-    }
-
-    public static void receipt(HashMap<Product, Integer> shoppingCart, BigDecimal discountedPrice, BigDecimal ordinaryPrice) {
-        String[] dateAndTime = getDateAndTime();
-        String dateAndTimeInReceipt = LineUp.withTab(1) + dateAndTime[0] + LineUp.withTab(1) + dateAndTime[1];
-        String shopNameInReceipt = LineUp.withTab(2) + "  Disc Shop";
-        String receiptHeader = LineUp.withTab(2) + "   Receipt";
-
-        System.out.println(receiptHeader);
-        System.out.println(shopNameInReceipt);
-        System.out.println(dateAndTimeInReceipt);
-        Print.newLine();
-        printCheckOutTotalPrice(discountedPrice, ordinaryPrice, getTotalNumOfProductsInCart(shoppingCart));
-        Print.newLine();
-        Print.quitMessage();
-        //        Json.exportReceipt(dateAndTimeInReceipt);
-    }
-
-    private static String[] getDateAndTime() {
-        String pattern = "yyyy-MM-dd,hh:mm:ss";
-        return new SimpleDateFormat(pattern).format(new Date()).split(",");
-    }
-
-    public static void printCheckOutTotalPrice(BigDecimal discountedPrice, BigDecimal ordinaryPrice, BigDecimal totalAmountInCart) {
-        productPriceInCart(ordinaryPrice);
-        shippingCostInCart(ordinaryPrice);
-        discount(discountedPrice, ordinaryPrice);
-        Print.newLine();
-        finalCostInCart(discountedPrice);
-    }
-
-    public static void discount(BigDecimal discountedPrice, BigDecimal ordinaryPrice) {
-        BigDecimal price = ordinaryPrice.subtract(discountedPrice);
-        BigDecimal numOfSpace = price.subtract(valueOf(99));
-        System.out.println("Discount |" + LineUp.withTab(4) + "| -" + LineUp.withSpace(numOfSpace) + get$() + price);
-    }
-
-    public static void shippingCostInCart(BigDecimal ordinaryPrice) {
-        System.out.println("Shipping " + Discounter.checkShippingCost(ordinaryPrice));
-    }
-
-    public static void productPriceInCart(BigDecimal ordinaryPrice) {
-        System.out.println("Products |" + LineUp.withTab(4) + "|" + LineUp.withSpace(ordinaryPrice) + get$() + ordinaryPrice);
-    }
-
-    public static void ordinaryPriceInCart(BigDecimal ordinaryPrice) {
-        BigDecimal price = ordinaryPrice.add(valueOf(7));
-        System.out.println(LineUp.withTab(4) + "  Total |" + LineUp.withSpace(price) + get$() + price);
-    }
-
-    public static void finalCostInCart(BigDecimal discountedPrice) {
-        BigDecimal price = Discounter.applyDiscount(discountedPrice);
-        System.out.println(LineUp.withTab(4) + "  Total |" + LineUp.withSpace(price) + get$() + price);
-    }
-
-    private static String get$() {
-        return "$";
-    }
-
-    private static BigDecimal getTotalNumOfProductsInCart(HashMap<Product, Integer> shoppingCart) {
-        return getAmountOfEachProductInCart(shoppingCart).stream()
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    private static List<BigDecimal> getAmountOfEachProductInCart(HashMap<Product, Integer> shoppingCart) {
-        return shoppingCart.values().stream()
-                .map(BigDecimal::new).toList();
-    }
-
-    private static List<BigDecimal> getProductPriceList(HashMap<Product, Integer> shoppingCart) {
-        return shoppingCart.keySet().stream()
-                .map(Product::getPrice).toList();
-    }
 }
