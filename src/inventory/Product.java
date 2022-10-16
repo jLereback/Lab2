@@ -1,11 +1,4 @@
-package inventory;/*
-Todo: Lägg till en köpedel i master
-Todo: Implementera köpedelen i customer
-Todo: När man köper x varor ska "skock" minskas med samma antal
-Todo: Skriva kvitto
-
-*/
-
+package inventory;
 
 import misc.LineUp;
 
