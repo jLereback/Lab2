@@ -15,8 +15,10 @@ public class FreeShippingOverFifty implements Discounter {
     }
 
     @Override
-    public BigDecimal apply(BigDecimal ordinaryPrice) {
-        return ordinaryPrice.add(valueOf(7));
+    public BigDecimal apply(BigDecimal price) {
+        if (price.compareTo(valueOf(50)) > 0)
+            return price;
+        else
+            return price.add(valueOf(7));
     }
-
 }

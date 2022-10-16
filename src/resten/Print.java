@@ -198,8 +198,7 @@ public abstract class Print {
     public static void addAvailableAmount(Product tempChosenProduct) {
         System.out.printf("""
                 Only %d %s are available for purchase
-                All %s in stock are added to cart
-                """, tempChosenProduct.getStock(), tempChosenProduct.getName(), tempChosenProduct.getName());
+                """, tempChosenProduct.getStock(), tempChosenProduct.getName());
     }
 
     public static void chosenProductUpdated() {
@@ -318,7 +317,7 @@ public abstract class Print {
     }
 
     public static void availableAmountAlreadyInCart() {
-        System.out.println("You already have the available amount of specified product in cart");
+        System.out.println("You already have the available amount of chosen product in cart");
     }
 
     public static void cart(HashMap<Product, Integer> shoppingCart) {

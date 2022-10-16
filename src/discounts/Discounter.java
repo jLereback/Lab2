@@ -1,5 +1,7 @@
 package discounts;
 
+import resten.LineUp;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -10,20 +12,21 @@ public interface Discounter extends Function<BigDecimal, String> {
     static BigDecimal applyDiscount(BigDecimal ordinaryPrice, String userInputCode) {
         return Stream.of(new FreeShippingOverFifty(), new TenOffOverHundredPromoCode())
                 .map(discounter -> discounter.apply(ordinaryPrice, userInputCode))
-                .reduce(BigDecimal::min)
+                .reduce(BigDecimal::max)
                 .get();
     }
 
-    static String checkShippingCost(BigDecimal ordinaryPrice, BigDecimal discountedPrice) {
-        if (Objects.equals(discountedPrice, ordinaryPrice))
-            return "| $7";
+    static String checkShippingCost(BigDecimal ordinaryPrice) {
+        if (ordinaryPrice.compareTo(valueOf(50)) > 0)
+            return "| Free" + LineUp.withTab(3) + "|\t$0";
         else
-            return "| Free";
+            return "| " + LineUp.withTab(4) + "|\t$7";
     }
-    static BigDecimal applyDiscount(BigDecimal ordinaryPrice) {
+    static BigDecimal applyDiscount(BigDecimal price) {
         return Stream.of(new FreeShippingOverFifty())
-                .map(discounter -> discounter.apply(ordinaryPrice))
+                .map(discounter -> discounter.apply(price))
                 .reduce(BigDecimal::min)
                 .get();
     }
+    String promoCode = "TenOFF";
 }

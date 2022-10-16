@@ -8,13 +8,15 @@ import java.util.Objects;
 import static java.math.BigDecimal.valueOf;
 
 public class TenOffOverHundredPromoCode implements Discounter {
+
     @Override
     public BigDecimal apply(BigDecimal totalPrice, String userInputCode) {
-        if (totalPrice.compareTo(valueOf(100)) > 0 && userInputCode.equals("TenOFF")) {
+
+        if (totalPrice.compareTo(valueOf(100)) > 0 && userInputCode.equals(promoCode)) {
             return totalPrice.multiply(valueOf(0.9));
         }
         else {
-            if (userInputCode.equals("TenOFF")) {
+            if (userInputCode.equals(promoCode)) {
                 Print.limitedPromoCode();
                 return totalPrice;
             } else if (!userInputCode.equals("null")) {

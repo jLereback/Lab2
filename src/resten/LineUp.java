@@ -1,5 +1,7 @@
 package resten;
 
+import java.math.BigDecimal;
+
 public abstract class LineUp {
     public static String name(int length) {
         if (length < 4)
@@ -50,5 +52,10 @@ public abstract class LineUp {
 
     public static String withTab(int numOfTabs){
         return "\t".repeat(Math.max(0, numOfTabs));
+    }
+
+    public static String withSpace(BigDecimal price) {
+        int numOfSpace = 5 - ("$" + price).length();
+        return " ".repeat(Math.max(0, numOfSpace));
     }
 }

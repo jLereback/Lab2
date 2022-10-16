@@ -10,6 +10,7 @@ import inventory.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static java.math.BigDecimal.valueOf;
 
@@ -249,30 +250,32 @@ public abstract class Shop extends Super {
     public static void checkOutTotalPrice(BigDecimal ordinaryPrice) {
         productPriceInCart(ordinaryPrice);
         printShippingCostInCart();
-        finalCostInCart(ordinaryPrice);
+        Discounter.checkShippingCost(ordinaryPrice);
+        ordinaryPriceInCart(ordinaryPrice);
     }
 
     public static void printShippingCostInCart() {
-        System.out.println("Shipping |" + LineUp.withTab(4) + "| $7");
+        System.out.println("Shipping |" + LineUp.withTab(4) + "|\t$7");
     }
 
     public static void checkOut_Step1(Scanner sc, List<Product> products, HashMap<Product, Integer> shoppingCart, List<Product> visibleCopyOfProducts) {
-//        viewCart(shoppingCart);
         List<BigDecimal> ordinaryPriceList = new ArrayList<>();
         putTotalPriceToList(ordinaryPriceList, shoppingCart);
 
-        BigDecimal ordinaryPrice = ordinaryPriceList.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal ordinaryTotalPrice = getOrdinaryTotalPrice(ordinaryPriceList);
 
 
-        checkOutTotalPrice(ordinaryPrice);
-
-        //printCheckOut(ordinaryPrice, getTotalNumOfProductsInCart(shoppingCart));
+        checkOutTotalPrice(ordinaryTotalPrice);
 
 
         Print.promoCodeMenu();
-        BigDecimal discountedPrice = Discounter.applyDiscount(ordinaryPrice, getUserInputOfPromoCode(sc));
 
-        printCheckOutTotalPrice(discountedPrice, ordinaryPrice, getTotalNumOfProductsInCart(shoppingCart));
+
+        BigDecimal discountedPrice = Discounter.applyDiscount(ordinaryTotalPrice, getUserInputOfPromoCode(sc));
+
+        loadCheckingDiscounts();
+
+        printCheckOutTotalPrice(discountedPrice, ordinaryTotalPrice, getTotalNumOfProductsInCart(shoppingCart));
 
 
         products = visibleCopyOfProducts;
@@ -284,13 +287,26 @@ public abstract class Shop extends Super {
         Print.newLine();
         Print.newLine();
         System.out.println("͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟͟");
-        receipt(shoppingCart, discountedPrice, ordinaryPrice);
+        receipt(shoppingCart, discountedPrice, ordinaryTotalPrice);
         System.exit(0);
     }
 
-    public static void printCheckOut(BigDecimal ordinaryPrice, BigDecimal totalAmountInCart) {
-        productPriceInCart(ordinaryPrice);
-        ordinaryPriceInCart(ordinaryPrice);
+    private static void loadCheckingDiscounts() {
+        System.out.print("Checking discounts");
+        try {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(".");
+                TimeUnit.SECONDS.sleep(1);
+            }
+            Print.newLine();
+            Print.newLine();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private static BigDecimal getOrdinaryTotalPrice(List<BigDecimal> ordinaryPriceList) {
+        return ordinaryPriceList.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private static String getUserInputOfPromoCode(Scanner sc) {
@@ -301,8 +317,6 @@ public abstract class Shop extends Super {
         } else
             return "null";
     }
-
-    //Todo: Om discounter skickar tillbaka pris med rabatt så ska det stå i checkout att frakten är gratis
 
     private static void putTotalPriceToList(List<BigDecimal> ordinaryPriceList, HashMap<Product, Integer> shoppingCart) {
         for (int i = 0; i < getProductPriceList(shoppingCart).size(); i++) {
@@ -338,28 +352,38 @@ public abstract class Shop extends Super {
 
     public static void printCheckOutTotalPrice(BigDecimal discountedPrice, BigDecimal ordinaryPrice, BigDecimal totalAmountInCart) {
         productPriceInCart(ordinaryPrice);
-        shippingCostInCart(discountedPrice, ordinaryPrice);
-        finalCostInCart(ordinaryPrice);
+        shippingCostInCart(ordinaryPrice);
+        discount(discountedPrice, ordinaryPrice);
+        Print.newLine();
+        finalCostInCart(discountedPrice);
     }
 
-    public static void shippingCostInCart(BigDecimal discountedPrice, BigDecimal ordinaryPrice) {
-        System.out.println("Shipping |" + LineUp.withTab(4) + Discounter.checkShippingCost(ordinaryPrice, discountedPrice));
+    public static void discount(BigDecimal discountedPrice, BigDecimal ordinaryPrice) {
+        BigDecimal price = ordinaryPrice.subtract(discountedPrice);
+        BigDecimal numOfSpace = price.subtract(valueOf(99));
+        System.out.println("Discount |" + LineUp.withTab(4) + "| -" + LineUp.withSpace(numOfSpace) + get$() + price);
+    }
+
+    public static void shippingCostInCart(BigDecimal ordinaryPrice) {
+        System.out.println("Shipping " + Discounter.checkShippingCost(ordinaryPrice));
     }
 
     public static void productPriceInCart(BigDecimal ordinaryPrice) {
-        System.out.println("Products |" + LineUp.withTab(4) + "| $" + ordinaryPrice);
+        System.out.println("Products |" + LineUp.withTab(4) + "|" + LineUp.withSpace(ordinaryPrice) + get$() + ordinaryPrice);
     }
 
     public static void ordinaryPriceInCart(BigDecimal ordinaryPrice) {
-        System.out.println(LineUp.withTab(4) + "  Total | $" + ordinaryPrice);
+        BigDecimal price = ordinaryPrice.add(valueOf(7));
+        System.out.println(LineUp.withTab(4) + "  Total |" + LineUp.withSpace(price) + get$() + price);
     }
 
-    public static void finalCostInCart(BigDecimal ordinaryPrice) {
-        System.out.println(LineUp.withTab(4) + "  Total | $" + Discounter.applyDiscount(ordinaryPrice));
+    public static void finalCostInCart(BigDecimal discountedPrice) {
+        BigDecimal price = Discounter.applyDiscount(discountedPrice);
+        System.out.println(LineUp.withTab(4) + "  Total |" + LineUp.withSpace(price) + get$() + price);
     }
 
-    public static void ordinaryCostInCart(BigDecimal ordinaryPrice) {
-        System.out.println(LineUp.withTab(4) + "  Total | $" + ordinaryPrice);
+    private static String get$() {
+        return "$";
     }
 
     private static BigDecimal getTotalNumOfProductsInCart(HashMap<Product, Integer> shoppingCart) {
