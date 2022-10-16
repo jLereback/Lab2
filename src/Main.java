@@ -1,6 +1,6 @@
 import inventory.Category;
 import inventory.Product;
-import json.Json;
+import files.Files;
 import resten.Start;
 
 import java.util.HashMap;
@@ -11,8 +11,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
 
-        List<Category> categoryList = Json.importCategoryListFromFile();
-        List<Product> products = Json.importProductsFromFile();
+        List<Category> categoryList = Files.importCategoryListFromFile();
+        List<Product> products = Files.importProductsFromFile();
         var shoppingCart = new HashMap<Product, Integer>();
         Start.menu(sc, categoryList, products, shoppingCart);
     }

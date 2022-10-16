@@ -1,12 +1,14 @@
 package resten;
 
-import discounts.Discounter;
 import inventory.Category;
 import inventory.Product;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+
+import static java.math.BigDecimal.valueOf;
+import static shop.PointOfSale.*;
 
 public abstract class Print {
 
@@ -215,7 +217,7 @@ public abstract class Print {
         Print.shopOptionE();
     }
 
-    public static void promoCodeMenu() {
+    public static void promoCodeOption() {
         Ask.ifUsingPromoCode();
         Print.yesAndNo();
     }
@@ -226,20 +228,19 @@ public abstract class Print {
                 This code is limited to carts with a total value over $50
                 """);
     }
-    public static void tryNewPromoCode(String userInputCode) {
-        Print.notValidPromoCode();
-        Ask.toTryAgain();
-        Print.yesAndNo();
-    }
 
-    private static void yesAndNo() {
+    public static void yesAndNo() {
         System.out.println("""
                 1. Yes
-                2. No
-                """);
+                2. No""");
     }
 
-    private static void notValidPromoCode() {
+    public static void saveReceiptOption() {
+        Ask.toSaveReceipt();
+        Print.yesAndNo();
+        System.out.println("e. Leave checkout");
+    }
+    public static void notValidPromoCode() {
         System.out.println("""
                 This is not a valid code""");
     }
@@ -386,14 +387,33 @@ public abstract class Print {
                 Going back to previous menu
                 """);
     }
+    public static void checkOutTotalPrice(BigDecimal ordPrice) {
+        System.out.println(getOrdProductPriceInCart(ordPrice) + nextLine() +
+                        getOrdShippingCostInCart() + nextLine() + nextLine() +
+                getOrdTotalPriceInCart(ordPrice) + nextLine());
+    }
 
+    public static String checkOutCart(BigDecimal discountedPrice, BigDecimal ordPrice) {
+        BigDecimal price = ordPrice.subtract(discountedPrice);
+        if (price.equals(valueOf(0)))
+            return String.format("""
+                        %s
+                        %s
+                                        
+                        %s
+                        """, getOrdProductPriceInCart(ordPrice),
+                    getShippingCostInCart(ordPrice), finalCostInCart(discountedPrice));
+        else
+            return String.format("""
+                        %s
+                        %s
+                        %s
+                                        
+                        %s
+                        """, getOrdProductPriceInCart(ordPrice), getShippingCostInCart(ordPrice),
+                    getDiscount(discountedPrice, ordPrice), finalCostInCart(discountedPrice));
+    }
     public static void quitMessage() {
         System.out.println(LineUp.withTab(2) + "Welcome back");
     }
-
-    //TODO: MAKE THE RECEIPT
-    public static void receipt() {
-        System.out.println("THIS IS THE RECEIPT");
-    }
-
 }

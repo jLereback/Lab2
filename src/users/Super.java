@@ -2,9 +2,8 @@ package users;
 
 import inventory.Category;
 import inventory.Product;
-import json.Json;
+import files.Files;
 import resten.Ask;
-import resten.LineUp;
 import resten.Print;
 
 import java.math.BigDecimal;
@@ -104,7 +103,7 @@ public abstract class Super {
     public static void addNewCategory(List<Category> categoryList, Scanner sc) {
         System.out.println("Insert the name of the new category:");
         categoryList.add(new Category(sc.nextLine()));
-        Json.exportCategoryListToFile(categoryList);
+        Files.exportCategoryListToFile(categoryList);
     }
 
     public static void addProduct(Scanner sc, List<Category> categoryList, List<Product> products) {
@@ -133,7 +132,7 @@ public abstract class Super {
         int stock = setStock(sc);
 
         products.add(new Product(name, price, categoryList.get(chosenCategory), brand, productID, stock));
-        Json.exportProductsToFile(products);
+        Files.exportProductsToFile(products);
     }
 
     private static String setAndCompareName(Scanner sc, List<Product> products) {
@@ -216,7 +215,7 @@ public abstract class Super {
     private static void removeChosenCategory(int chosenProduct, List<Category> categoryList) {
         System.out.println("The chosen category is now deleted");
         categoryList.remove(chosenProduct);
-        Json.exportCategoryListToFile(categoryList);
+        Files.exportCategoryListToFile(categoryList);
     }
 
     public static void chooseAllProducts(List<Product> products) {
@@ -251,7 +250,7 @@ public abstract class Super {
     private static void removeChosenProduct(int choiceNumber, List<Product> products) {
         System.out.println("The chosen product is now deleted");
         products.remove(choiceNumber);
-        Json.exportProductsToFile(products);
+        Files.exportProductsToFile(products);
     }
 
     public static void editStock(Scanner sc, List<Product> products) {

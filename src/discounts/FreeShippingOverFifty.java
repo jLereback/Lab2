@@ -7,16 +7,16 @@ import static java.math.BigDecimal.valueOf;
 
 public class FreeShippingOverFifty implements Discounter {
     @Override
-    public BigDecimal apply(BigDecimal ordinaryPrice, String promoCode) {
-        if (ordinaryPrice.compareTo(valueOf(50)) > 0)
-            return ordinaryPrice.subtract(valueOf(7));
+    public BigDecimal apply(BigDecimal ordPrice, String promoCode) {
+        if (ordPrice.compareTo(valueOf(50)) >= 0)
+            return ordPrice.subtract(valueOf(7));
         else
-            return ordinaryPrice;
+            return ordPrice;
     }
 
     @Override
     public BigDecimal apply(BigDecimal price) {
-        if (price.compareTo(valueOf(50)) > 0)
+        if (price.compareTo(valueOf(50)) >= 0)
             return price;
         else
             return price.add(valueOf(7));

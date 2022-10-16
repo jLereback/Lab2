@@ -63,8 +63,13 @@ public class Ask {
     public static void toTryAgain() {
         System.out.println("""
                 
-                Would you like to try again?
-                """);
+                Would you like to try again?""");
+    }
+
+    public static void toSaveReceipt() {
+        System.out.println("""
+                
+                Would you like to save the receipt?""");
     }
 
 }

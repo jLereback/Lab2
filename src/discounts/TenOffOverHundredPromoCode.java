@@ -4,8 +4,10 @@ import resten.Print;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Scanner;
 
 import static java.math.BigDecimal.valueOf;
+import static shop.PointOfSale.tryAgain;
 
 public class TenOffOverHundredPromoCode implements Discounter {
 
@@ -20,7 +22,7 @@ public class TenOffOverHundredPromoCode implements Discounter {
                 Print.limitedPromoCode();
                 return totalPrice;
             } else if (!userInputCode.equals("null")) {
-                Print.tryNewPromoCode(userInputCode);
+                tryAgain(sc);
                 return totalPrice;
             } else
                 return totalPrice;

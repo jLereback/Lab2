@@ -1,24 +1,22 @@
-package json;
+package files;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import inventory.Category;
 import inventory.Product;
 
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class Json {
-    static Path productPath = Path.of("src/Json/products.json");
-    static Path categoryPath = Path.of("src/Json/categories.json");
-    static Path receiptPath = Path.of("src/Json/receipt.txt");
+public class Files {
+    static Path productPath = Path.of("src/Files/products.json");
+    static Path categoryPath = Path.of("src/Files/categories.json");
+    static Path receiptPath = Path.of("src/Files/receipt.txt");
 
     public static void exportProductsToFile(List<Product> products) {
         Gson gson = new Gson();
@@ -26,7 +24,7 @@ public class Json {
         String json = gson.toJson(products);
 
         try {
-            Files.writeString(productPath, json);
+            java.nio.file.Files.writeString(productPath, json);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -34,8 +32,9 @@ public class Json {
 
     public static List<Product> importProductsFromFile() throws IOException {
 
-        return new Gson().fromJson(Files.readString(productPath), new TypeToken<ArrayList<Product>>() {
-        }.getType());
+        return new Gson().fromJson(java.nio.file.Files.readString(productPath),
+                new TypeToken<ArrayList<Product>>() {
+                }.getType());
     }
 
     public static void exportCategoryListToFile(List<Category> categoryList) {
@@ -44,7 +43,7 @@ public class Json {
         String json = gson.toJson(categoryList);
 
         try {
-            Files.writeString(categoryPath, json);
+            java.nio.file.Files.writeString(categoryPath, json);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -52,15 +51,18 @@ public class Json {
 
     public static List<Category> importCategoryListFromFile() throws IOException {
 
-        return new Gson().fromJson(Files.readString(categoryPath), new TypeToken<ArrayList<Category>>() {
+        return new Gson().fromJson(java.nio.file.Files.readString(categoryPath),
+                new TypeToken<ArrayList<Category>>() {
         }.getType());
     }
 
     public static void exportReceipt(String receipt) {
         try {
-            Files.writeString(receiptPath, receipt, StandardOpenOption.WRITE);
-            String fileContent = Files.readString(receiptPath);
-            System.out.println(fileContent);
+            java.nio.file.Files.writeString(receiptPath, receipt, StandardOpenOption.APPEND);
+            String fileContent = java.nio.file.Files.readString(receiptPath);
+            System.out.println(receipt);
+            System.out.printf("You can find the receipt in the following path: %s", receiptPath);
+
 
         } catch (IOException e) {
             System.out.println(e.getClass().getName() + ": " + e.getMessage());
