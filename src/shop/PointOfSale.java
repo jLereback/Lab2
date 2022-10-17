@@ -26,19 +26,23 @@ public class PointOfSale {
 
         System.out.println(Print.checkOutCart(discountedPrice, ordTotalPrice));
         saveReceiptAndUpdateProductList
-                (sc, discountedPrice, ordTotalPrice, visibleCopyOfProducts);
+                (sc, discountedPrice, ordTotalPrice, visibleCopyOfProducts, shoppingCart);
     }
 
     private static void saveReceiptAndUpdateProductList(Scanner sc, BigDecimal discountedPrice, BigDecimal ordTotalPrice,
-                                                        List<Product> visibleCopyOfProducts) {
+                                                        List<Product> visibleCopyOfProducts,
+                                                        HashMap<Product, Integer> shoppingCart) {
         Print.saveReceiptOption();
         String choice = sc.nextLine();
         if (choice.equals("1")) {
             Files.exportReceipt(getReceipt(discountedPrice, ordTotalPrice));
             Files.exportProductsToFile(visibleCopyOfProducts);
+            shoppingCart.clear();
         } else if (choice.equals("2")) {
             System.out.println(getReceipt(discountedPrice, ordTotalPrice));
             Files.exportProductsToFile(visibleCopyOfProducts);
+            shoppingCart.clear();
+
         } else
             System.out.println("Going back to the shop");
     }
