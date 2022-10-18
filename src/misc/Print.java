@@ -225,7 +225,7 @@ public abstract class Print {
     public static void limitedPromoCode() {
         System.out.println("""
                 
-                This code is limited to carts with a total value over $50
+                This code is limited to carts with a total value over $100
                 """);
     }
 
@@ -262,7 +262,7 @@ public abstract class Print {
 
     public static void allProductNamesWithNumber(List<Product> products) {
         for (int i = 0; i < products.size(); i++) {
-            System.out.print(number(i) + smallSpace() + productName(i, products));
+            System.out.println(number(i) + smallSpace() + productName(i, products));
         }
     }
 
